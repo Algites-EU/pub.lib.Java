@@ -62,32 +62,16 @@ import java.util.Properties
 //
 //version=computeAlgitesRepositoryVersion()
 
+plugins {
+    `java-library`
+    `maven-publish`
+}
+
 // --- Dependency resolution repos (read) ---
 allprojects {
     layout.buildDirectory.set(
         rootProject.layout.projectDirectory.dir("run/bld/gradle/${project.name}")
     )
-
-//    // --- Publishing repo (write) for projects that apply maven-publish ---
-//    plugins.withId("maven-publish") {
-//        extensions.configure<PublishingExtension>("publishing") {
-//            repositories {
-//                maven {
-//                    name = "GitHubPackages"
-//                    url = ghPackagesUrl
-//
-//                    val u = ghUser()
-//                    val t = ghToken()
-//                    if (u != null && t != null) {
-//                        credentials {
-//                            username = u
-//                            password = t
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
 }
 
 // Simple sanity task
@@ -99,11 +83,6 @@ allprojects {
     tasks.withType<Test>().configureEach {
         useTestNG()
     }
-}
-
-plugins {
-    `java-library`
-    `maven-publish`
 }
 
 publishing {
@@ -162,4 +141,3 @@ tasks.named("publish") {
     }
 }
 /* --- END OF: common sniplet for repo publishment --- */
-
