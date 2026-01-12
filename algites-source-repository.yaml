@@ -1,0 +1,11 @@
+sourceRepository:
+  id: pub.lib.Java
+  name: Algites public Java libraries repository
+  containedArtifactRelativePaths:
+    - common
+
+versionContext:
+  releaseLine: "1"
+  revision: 0
+  qualifierKind: SNAPSHOT
+  qualifierLabel: SNAPSHOT
