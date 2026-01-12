@@ -20,10 +20,6 @@ java {
 
 group = "eu.algites.lib.common"
 
-base {
-    archivesName.set("pub.lib.Java_util.common")
-}
-
 val TESTNG_VERSION = "7.11.0"
 val JAKARTA_ANNOTATION_VERSION = "3.0.0"
 
