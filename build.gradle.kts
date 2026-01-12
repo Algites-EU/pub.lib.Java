@@ -94,6 +94,14 @@ publishing {
 }
 
 /* --- START OF: common sniplet for repo publishment --- */
+if (project == rootProject) {
+    tasks.matching { it.name == "publish" || it.name == "publishToMavenLocal" }
+        .configureEach { enabled = false }
+
+    tasks.withType<org.gradle.api.publish.maven.tasks.PublishToMavenRepository>()
+        .configureEach { enabled = false }
+}
+
 fun String.capFirst(): String =
     replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
 
