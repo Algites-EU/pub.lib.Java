@@ -56,8 +56,33 @@ if (locIsCi && !locHasRemoteRepo) {
 
 
 subprojects {
-    /* 1) If project uses maven-publish, configure remote repo */
+    /* artifactId = "<rootProject.name>_<subproject-path-with-dots>" */
+    val locRepoName = rootProject.name
+
+    val locPathDots = project.path
+        .removePrefix(":")
+        .replace(':', '.')
+
+    val locCanonicalArtifactId = if (locPathDots.isBlank()) {
+        locRepoName
+    } else {
+        "${locRepoName}_${locPathDots}"
+    }
+
+    /* Set local archive base name (jar file name prefix) */
+    plugins.withId("base") {
+        base {
+            archivesName.set(locCanonicalArtifactId)
+        }
+    }
+
+    /* Set Maven artifactId for all Maven publications in this subproject */
     plugins.withId("maven-publish") {
+        publishing {
+            publications.withType(MavenPublication::class.java).configureEach {
+                artifactId = locCanonicalArtifactId
+            }
+        }
         extensions.configure<PublishingExtension>("publishing") {
             repositories {
                 if (locHasRemoteRepo) {
@@ -73,7 +98,7 @@ subprojects {
             }
         }
     }
-    /* 2) Local fallback: if NOT CI and no remote repo, publish => publishToMavenLocal */
+    /* Local fallback: if NOT CI and no remote repo, publish => publishToMavenLocal */
     tasks.matching { it.name == "publish" }.configureEach {
         if (!locIsCi && !locHasRemoteRepo) {
             dependsOn("publishToMavenLocal")
