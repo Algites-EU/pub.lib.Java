@@ -40,4 +40,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "pub.lib.Java"
-include(":common")
+//include(":common")
