@@ -1,3 +1,9 @@
+plugins {
+    `maven-publish`
+    `kotlin-dsl`
+    `java-gradle-plugin`
+}
+
 
 java {
     sourceSets {
@@ -24,11 +30,5 @@ val JAKARTA_ANNOTATION_VERSION = "3.0.0"
 dependencies {
     testImplementation("org.testng:testng:" + TESTNG_VERSION)
     implementation("jakarta.annotation:jakarta.annotation-api:" + JAKARTA_ANNOTATION_VERSION)
-}
-
-plugins {
-    `maven-publish`
-    `kotlin-dsl`
-    `java-gradle-plugin`
 }
 
