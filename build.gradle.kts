@@ -1,67 +1,4 @@
-//import org.gradle.api.publish.PublishingExtension
-//
-//plugins {
-//    // root je jen orchestrátor; publication bude až v subprojektech
-//    `maven-publish`
-//}
-//
-//import java.util.Properties
-//
-//        allprojects {
-//
-//            val repoProps = Properties().apply {
-//                loader(rootProject.file("algites-source-repository.properties").inputStream())
-//            }
-//
-//            val lane = repoProps.getProperty("algites.repository.lane")
-//            val revision = repoProps.getProperty("algites.repository.lane.revision")
-//            val suffix = repoProps.getProperty("algites.repository.lane.revision.suffix")
-//
-//            group = "eu.algites.tool.build"
-//            version = "$lane.$revision$suffix"
-//        }
-//
-//// Put Gradle build outputs under run/
-//layout.buildDirectory.set(file("run/bld"))
-//subprojects {
-//    layout.buildDirectory.set(file("${project.projectDir}/run/bld"))
-//}
-//
-//
-//// --- GitHub Packages target repo (dynamic in CI) ---
-//val ghRepo: String = (
-//        System.getenv("ALGITES_GITHUB_REPOSITORY")
-//            ?: System.getenv("GITHUB_REPOSITORY")
-//            ?: "Algites-EU/pub.tool.Java" // local fallback
-//        ).trim()
-//
-//val ghPackagesUrl = uri("https://maven.pkg.github.com/$ghRepo")
-//
-//fun ghUser(): String? =
-//    (findProperty("gpr.user") as String?)?.takeIf { it.isNotBlank() }
-//        ?: System.getenv("GITHUB_ACTOR")?.takeIf { it.isNotBlank() }
-//
-//fun ghToken(): String? =
-//    (findProperty("gpr.token") as String?)?.takeIf { it.isNotBlank() }
-//        ?: System.getenv("GITHUB_TOKEN")?.takeIf { it.isNotBlank() }
-
-import java.util.Properties
-
-//fun computeAlgitesRepositoryVersion(): String {
-//    val props = Properties()
-//    file("algites-source-repository.properties").inputStream().use {
-//        props.load(it)
-//    }
-//
-//    val lane = props.getProperty("algites.repository.lane")
-//    val revision = props.getProperty("algites.repository.lane.revision")
-//    val suffix = props.getProperty("algites.repository.lane.revision.suffix") ?: ""
-//
-//    return "$lane.$revision$suffix"
-//}
-//
-//version=computeAlgitesRepositoryVersion()
-
+/* --- START OF: common sniplet for build.gradle.kts in repo root --- */
 plugins {
     `java-library`
     `maven-publish`
@@ -93,15 +30,6 @@ publishing {
     }
 }
 
-/* --- START OF: common sniplet for repo publishment --- */
-if (project == rootProject) {
-    tasks.matching { it.name == "publish" || it.name == "publishToMavenLocal" }
-        .configureEach { enabled = false }
-
-    tasks.withType<org.gradle.api.publish.maven.tasks.PublishToMavenRepository>()
-        .configureEach { enabled = false }
-}
-
 fun String.capFirst(): String =
     replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
 
@@ -121,31 +49,42 @@ val locRepoName = buildString {
     append(locDirection.capFirst())
 }
 
-publishing {
-    repositories {
-
-        if (locRepoUrl != null && locRepoUser != null && locRepoPass != null) {
-            maven {
-                name = locRepoName
-                url = uri(locRepoUrl)
-                credentials {
-                    username = locRepoUser
-                    password = locRepoPass
-                }
-            }
-        } else {
-            logger.lifecycle("Remote repo disabled (ALGITES_REPO_* not set). Repo name would be '$locRepoName'.")
-        }
-    }
-}
-
 val locIsCi = providers.environmentVariable("CI").orNull == "true"
 if (locIsCi && !locHasRemoteRepo) {
     throw GradleException("CI build requires ALGITES_REPO_* for publishing.")
 }
-tasks.named("publish") {
-    if (!locIsCi && !locHasRemoteRepo) {
-        dependsOn("publishToMavenLocal")
+
+
+subprojects {
+    /* 1) If project uses maven-publish, configure remote repo */
+    plugins.withId("maven-publish") {
+        extensions.configure<PublishingExtension>("publishing") {
+            repositories {
+                if (locHasRemoteRepo) {
+                    maven {
+                        name = locRepoName
+                        url = uri(locRepoUrl!!)
+                        credentials {
+                            username = locRepoUser!!
+                            password = locRepoPass!!
+                        }
+                    }
+                }
+            }
+        }
+    }
+    /* 2) Local fallback: if NOT CI and no remote repo, publish => publishToMavenLocal */
+    tasks.matching { it.name == "publish" }.configureEach {
+        if (!locIsCi && !locHasRemoteRepo) {
+            dependsOn("publishToMavenLocal")
+        }
     }
 }
-/* --- END OF: common sniplet for repo publishment --- */
+
+/* Disable publishing tasks in root completely */
+if (project == rootProject) {
+    tasks.withType<PublishToMavenRepository>().configureEach { enabled = false }
+    tasks.matching { it.name == "publish" || it.name == "publishToMavenLocal" }.configureEach { enabled = false }
+}
+
+/* --- END OF: common sniplet for build.gradle.kts in repo root --- */
