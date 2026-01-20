@@ -55,8 +55,8 @@ public @interface AIaFieldLabel {
 	/* --- MODE axis --- */
 
 
-	AInStringOutputMode mode() default AInStringOutputMode.DEFAULT; // hezký enum výběr v IDE
-	String modeCode() default ""; // pro custom módy mimo enum
+	AInStringOutputMode mode() default AInStringOutputMode.DEFAULT; /* nice enum selection in iDE */
+	String modeCode() default ""; /* for custom modes without  enums */
 	Class<? extends AIiStringOutputModeResolver> modeResolver() default NoModeResolver.class;
 
 	@interface Entry {

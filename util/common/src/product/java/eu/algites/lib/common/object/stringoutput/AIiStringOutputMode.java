@@ -1,5 +1,7 @@
 package eu.algites.lib.common.object.stringoutput;
 
+import eu.algites.lib.common.object.enums.AIiEnumItem;
+
 /**
  * <p>
  * Title: {@link AIiStringOutputMode}
@@ -17,11 +19,6 @@ package eu.algites.lib.common.object.stringoutput;
  * @author linhart1
  * @date 12.01.26 4:47
  */
-public interface AIiStringOutputMode {
-	/**
-	 * Returns unique code of the mode, typically the name of the enum or similar code
-	 * @return code of the given mode
-	 */
-	String code();
+public interface AIiStringOutputMode extends AIiEnumItem {
 
 }
