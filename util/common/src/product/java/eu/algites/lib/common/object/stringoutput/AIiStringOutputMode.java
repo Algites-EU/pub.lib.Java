@@ -1,6 +1,6 @@
 package eu.algites.lib.common.object.stringoutput;
 
-import eu.algites.lib.common.object.enums.AIiEnumItem;
+import eu.algites.lib.common.enumdata.AIiEnumItem;
 
 /**
  * <p>

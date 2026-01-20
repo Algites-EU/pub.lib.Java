@@ -43,7 +43,7 @@ public class AIxRuntimeException extends RuntimeException{
 		messageOutputMode = aMessageOutputMode;
 	}
 
-	public AIxRuntimeException(AInStringOutputMode aMessageOutputMode, @NotNull final Supplier<String> aMessageSupplier) {
+	public AIxRuntimeException(@NotNull final Supplier<String> aMessageSupplier, AInStringOutputMode aMessageOutputMode) {
 		super(resolveStringOutput(aMessageSupplier, aMessageOutputMode));
 		messageOutputMode = aMessageOutputMode;
 	}
