@@ -16,7 +16,7 @@ import java.util.Map;
  * Company: Algites
  * </p>
  * @param displayLabel label to be displayed in UI
- * @param required whether the field is required
+ * @param requiredForOrigin whether the field is required for given origin
  *
  * @author linhart1
  * @date 20.01.26 7:44
