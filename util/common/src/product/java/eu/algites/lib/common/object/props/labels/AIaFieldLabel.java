@@ -13,7 +13,8 @@ import java.lang.annotation.Target;
  * Title: {@link AIaFieldLabel}
  * </p>
  * <p>
- * Description: TODO: Add description
+ * Description: Annotation for the custom field labeling used
+ *    for the evaluation what label should be used for the field.
  * </p>
  * <p>
  * Copyright: Copyright (c) 2026 Artur Linhart, Algites
