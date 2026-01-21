@@ -1,6 +1,10 @@
 package eu.algites.lib.common.enumdata;
 
+import static eu.algites.lib.common.enumdata.AIsEnumDataUtils.LAST_UID_HEADER_PART_POSITION;
+
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.gradle.internal.impldep.org.apache.commons.lang3.function.TriFunction;
 import org.testng.Assert;
@@ -13,10 +17,11 @@ import org.testng.annotations.Test;
  * The tests use a small test enum-data-type with the following UID layout:
  * {@code <origin>:<namespace>:<classifier>:<fileType>}.
  * </p>
+ * @author linhart1
  */
 public class AItcAIsEnumDataUtilsTest {
 
-	private static final AIiGloballyUniqueEnumDataType<AIcTestUidPartsRecord> TEST_ENUM_DATA_TYPE = new AIcTestEnumDataType();
+	private static final AIiGloballyUniqueEnumDataType<AIcTestUidPartsRecord, AInEnumDataOrigin> TEST_ENUM_DATA_TYPE = new AIcTestEnumDataType();
 
 	/**
 	 * Test record used as a parsed representation for the test UID format.
@@ -36,12 +41,12 @@ public class AItcAIsEnumDataUtilsTest {
 	/**
 	 * Test enum-data-type used by tests.
 	 */
-	private static final class AIcTestEnumDataType implements AIiGloballyUniqueEnumDataType<AIcTestUidPartsRecord> {
+	private static final class AIcTestEnumDataType implements AIiGloballyUniqueEnumDataType<AIcTestUidPartsRecord, AInEnumDataOrigin> {
 
-		private static final List<AIiUidPartMetadata> SPECIFIC_UID_PARTS_METADATA = List.of(
-				new AIrUidPartMetadata("__unused__", false),
-				new AIrUidPartMetadata("classifier", false),
-				new AIrUidPartMetadata("fileType", true)
+		@SuppressWarnings("unchecked")
+		private static final List<AIiUidPartMetadata<AInEnumDataOrigin>> SPECIFIC_UID_PARTS_METADATA = List.of(
+				new AIrUidPartMetadata("classifier", Collections.emptyMap()),
+				new AIrUidPartMetadata("fileType", Map.of(AInEnumDataOrigin.BUILTIN, true, AInEnumDataOrigin.CUSTOM, true))
 		);
 
 		@Override
@@ -51,29 +56,32 @@ public class AItcAIsEnumDataUtilsTest {
 					final List<String> aParts) -> new AIcTestUidPartsRecord(
 					AInEnumDataOrigin.getByCodeOrThrow(aParts.get(AIsEnumDataUtils.ORIGIN_CLASS_UID_POSITION)),
 					aParts.get(AIsEnumDataUtils.NAMESPACE_UID_POSITION),
-					aParts.get(AIsEnumDataUtils.LAST_UID_HEADER_PART_POSITION + 1),
-					aParts.get(AIsEnumDataUtils.LAST_UID_HEADER_PART_POSITION + 2)
+					aParts.get(LAST_UID_HEADER_PART_POSITION + 1),
+					aParts.get(LAST_UID_HEADER_PART_POSITION + 2)
 			);
 		}
 
 		@Override
-		public List<AIiUidPartMetadata> getSpecificUidPartsMetadata() {
+		public List<AIiUidPartMetadata<AInEnumDataOrigin>> getSpecificUidPartsMetadata() {
 			return SPECIFIC_UID_PARTS_METADATA;
 		}
 
 		@Override
 		public int getUidPartCount() {
-			final int locSpecificPartsCount = getSpecificUidPartsMetadata().size() - 1;
-			return locSpecificPartsCount + 2;
+			return getSpecificUidPartsMetadata().size() + LAST_UID_HEADER_PART_POSITION + 1;
 		}
 	}
 
+	/**
+	 * Test that a UID can be created from a specific UID parts list and that the UID can be parsed back to the same parts.
+	 */
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testCreateBuiltinUidAndParseRoundtrip() {
 		final List<String> locSpecificUidParts = List.of("", "jar");
-		final List<AIiUidPartMetadata> locSpecificUidPartsMetadata = List.of(
-				new AIrUidPartMetadata("classifier", false),
-				new AIrUidPartMetadata("fileType", true)
+		final List<AIiUidPartMetadata<AInEnumDataOrigin>> locSpecificUidPartsMetadata = List.of(
+				new AIrUidPartMetadata("classifier", Collections.emptyMap()),
+				new AIrUidPartMetadata("fileType", Map.of(AInEnumDataOrigin.BUILTIN, true, AInEnumDataOrigin.CUSTOM, true))
 		);
 		final String locUid = AIsEnumDataUtils.createBuiltinUid(locSpecificUidParts, locSpecificUidPartsMetadata);
 		Assert.assertEquals(locUid, "builtin:::jar");
@@ -85,6 +93,9 @@ public class AItcAIsEnumDataUtilsTest {
 		Assert.assertEquals(locParts.fileType(), "jar");
 	}
 
+	/**
+	 * Test that the origin and namespace can be extracted from a UID.
+	 */
 	@Test
 	public void testGetOriginAndNamespace() {
 		final String locUid = "builtin:::jar";
@@ -94,6 +105,9 @@ public class AItcAIsEnumDataUtilsTest {
 		Assert.assertEquals(locNamespace, "");
 	}
 
+	/**
+	 * Test that the namespace must be empty for builtin UIDs.
+	 */
 	@Test
 	public void testBuiltinNamespaceMustBeEmpty() {
 		final String locInvalidUid = "builtin:eu.algites::jar";
@@ -101,6 +115,9 @@ public class AItcAIsEnumDataUtilsTest {
 		Assert.expectThrows(IllegalArgumentException.class, () -> AIsEnumDataUtils.validateUid(TEST_ENUM_DATA_TYPE, locInvalidUid));
 	}
 
+	/**
+	 * Test that the namespace must be non-blank for custom UIDs.
+	 */
 	@Test
 	public void testCustomNamespaceMustBeNonBlank() {
 		final String locValidUid = "custom:eu.algites::jar";
@@ -114,6 +131,9 @@ public class AItcAIsEnumDataUtilsTest {
 		Assert.expectThrows(IllegalArgumentException.class, () -> AIsEnumDataUtils.validateUid(TEST_ENUM_DATA_TYPE, locInvalidUid));
 	}
 
+	/**
+	 * Test that invalid characters are rejected.
+	 */
 	@Test
 	public void testInvalidCharactersAreRejected() {
 		final String locInvalidUid = "builtin:::ja$r";
@@ -121,6 +141,9 @@ public class AItcAIsEnumDataUtilsTest {
 		Assert.expectThrows(IllegalArgumentException.class, () -> AIsEnumDataUtils.validateUid(TEST_ENUM_DATA_TYPE, locInvalidUid));
 	}
 
+	/**
+	 * Test that the UID must have the correct number of segments.
+	 */
 	@Test
 	public void testSplitUidIntoPartsRejectsWrongSegmentCount() {
 		final String locInvalidUid = "builtin::jar";

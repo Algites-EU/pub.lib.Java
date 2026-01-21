@@ -1,5 +1,7 @@
 package eu.algites.lib.common.enumdata;
 
+import java.util.Map;
+
 /**
  * <p>
  * Title: {@link AIrUidPartMetadata}
@@ -21,5 +23,7 @@ package eu.algites.lib.common.enumdata;
  */
 public record AIrUidPartMetadata(
 		String displayLabel,
-		boolean required
-) implements AIiUidPartMetadata { }
+		Map<AIiEnumDataOrigin, Boolean> requiredForOrigin
+) implements AIiUidPartMetadata {
+
+}

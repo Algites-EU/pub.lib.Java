@@ -1,5 +1,7 @@
 package eu.algites.lib.common.enumdata;
 
+import static eu.algites.lib.common.enumdata.AIsEnumDataUtils.LAST_UID_HEADER_PART_POSITION;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -22,7 +24,7 @@ import org.gradle.internal.impldep.org.apache.commons.lang3.function.TriFunction
  * @author linhart1
  * @date 20.01.26 8:36
  */
-public interface AIiGloballyUniqueEnumDataType<R extends AIiUidPartsRecord> {
+public interface AIiGloballyUniqueEnumDataType<R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin> {
 
 	/**
 	 * Gets the constructor for the UID record.
@@ -35,8 +37,9 @@ public interface AIiGloballyUniqueEnumDataType<R extends AIiUidPartsRecord> {
 	 * if the origin is unknown.
 	 * @return the origin resolver. By default it resolves from {@link AInEnumDataOrigin#getByCodeOrThrow(String)}.
 	 */
-	default Function<String, AIiEnumDataOrigin> getOriginGetter() {
-		return AInEnumDataOrigin::getByCodeOrThrow;
+	@SuppressWarnings("unchecked")
+	default Function<String, O> getOriginGetter() {
+		return aS -> (O)AInEnumDataOrigin.getByCodeOrThrow(aS);
 	}
 
 	/**
@@ -44,15 +47,16 @@ public interface AIiGloballyUniqueEnumDataType<R extends AIiUidPartsRecord> {
 	 * if the origin is unknown.
 	 * @return the origin resolver. By default it resolves from {@link AInEnumDataOrigin#findByCodeOrNull(String)}.
 	 */
-	default Function<String, AIiEnumDataOrigin> getOriginFinder() {
-		return AInEnumDataOrigin::findByCodeOrNull;
+	@SuppressWarnings("unchecked")
+	default Function<String, O> getOriginFinder() {
+		return aS -> (O)AInEnumDataOrigin.findByCodeOrNull(aS);
 	}
 
 	/**
 	 * Gets the metadata for the specific UID parts of this enum data type.
 	 * @return the metadata for the specific uid parts
 	 */
-	List<AIiUidPartMetadata> getSpecificUidPartsMetadata();
+	List<AIiUidPartMetadata<O>> getSpecificUidPartsMetadata();
 
 	/**
 	 * Gets the count of UID parts for this enum data type.
@@ -61,7 +65,7 @@ public interface AIiGloballyUniqueEnumDataType<R extends AIiUidPartsRecord> {
 	 */
 	default int getUidPartCount() {
 		/* Count of specific parts plus origin prefix plus namespace prefix */
-		return getSpecificUidPartsMetadata().size() + 2;
+		return getSpecificUidPartsMetadata().size() + LAST_UID_HEADER_PART_POSITION + 1;
 	}
 
 }

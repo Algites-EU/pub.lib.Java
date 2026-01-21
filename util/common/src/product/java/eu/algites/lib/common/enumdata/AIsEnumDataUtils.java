@@ -46,6 +46,7 @@ public class AIsEnumDataUtils {
 	public static final int ORIGIN_CLASS_UID_POSITION = 0;
 	public static final int NAMESPACE_UID_POSITION = ORIGIN_CLASS_UID_POSITION + 1;
 	public static final int LAST_UID_HEADER_PART_POSITION = NAMESPACE_UID_POSITION;
+	public static final int FIRST_UID_SPECIFIC_PART_POSITION = LAST_UID_HEADER_PART_POSITION + 1;
 
 	private AIsEnumDataUtils() {}
 
@@ -60,11 +61,12 @@ public class AIsEnumDataUtils {
 	 * @param aSpecificUidParts parts of the UID after {@link #LAST_UID_HEADER_PART_POSITION} to the end
 	 * @param aSpecificUidPartsMetadata metadata for the specific parts
 	 * @return UID string for the builtin UID
+	 * @param <O> origin type
 	 */
-	public static String createUid(@Nonnull AIiEnumDataOrigin aOrigin,
+	public static <O extends AIiEnumDataOrigin> String createUid(@Nonnull O aOrigin,
 			String aUidNamespacePart,
 			@Nonnull List<String> aSpecificUidParts,
-			@Nonnull List<AIiUidPartMetadata> aSpecificUidPartsMetadata) {
+			@Nonnull List<AIiUidPartMetadata<O>> aSpecificUidPartsMetadata) {
 		if (aSpecificUidParts.size() != aSpecificUidPartsMetadata.size()) {
 			throw new AIxDevelopmentErrorException("Number of specific parts must match number of metadata. Passed values:" + aSpecificUidParts + ", " + aSpecificUidPartsMetadata);
 		}
@@ -81,8 +83,8 @@ public class AIsEnumDataUtils {
 		}
 		for (int i = 0; i< aSpecificUidParts.size(); i++) {
 			final String locNormalizedSpecificUidPart;
-			final AIiUidPartMetadata locAIiUidPartMetadata = aSpecificUidPartsMetadata.get(i);
-			if (locAIiUidPartMetadata.required())
+			final AIiUidPartMetadata<O> locAIiUidPartMetadata = aSpecificUidPartsMetadata.get(i);
+			if (locAIiUidPartMetadata.requiredForOrigin().getOrDefault(aOrigin, false))
 				locNormalizedSpecificUidPart = normalizeRequiredPart(aSpecificUidParts.get(i), locAIiUidPartMetadata.displayLabel());
 			else
 			  locNormalizedSpecificUidPart = normalizeOptionalPart(aSpecificUidParts.get(i));
@@ -107,7 +109,7 @@ public class AIsEnumDataUtils {
 	 */
 	public static String createBuiltinUid(
 			@Nonnull List<String> aSpecificUidParts,
-			@Nonnull List<AIiUidPartMetadata> aSpecificUidPartsMetadata) {
+			@Nonnull List<AIiUidPartMetadata<AInEnumDataOrigin>> aSpecificUidPartsMetadata) {
 		return createUid(AInEnumDataOrigin.BUILTIN, "", aSpecificUidParts, aSpecificUidPartsMetadata);
 	}
 
@@ -124,7 +126,7 @@ public class AIsEnumDataUtils {
 	public static String createCustomUid(
 			String aUidNamespacePart,
 			@Nonnull List<String> aSpecificUidParts,
-			@Nonnull List<AIiUidPartMetadata> aSpecificUidPartsMetadata) {
+			@Nonnull List<AIiUidPartMetadata<AInEnumDataOrigin>> aSpecificUidPartsMetadata) {
 		return createUid(AInEnumDataOrigin.BUILTIN, aUidNamespacePart, aSpecificUidParts, aSpecificUidPartsMetadata);
 	}
 
@@ -136,14 +138,15 @@ public class AIsEnumDataUtils {
 	 * @return parsed parts
 	 * @throws IllegalArgumentException if invalid
 	 * @param <R> type of the result enum data type expected.
+	 * @param <O> origin type
 	 */
-	public static <R extends AIiUidPartsRecord> R parseUid(
-			@Nonnull AIiGloballyUniqueEnumDataType<R> aEnumDataType,
+	public static <R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin> R parseUid(
+			@Nonnull AIiGloballyUniqueEnumDataType<R, O> aEnumDataType,
 			@Nonnull String aUid) {
 		Objects.requireNonNull(aEnumDataType, () -> "Enum data type must not be null. Passed UID:" + aUid);
 		String locUid = Objects.requireNonNull(aUid, () -> "aUid must not be null. Passed enum data type:" + aEnumDataType);
 		String[] locParts = splitUidIntoParts(aEnumDataType, locUid);
-		AIiEnumDataOrigin locOrigin = aEnumDataType.getOriginGetter().apply(locParts[ORIGIN_CLASS_UID_POSITION]);
+		O locOrigin = aEnumDataType.getOriginGetter().apply(locParts[ORIGIN_CLASS_UID_POSITION]);
 
 		validatePartsSemantics(aEnumDataType, locOrigin, locParts);
 
@@ -157,9 +160,10 @@ public class AIsEnumDataUtils {
 	 * @param aUid uid string
 	 * @throws IllegalArgumentException if invalid
 	 * @param <R> type of the enum data type expected.
+	 * @param <O> origin type
 	 */
-	public static <R extends AIiUidPartsRecord> void validateUid(
-			@Nonnull final AIiGloballyUniqueEnumDataType<R> aEnumDataType, @Nonnull String aUid)
+	public static <R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin> void validateUid(
+			@Nonnull final AIiGloballyUniqueEnumDataType<R, O> aEnumDataType, @Nonnull String aUid)
 			throws IllegalArgumentException {
 		parseUid(aEnumDataType, aUid);
 	}
@@ -169,10 +173,11 @@ public class AIsEnumDataUtils {
 	 * @param aUid uid string
 	 * @return true if valid, else false
 	 * @param <R> type of the enum data type expected.
+	 * @param <O> origin type
 	 */
-	public static <R extends AIiUidPartsRecord>
+	public static <R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin>
 	boolean isValidOutputTypeUid(
-			@Nonnull final AIiGloballyUniqueEnumDataType<R> aEnumDataType,
+			@Nonnull final AIiGloballyUniqueEnumDataType<R, O> aEnumDataType,
 			@Nonnull String aUid) {
 		try {
 			validateUid(aEnumDataType, aUid);
@@ -187,9 +192,10 @@ public class AIsEnumDataUtils {
 	 * @param aUid uid string
 	 * @return kind class
 	 * @param <R> type of the enum data type expected.
+	 * @param <O> origin type
 	 */
-	public static <R extends AIiUidPartsRecord> AInEnumDataOrigin getOrigin(
-			@Nonnull final AIiGloballyUniqueEnumDataType<R> aEnumDataType,
+	public static <R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin> AInEnumDataOrigin getOrigin(
+			@Nonnull final AIiGloballyUniqueEnumDataType<R, O> aEnumDataType,
 			@Nonnull String aUid) {
 		return parseUid(aEnumDataType, aUid).origin();
 	}
@@ -199,9 +205,10 @@ public class AIsEnumDataUtils {
 	 * @param aUid uid string
 	 * @return namespace segment (empty for builtin)
 	 * @param <R> type of the enum data type expected.
+	 * @param <O> origin type
 	 */
-	public static <R extends AIiUidPartsRecord> String getNamespace(
-			final AIiGloballyUniqueEnumDataType<R> aComponentType, String aUid) {
+	public static <R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin> String getNamespace(
+			final AIiGloballyUniqueEnumDataType<R, O> aComponentType, String aUid) {
 		return parseUid(aComponentType, aUid).namespace();
 	}
 
@@ -211,10 +218,11 @@ public class AIsEnumDataUtils {
 	 * @param aUid uid string
 	 * @return parts split according to the definition of the enum data type
 	 * @param <R> type of the enum data type expected.
+	 * @param <O> origin type
 	 * @throws IllegalArgumentException if uid is invalid
 	 */
-	public static <R extends AIiUidPartsRecord> String[] splitUidIntoParts(
-			@Nonnull final AIiGloballyUniqueEnumDataType<R> aEnumDataType,
+	public static <R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin> String[] splitUidIntoParts(
+			@Nonnull final AIiGloballyUniqueEnumDataType<R, O> aEnumDataType,
 			@Nonnull final String aUid)
 	throws IllegalArgumentException {
 		int locFirst = aUid.indexOf(UID_PART_SEPARATOR);
@@ -234,9 +242,9 @@ public class AIsEnumDataUtils {
 		return locParts;
 	}
 
-	private static <R extends AIiUidPartsRecord> void validatePartsSemantics(
-			@Nonnull AIiGloballyUniqueEnumDataType<R> aEnumDataType,
-			@Nonnull AIiEnumDataOrigin aEnumDataOrigin,
+	private static <R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin> void validatePartsSemantics(
+			@Nonnull AIiGloballyUniqueEnumDataType<R, O> aEnumDataType,
+			@Nonnull O aEnumDataOrigin,
 			@Nonnull String[] aEnumDataParts
 	) {
 		if (aEnumDataParts.length != aEnumDataType.getUidPartCount()) {
@@ -261,8 +269,8 @@ public class AIsEnumDataUtils {
 			}
 			validateSafeNamespace(locNamespace);
 		}
-		for (int i = LAST_UID_HEADER_PART_POSITION + 1; i < aEnumDataType.getUidPartCount(); i++) {
-			final AIiUidPartMetadata locPartMetadata = aEnumDataType.getSpecificUidPartsMetadata().get(i - LAST_UID_HEADER_PART_POSITION);
+		for (int i = FIRST_UID_SPECIFIC_PART_POSITION; i < aEnumDataType.getUidPartCount(); i++) {
+			final AIiUidPartMetadata<O> locPartMetadata = aEnumDataType.getSpecificUidPartsMetadata().get(i - FIRST_UID_SPECIFIC_PART_POSITION);
 			Objects.requireNonNull(aEnumDataParts[i], () -> "<" + locPartMetadata.displayLabel() + "> part must not be null");
 			validateSafePart(aEnumDataParts[i], locPartMetadata.displayLabel());
 		}
