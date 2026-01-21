@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 /**
@@ -72,12 +73,12 @@ public class AIsEnumDataUtils {
 		}
 		String locNormalizedNamespace;
 		if (aOrigin.namespaceUsed()) {
-			locNormalizedNamespace = normalizeRequiredPart(aUidNamespacePart, "namespace");
+			locNormalizedNamespace = normalizeRequiredPart(aUidNamespacePart, () -> "namespace");
 			validateSafeNamespace(locNormalizedNamespace);
 		}
 		else {
 			if (!(aUidNamespacePart == null || aUidNamespacePart.isBlank()))
-				throw new AIxDevelopmentErrorException("For the origin '" + aOrigin.code() + "' cannot be ued any namespace. Passed values: namespace='" + aUidNamespacePart + "', specific uid parts:"
+				throw new AIxDevelopmentErrorException("For the origin '" + aOrigin.code() + "' cannot be used any namespace. Passed values: namespace='" + aUidNamespacePart + "', specific uid parts:"
 						+ aSpecificUidParts + ", specific parts metadata: " + aSpecificUidPartsMetadata);
 			locNormalizedNamespace = "";
 		}
@@ -85,10 +86,10 @@ public class AIsEnumDataUtils {
 			final String locNormalizedSpecificUidPart;
 			final AIiUidPartMetadata<O> locAIiUidPartMetadata = aSpecificUidPartsMetadata.get(i);
 			if (locAIiUidPartMetadata.requiredForOrigin().getOrDefault(aOrigin, false))
-				locNormalizedSpecificUidPart = normalizeRequiredPart(aSpecificUidParts.get(i), locAIiUidPartMetadata.displayLabel());
+				locNormalizedSpecificUidPart = normalizeRequiredPart(aSpecificUidParts.get(i), locAIiUidPartMetadata.displayLabelSupplier());
 			else
 			  locNormalizedSpecificUidPart = normalizeOptionalPart(aSpecificUidParts.get(i));
-			validateSafePart(locNormalizedSpecificUidPart, locAIiUidPartMetadata.displayLabel());
+			validateSafePart(locNormalizedSpecificUidPart, locAIiUidPartMetadata.displayLabelSupplier());
 
 		}
 		Collection<String> locResult = new ArrayList<>(aSpecificUidParts.size() + 2);
@@ -258,28 +259,28 @@ public class AIsEnumDataUtils {
 		if (!aEnumDataOrigin.namespaceUsed()) {
 			if (!locNamespace.isEmpty()) {
 				throw new IllegalArgumentException("Invalid builtin UID: " 
-						+ aEnumDataType.getSpecificUidPartsMetadata().get(NAMESPACE_UID_POSITION).displayLabel()
+						+ aEnumDataType.getSpecificUidPartsMetadata().get(NAMESPACE_UID_POSITION).displayLabelSupplier().get()
 						+ " must be empty");
 			}
 		} else {
 			if (locNamespace.isBlank()) {
 				throw new IllegalArgumentException("Invalid builtin UID: "
-						+ aEnumDataType.getSpecificUidPartsMetadata().get(NAMESPACE_UID_POSITION).displayLabel()
+						+ aEnumDataType.getSpecificUidPartsMetadata().get(NAMESPACE_UID_POSITION).displayLabelSupplier().get()
 						+ " must be non-blank");
 			}
 			validateSafeNamespace(locNamespace);
 		}
 		for (int i = FIRST_UID_SPECIFIC_PART_POSITION; i < aEnumDataType.getUidPartCount(); i++) {
 			final AIiUidPartMetadata<O> locPartMetadata = aEnumDataType.getSpecificUidPartsMetadata().get(i - FIRST_UID_SPECIFIC_PART_POSITION);
-			Objects.requireNonNull(aEnumDataParts[i], () -> "<" + locPartMetadata.displayLabel() + "> part must not be null");
-			validateSafePart(aEnumDataParts[i], locPartMetadata.displayLabel());
+			Objects.requireNonNull(aEnumDataParts[i], () -> "<" + locPartMetadata.displayLabelSupplier().get() + "> part must not be null");
+			validateSafePart(aEnumDataParts[i], locPartMetadata.displayLabelSupplier());
 		}
 	}
 
-	private static void validateSafePart(CharSequence aSegment, String aSegmentName) {
+	private static void validateSafePart(CharSequence aSegment, Supplier<String> aPartDisplayLabelSupplier) {
 		if (!UID_COMMON_PART_PATTERN.matcher(aSegment).matches()) {
 			throw new IllegalArgumentException(
-					"Invalid " + aSegmentName + " part '" + aSegment + "': allowed pattern is " + UID_COMMON_PART_PATTERN.pattern()
+					"Invalid " + aPartDisplayLabelSupplier.get() + " part '" + aSegment + "': allowed pattern is " + UID_COMMON_PART_PATTERN.pattern()
 			);
 		}
 	}
@@ -300,10 +301,10 @@ public class AIsEnumDataUtils {
 		return locTrimmedValue;
 	}
 
-	private static String normalizeRequiredPart(String aValue, String aName) {
-		String locValue = Objects.requireNonNull(aValue, () -> aName + " must not be null").trim();
+	private static String normalizeRequiredPart(String aValue, Supplier<String> aPartDisplayLabelSupplier) {
+		String locValue = Objects.requireNonNull(aValue, () -> aPartDisplayLabelSupplier.get() + " must not be null").trim();
 		if (locValue.isEmpty()) {
-			throw new IllegalArgumentException(aName + " must be non-empty");
+			throw new IllegalArgumentException(aPartDisplayLabelSupplier.get() + " must be non-empty");
 		}
 		return locValue;
 	}

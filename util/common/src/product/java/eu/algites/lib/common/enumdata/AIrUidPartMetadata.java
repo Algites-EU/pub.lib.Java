@@ -1,6 +1,7 @@
 package eu.algites.lib.common.enumdata;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * <p>
@@ -15,14 +16,14 @@ import java.util.Map;
  * <p>
  * Company: Algites
  * </p>
- * @param displayLabel label to be displayed in UI
+ * @param displayLabelSupplier field name of the field in the UID record to be used for the resolution of the display label in UI
  * @param requiredForOrigin whether the field is required for given origin
  *
  * @author linhart1
  * @date 20.01.26 7:44
  */
 public record AIrUidPartMetadata(
-		String displayLabel,
+		Supplier<String> displayLabelSupplier,
 		Map<AIiEnumDataOrigin, Boolean> requiredForOrigin
 ) implements AIiUidPartMetadata {
 

@@ -45,8 +45,8 @@ public class AItcAIsEnumDataUtilsTest {
 
 		@SuppressWarnings("unchecked")
 		private static final List<AIiUidPartMetadata<AInEnumDataOrigin>> SPECIFIC_UID_PARTS_METADATA = List.of(
-				new AIrUidPartMetadata("classifier", Collections.emptyMap()),
-				new AIrUidPartMetadata("fileType", Map.of(AInEnumDataOrigin.BUILTIN, true, AInEnumDataOrigin.CUSTOM, true))
+				new AIrUidPartMetadata(() -> "classifier", Collections.emptyMap()),
+				new AIrUidPartMetadata(() -> "fileType", Map.of(AInEnumDataOrigin.BUILTIN, true, AInEnumDataOrigin.CUSTOM, true))
 		);
 
 		@Override
@@ -80,8 +80,8 @@ public class AItcAIsEnumDataUtilsTest {
 	public void testCreateBuiltinUidAndParseRoundtrip() {
 		final List<String> locSpecificUidParts = List.of("", "jar");
 		final List<AIiUidPartMetadata<AInEnumDataOrigin>> locSpecificUidPartsMetadata = List.of(
-				new AIrUidPartMetadata("classifier", Collections.emptyMap()),
-				new AIrUidPartMetadata("fileType", Map.of(AInEnumDataOrigin.BUILTIN, true, AInEnumDataOrigin.CUSTOM, true))
+				new AIrUidPartMetadata(() -> "classifier", Collections.emptyMap()),
+				new AIrUidPartMetadata(() -> "fileType", Map.of(AInEnumDataOrigin.BUILTIN, true, AInEnumDataOrigin.CUSTOM, true))
 		);
 		final String locUid = AIsEnumDataUtils.createBuiltinUid(locSpecificUidParts, locSpecificUidPartsMetadata);
 		Assert.assertEquals(locUid, "builtin:::jar");

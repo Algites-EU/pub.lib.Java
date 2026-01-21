@@ -1,6 +1,7 @@
 package eu.algites.lib.common.enumdata;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * <p>
@@ -21,10 +22,10 @@ import java.util.Map;
  */
 public interface AIiUidPartMetadata<O extends AIiEnumDataOrigin> {
 	/**
-	 * Label to be displayed in the UI
+	 * Supplier of Label to be displayed in the UI
 	 * @return label
 	 */
-	String displayLabel();
+	Supplier<String> displayLabelSupplier();
 
 	/**
 	 * Whether the field value is required
