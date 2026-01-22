@@ -182,4 +182,188 @@ public class AItsFieldLabelUtilsTest {
 			return AInStringOutputMode.USER;
 		}
 	}
+
+
+	@Test
+	public void testFindLabelUsesMethodAnnotationOnGetter() {
+		String locLabel = AIsFieldLabelUtils.findLabel(
+				AIcTestMethodAnnotation.class,
+				"myProperty",
+				AInStringOutputMode.USER
+		);
+
+		Assert.assertEquals(locLabel, "GetterUserLabel", "Getter annotation must be used when field has no annotation");
+	}
+
+	@Test
+	public void testFindLabelUsesRecordComponentAnnotation() {
+		String locLabel = AIsFieldLabelUtils.findLabel(
+				AIcTestRecordComponent.class,
+				"myProperty",
+				AInStringOutputMode.USER
+		);
+
+		Assert.assertEquals(locLabel, "RecordComponentUserLabel", "Record component annotation must be used for records");
+	}
+
+	@Test
+	public void testFindLabelResolvesAnnotationFromInterfaceMethodForRecord() {
+		String locLabel = AIsFieldLabelUtils.findLabel(
+				AIcTestRecordImplementsInterface.class,
+				"myProperty",
+				AInStringOutputMode.USER
+		);
+
+		Assert.assertEquals(locLabel, "InterfaceUserLabel", "Interface method annotation must be resolved for record implementing the interface");
+	}
+
+
+@Test
+public void testFindLabelResolvesInterfaceAnnotationEvenIfClassDeclaresUnannotatedGetter() {
+	String locLabel = AIsFieldLabelUtils.findLabel(
+			AIcTestClassImplementsInterfaceWithUnannotatedGetter.class,
+			"myProperty",
+			AInStringOutputMode.USER
+	);
+
+	Assert.assertEquals(locLabel, "InterfaceGetterUserLabel", "Interface getter annotation must be resolved even if class declares an unannotated getter");
+}
+
+	@Test
+	public void testFindLabelFieldAnnotationOverridesGetterAnnotation() {
+		String locLabel = AIsFieldLabelUtils.findLabel(
+				AIcTestFieldOverridesMethod.class,
+				"myProperty",
+				AInStringOutputMode.USER
+		);
+
+		Assert.assertEquals(locLabel, "FieldUserLabel", "Field annotation must override getter annotation");
+	}
+
+	@Test
+	public void testFindLabelRecordComponentAnnotationOverridesAccessorMethodAnnotation() {
+		String locLabel = AIsFieldLabelUtils.findLabel(
+				AIcTestRecordComponentOverridesMethod.class,
+				"myProperty",
+				AInStringOutputMode.USER
+		);
+
+		Assert.assertEquals(locLabel, "RecordComponentUserLabel", "Record component annotation must override accessor method annotation");
+	}
+
+	private static final class AIcTestMethodAnnotation {
+		private String myProperty;
+
+		@AIaFieldLabel(labels = {
+				@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "GetterUserLabel")
+		})
+		public String getMyProperty() {
+			return myProperty;
+		}
+	}
+
+	private record AIcTestRecordComponent(
+			@AIaFieldLabel(labels = {
+					@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "RecordComponentUserLabel")
+			})
+			String myProperty
+	) {
+		/* Record as data carrier. */
+	}
+
+	private interface AIiTestInterfaceWithAnnotatedAccessor {
+		@AIaFieldLabel(labels = {
+				@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "InterfaceUserLabel")
+		})
+		String myProperty();
+	}
+
+	private record AIcTestRecordImplementsInterface(
+			String myProperty
+	) implements AIiTestInterfaceWithAnnotatedAccessor {
+		/* Record as data carrier. */
+	}
+
+
+private interface AIiTestInterfaceWithAnnotatedGetter {
+	@AIaFieldLabel(labels = {
+			@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "InterfaceGetterUserLabel")
+	})
+	String getMyProperty();
+}
+
+private static final class AIcTestClassImplementsInterfaceWithUnannotatedGetter implements AIiTestInterfaceWithAnnotatedGetter {
+	@Override
+	public String getMyProperty() {
+		return "value";
+	}
+}
+
+	private static final class AIcTestFieldOverridesMethod {
+
+		@AIaFieldLabel(labels = {
+				@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "FieldUserLabel")
+		})
+		private String myProperty;
+
+		@AIaFieldLabel(labels = {
+				@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "GetterUserLabel")
+		})
+		public String getMyProperty() {
+			return myProperty;
+		}
+	}
+
+	private record AIcTestRecordComponentOverridesMethod(
+			@AIaFieldLabel(labels = {
+					@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "RecordComponentUserLabel")
+			})
+			String myProperty
+	) {
+		@AIaFieldLabel(labels = {
+				@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "GetterUserLabel")
+		})
+		@Override
+		public String myProperty() {
+			return myProperty;
+		}
+	}
+
+
+
+	@Test
+	public void testRequirePropertyExistsDoesNotThrowForExistingPropertyOnField() {
+	    AIsFieldLabelUtils.requirePropertyExists(
+	            AIcTestMappedLabels.class,
+	            "myProperty"
+	    );
+	}
+
+	@Test
+	public void testRequirePropertyExistsDoesNotThrowForExistingPropertyOnGetterOnly() {
+	    AIsFieldLabelUtils.requirePropertyExists(
+	            AIcTestGetterOnlyProperty.class,
+	            "myProperty"
+	    );
+	}
+
+	@Test
+	public void testRequirePropertyExistsThrowsForUnknownProperty() {
+	    boolean locThrown = false;
+	    try {
+	        AIsFieldLabelUtils.requirePropertyExists(
+	                AIcTestMappedLabels.class,
+	                "unknownProperty"
+	        );
+	    } catch (IllegalArgumentException locException) {
+	        locThrown = true;
+	    }
+	    Assert.assertTrue(locThrown, "Unknown property must throw IllegalArgumentException");
+	}
+
+	private static final class AIcTestGetterOnlyProperty {
+	    public String getMyProperty() {
+	        return "value";
+	    }
+	}
 }

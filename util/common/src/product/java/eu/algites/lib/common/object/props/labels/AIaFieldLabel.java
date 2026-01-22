@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
  * @date 12.01.26 6:13
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.RECORD_COMPONENT})
 public @interface AIaFieldLabel {
 
 

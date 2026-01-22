@@ -6,17 +6,37 @@ import eu.algites.lib.common.object.stringoutput.AInStringOutputMode;
 import eu.algites.lib.common.object.stringoutput.AIsStringOutputUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.RecordComponent;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
  * Title: {@link AIsFieldLabelUtils}
  * </p>
  * <p>
- * Description: Utilities for the field labeling processing
+ * Description: Utilities for the field labeling processing.
+ * Supports annotations declared on:
  * </p>
+ * <ul>
+ *   <li>fields</li>
+ *   <li>methods (getters/accessors)</li>
+ *   <li>record components</li>
+ *   <li>interface methods (e.g., record implements interface)</li>
+ * </ul>
+ * <p>
+ * In the presence of multiple annotations for the same property name, the following precedence is applied:
+ * </p>
+ * <ol>
+ *   <li>record component annotation</li>
+ *   <li>field annotation</li>
+ *   <li>declared class method annotation</li>
+ *   <li>interface method annotation</li>
+ * </ol>
  * <p>
  * Copyright: Copyright (c) 2026 Artur Linhart, Algites
  * </p>
@@ -38,7 +58,7 @@ public class AIsFieldLabelUtils {
 	}
 
 	private record AIcFieldMetaNode(
-			Map<String, AIcFieldMeta> declaredByField,
+			Map<String, AIcFieldMeta> declaredByPropertyName,
 			AIcFieldMetaNode parentOrNull
 	) {
 		/* Record as data carrier. */
@@ -47,30 +67,189 @@ public class AIsFieldLabelUtils {
 	private static final ClassValue<AIcFieldMetaNode> CACHE = new ClassValue<>() {
 		@Override
 		protected AIcFieldMetaNode computeValue(Class<?> type) {
-			AIcFieldMetaNode parentOrNull = null;
+			AIcFieldMetaNode locParentOrNull = null;
 
-			Class<?> superclass = type.getSuperclass();
-			if (superclass != null && superclass != Object.class) {
-				parentOrNull = CACHE.get(superclass);
+			Class<?> locSuperclass = type.getSuperclass();
+			if (locSuperclass != null && locSuperclass != Object.class) {
+				locParentOrNull = CACHE.get(locSuperclass);
 			}
 
-			Map<String, AIcFieldMeta> declaredByField = new HashMap<>();
+			Map<String, AIcFieldMeta> locDeclaredByPropertyName = buildDeclaredMetaMap(type);
 
-			for (Field f : type.getDeclaredFields()) {
-				AIaFieldLabel ann = f.getAnnotation(AIaFieldLabel.class);
-				if (ann == null) {
-					continue;
-				}
-
-				validate(ann, f);
-
-				AIcFieldMeta meta = buildMetaFromAnnotation(ann);
-				declaredByField.put(f.getName(), meta);
-			}
-
-			return new AIcFieldMetaNode(Collections.unmodifiableMap(declaredByField), parentOrNull);
+			return new AIcFieldMetaNode(Collections.unmodifiableMap(locDeclaredByPropertyName), locParentOrNull);
 		}
 	};
+
+	private static Map<String, AIcFieldMeta> buildDeclaredMetaMap(Class<?> aOwnerClass) {
+		Map<String, AIcFieldMeta> locDeclaredByPropertyName = new HashMap<>();
+
+		/*
+		 * Lowest precedence first: interface method annotations.
+		 */
+		collectFromInterfaces(aOwnerClass, locDeclaredByPropertyName);
+
+		/*
+		 * Class declared methods override interface method annotations.
+		 */
+		collectFromDeclaredMethods(aOwnerClass, locDeclaredByPropertyName);
+
+		/*
+		 * Fields override method-based annotations.
+		 */
+		collectFromDeclaredFields(aOwnerClass, locDeclaredByPropertyName);
+
+		/*
+		 * Record components override everything else.
+		 */
+		collectFromRecordComponents(aOwnerClass, locDeclaredByPropertyName);
+
+		return locDeclaredByPropertyName;
+	}
+
+	private static void collectFromDeclaredFields(Class<?> aOwnerClass, Map<String, AIcFieldMeta> aDeclaredByPropertyName) {
+		for (Field locField : aOwnerClass.getDeclaredFields()) {
+			AIaFieldLabel locAnnotation = locField.getAnnotation(AIaFieldLabel.class);
+			if (locAnnotation == null) {
+				continue;
+			}
+
+			validate(locAnnotation, "Field " + locField);
+
+			AIcFieldMeta locMeta = buildMetaFromAnnotation(locAnnotation);
+			aDeclaredByPropertyName.put(locField.getName(), locMeta);
+		}
+	}
+
+	private static void collectFromDeclaredMethods(Class<?> aOwnerClass, Map<String, AIcFieldMeta> aDeclaredByPropertyName) {
+		for (Method locMethod : aOwnerClass.getDeclaredMethods()) {
+			AIaFieldLabel locAnnotation = locMethod.getAnnotation(AIaFieldLabel.class);
+			if (locAnnotation == null) {
+				continue;
+			}
+
+			String locPropertyNameOrNull = resolvePropertyNameFromMethod(locMethod);
+			if (locPropertyNameOrNull == null || locPropertyNameOrNull.isBlank()) {
+				continue;
+			}
+
+			validate(locAnnotation, "Method " + locMethod);
+
+			AIcFieldMeta locMeta = buildMetaFromAnnotation(locAnnotation);
+			aDeclaredByPropertyName.put(locPropertyNameOrNull, locMeta);
+		}
+	}
+
+	private static void collectFromRecordComponents(Class<?> aOwnerClass, Map<String, AIcFieldMeta> aDeclaredByPropertyName) {
+		if (!aOwnerClass.isRecord()) {
+			return;
+		}
+
+		RecordComponent[] locComponents = aOwnerClass.getRecordComponents();
+		if (locComponents == null || locComponents.length == 0) {
+			return;
+		}
+
+		for (RecordComponent locComponent : locComponents) {
+			AIaFieldLabel locAnnotation = locComponent.getAnnotation(AIaFieldLabel.class);
+			if (locAnnotation == null) {
+				continue;
+			}
+
+			validate(locAnnotation, "Record component " + locComponent);
+
+			AIcFieldMeta locMeta = buildMetaFromAnnotation(locAnnotation);
+			aDeclaredByPropertyName.put(locComponent.getName(), locMeta);
+		}
+	}
+
+	private static void collectFromInterfaces(Class<?> aOwnerClass, Map<String, AIcFieldMeta> aDeclaredByPropertyName) {
+		Set<Class<?>> locVisitedInterfaces = new HashSet<>();
+		for (Class<?> locInterface : aOwnerClass.getInterfaces()) {
+			collectFromInterfaceRecursive(locInterface, locVisitedInterfaces, aDeclaredByPropertyName);
+		}
+	}
+
+	private static void collectFromInterfaceRecursive(
+			Class<?> aInterface,
+			Set<Class<?>> aVisitedInterfaces,
+			Map<String, AIcFieldMeta> aDeclaredByPropertyName
+	) {
+		if (aInterface == null || !aInterface.isInterface()) {
+			return;
+		}
+		if (!aVisitedInterfaces.add(aInterface)) {
+			return;
+		}
+
+		for (Method locMethod : aInterface.getMethods()) {
+			AIaFieldLabel locAnnotation = locMethod.getAnnotation(AIaFieldLabel.class);
+			if (locAnnotation == null) {
+				continue;
+			}
+
+			String locPropertyNameOrNull = resolvePropertyNameFromMethod(locMethod);
+			if (locPropertyNameOrNull == null || locPropertyNameOrNull.isBlank()) {
+				continue;
+			}
+
+			validate(locAnnotation, "Interface method " + locMethod);
+
+			AIcFieldMeta locMeta = buildMetaFromAnnotation(locAnnotation);
+
+			/*
+			 * Lowest precedence: only set if absent, because later collectors override.
+			 */
+			aDeclaredByPropertyName.putIfAbsent(locPropertyNameOrNull, locMeta);
+		}
+
+		for (Class<?> locParentInterface : aInterface.getInterfaces()) {
+			collectFromInterfaceRecursive(locParentInterface, aVisitedInterfaces, aDeclaredByPropertyName);
+		}
+	}
+
+	private static String resolvePropertyNameFromMethod(Method aMethod) {
+		if (aMethod == null) {
+			return null;
+		}
+		if (aMethod.getParameterCount() != 0) {
+			return null;
+		}
+		if (aMethod.getReturnType() == Void.TYPE) {
+			return null;
+		}
+
+		String locName = aMethod.getName();
+		if (locName == null || locName.isBlank()) {
+			return null;
+		}
+
+		if (locName.startsWith("get") && locName.length() > 3) {
+			return decapitalize(locName.substring(3));
+		}
+		if (locName.startsWith("is") && locName.length() > 2) {
+			Class<?> locReturnType = aMethod.getReturnType();
+			if (locReturnType == boolean.class || locReturnType == Boolean.class) {
+				return decapitalize(locName.substring(2));
+			}
+		}
+
+		/*
+		 * Record accessor or property-like method name.
+		 */
+		return locName;
+	}
+
+	private static String decapitalize(String aValue) {
+		if (aValue == null || aValue.isBlank()) {
+			return aValue;
+		}
+		char locFirst = aValue.charAt(0);
+		char locLower = Character.toLowerCase(locFirst);
+		if (locFirst == locLower) {
+			return aValue;
+		}
+		return locLower + aValue.substring(1);
+	}
 
 	private static AIcFieldMeta buildMetaFromAnnotation(AIaFieldLabel ann) {
 		Map<String, String> labels = new HashMap<>();
@@ -103,19 +282,19 @@ public class AIsFieldLabelUtils {
 	}
 
 	private static AIiFieldLabelResolver instantiateLabelResolverIfAny(AIaFieldLabel ann) {
-		Class<? extends AIiFieldLabelResolver> rc = ann.labelResolver();
-		if (rc == null || rc == AIaFieldLabel.NoLabelResolver.class) {
+		Class<? extends AIiFieldLabelResolver> locResolverClass = ann.labelResolver();
+		if (locResolverClass == null || locResolverClass == AIaFieldLabel.NoLabelResolver.class) {
 			return null;
 		}
-		return newInstanceOrNull(rc);
+		return newInstanceOrNull(locResolverClass);
 	}
 
 	private static AIiStringOutputModeResolver instantiateModeResolverIfAny(AIaFieldLabel ann) {
-		Class<? extends AIiStringOutputModeResolver> rc = ann.modeResolver();
-		if (rc == null || rc == AIaFieldLabel.NoModeResolver.class) {
+		Class<? extends AIiStringOutputModeResolver> locResolverClass = ann.modeResolver();
+		if (locResolverClass == null || locResolverClass == AIaFieldLabel.NoModeResolver.class) {
 			return null;
 		}
-		return newInstanceOrNull(rc);
+		return newInstanceOrNull(locResolverClass);
 	}
 
 	private static <T> T newInstanceOrNull(Class<? extends T> cls) {
@@ -126,31 +305,33 @@ public class AIsFieldLabelUtils {
 		}
 	}
 
-	private static void validate(AIaFieldLabel aFieldLabelAnnotation, Field aField) {
-		boolean hasLabels = aFieldLabelAnnotation.labels().length > 0;
-		boolean hasLabelResolver = aFieldLabelAnnotation.labelResolver() != AIaFieldLabel.NoLabelResolver.class;
+	private static void validate(AIaFieldLabel aFieldLabelAnnotation, String aElementDescription) {
+		boolean locHasLabels = aFieldLabelAnnotation.labels().length > 0;
+		boolean locHasLabelResolver = aFieldLabelAnnotation.labelResolver() != AIaFieldLabel.NoLabelResolver.class;
 
-		int labelChoices = (hasLabels ? 1 : 0) + (hasLabelResolver ? 1 : 0);
-		if (labelChoices > 1) {
+		int locLabelChoices = (locHasLabels ? 1 : 0) + (locHasLabelResolver ? 1 : 0);
+		if (locLabelChoices > 1) {
 			throw new IllegalArgumentException(
-					"Field " + aField + ": choose only one of labels/labelResolver"
+					aElementDescription + ": choose only one of labels/labelResolver"
 			);
 		}
 
-		boolean hasModeResolver = aFieldLabelAnnotation.modeResolver() != AIaFieldLabel.NoModeResolver.class;
-		if (hasModeResolver && hasLabels) {
-			/* This is allowed: modeResolver selects active mode, labels map mode->label. */
+		boolean locHasModeResolver = aFieldLabelAnnotation.modeResolver() != AIaFieldLabel.NoModeResolver.class;
+		if (locHasModeResolver && locHasLabels) {
+			/*
+			 * This is allowed: modeResolver selects active mode, labels map mode->label.
+			 */
 		}
 	}
 
-	private static AIcFieldMeta findMeta(Class<?> aOwnerClass, String aFieldName) {
-		AIcFieldMetaNode node = CACHE.get(aOwnerClass);
-		while (node != null) {
-			AIcFieldMeta meta = node.declaredByField.get(aFieldName);
-			if (meta != null) {
-				return meta;
+	private static AIcFieldMeta findMeta(Class<?> aOwnerClass, String aPropertyName) {
+		AIcFieldMetaNode locNode = CACHE.get(aOwnerClass);
+		while (locNode != null) {
+			AIcFieldMeta locMeta = locNode.declaredByPropertyName.get(aPropertyName);
+			if (locMeta != null) {
+				return locMeta;
 			}
-			node = node.parentOrNull;
+			locNode = locNode.parentOrNull;
 		}
 		return null;
 	}
@@ -158,42 +339,140 @@ public class AIsFieldLabelUtils {
 	/**
 	 * Example API for callers (toString code) to get a label for a field name.
 	 * @param aOwnerClass class where the call is made
-	 * @param aFieldName field name used
-	 * @return label for the field name
+	 * @param aPropertyName property name used (field/record component/getter)
+	 * @return label for the property name
 	 */
-	public static String findLabel(Class<?> aOwnerClass, String aFieldName) {
-		return findLabel(aOwnerClass, aFieldName, null);
+	public static String findLabel(Class<?> aOwnerClass, String aPropertyName) {
+		return findLabel(aOwnerClass, aPropertyName, null);
 	}
 
 	/**
 	 * Example API for callers (toString code) to get a label for a field name.
 	 * @param aOwnerClass class where the call is made
-	 * @param aFieldName field name used
+	 * @param aPropertyName property name used (field/record component/getter)
 	 * @param aStringOutputMode to be used for label resolution
-	 * @return label for the field name
+	 * @return label for the property name
 	 */
-	public static String findLabel(Class<?> aOwnerClass, String aFieldName, AIiStringOutputMode aStringOutputMode) {
-		AIcFieldMeta meta = findMeta(aOwnerClass, aFieldName);
-		if (meta == null) {
-			return aFieldName;
+	public static String findLabel(Class<?> aOwnerClass, String aPropertyName, AIiStringOutputMode aStringOutputMode) {
+		AIcFieldMeta locMeta = findMeta(aOwnerClass, aPropertyName);
+		if (locMeta == null) {
+			return aPropertyName;
 		}
 
-		AIiStringOutputMode resolvedMode = aStringOutputMode;
-		if (resolvedMode == null && meta.modeResolverOrNull != null) {
-			resolvedMode = meta.modeResolverOrNull.resolveMode();
+		AIiStringOutputMode locResolvedMode = aStringOutputMode;
+		if (locResolvedMode == null && locMeta.modeResolverOrNull != null) {
+			locResolvedMode = locMeta.modeResolverOrNull.resolveMode();
 		}
-		if (resolvedMode == null) {
-			resolvedMode = AIsStringOutputUtils.usedStringOutputMode();
+		if (locResolvedMode == null) {
+			locResolvedMode = AIsStringOutputUtils.usedStringOutputMode();
 		}
 
-		if (meta.labelResolverOrNull != null) {
-			String resolved = meta.labelResolverOrNull.resolveLabel(aOwnerClass, aFieldName, resolvedMode);
-			if (resolved != null && !resolved.isBlank()) {
-				return resolved;
+		if (locMeta.labelResolverOrNull != null) {
+			String locResolved = locMeta.labelResolverOrNull.resolveLabel(aOwnerClass, aPropertyName, locResolvedMode);
+			if (locResolved != null && !locResolved.isBlank()) {
+				return locResolved;
 			}
 		}
 
-		String mapped = meta.labelsByModeCode.get(resolvedMode.code());
-		return (mapped != null && !mapped.isBlank()) ? mapped : aFieldName;
+		String locMapped = locMeta.labelsByModeCode.get(locResolvedMode.code());
+		return (locMapped != null && !locMapped.isBlank()) ? locMapped : aPropertyName;
+	}
+
+
+
+
+	/**
+	 * Validates that the given property name exists on the owner type.
+	 * <p>
+	 * The property is considered present if at least one of the following is found:
+	 * </p>
+	 * <ul>
+	 *   <li>a field with the same name (searched on the class hierarchy)</li>
+	 *   <li>a record component with the same name</li>
+	 *   <li>a no-arg, non-void method that maps to the property name (record accessor or JavaBean getter), including interface methods</li>
+	 * </ul>
+	 *
+	 * @param aOwnerClass the owning type
+	 * @param aPropertyName property name (field/record component/accessor/getter derived name)
+	 * @throws IllegalArgumentException when the property name is blank or not present on the owner type
+	 */
+	public static void requirePropertyExists(Class<?> aOwnerClass, String aPropertyName) {
+	    if (aOwnerClass == null) {
+	        throw new IllegalArgumentException("Owner class must not be null");
+	    }
+	    if (aPropertyName == null || aPropertyName.isBlank()) {
+	        throw new IllegalArgumentException("Property name must not be blank");
+	    }
+	    if (!isPropertyPresent(aOwnerClass, aPropertyName)) {
+	        throw new IllegalArgumentException("Unknown property '" + aPropertyName + "' for " + aOwnerClass.getName());
+	    }
+	}
+
+	/**
+	 * Checks whether the given property name exists on the owner type.
+	 *
+	 * @param aOwnerClass the owning type
+	 * @param aPropertyName property name (field/record component/accessor/getter derived name)
+	 * @return true if the property exists on the owner type; false otherwise
+	 */
+	public static boolean isPropertyPresent(Class<?> aOwnerClass, String aPropertyName) {
+	    if (aOwnerClass == null || aPropertyName == null || aPropertyName.isBlank()) {
+	        return false;
+	    }
+
+	    if (containsRecordComponentName(aOwnerClass, aPropertyName)) {
+	        return true;
+	    }
+	    if (containsFieldNameInHierarchy(aOwnerClass, aPropertyName)) {
+	        return true;
+	    }
+	    return containsPropertyMethodName(aOwnerClass, aPropertyName);
+	}
+
+	private static boolean containsRecordComponentName(Class<?> aOwnerClass, String aPropertyName) {
+	    if (!aOwnerClass.isRecord()) {
+	        return false;
+	    }
+
+	    RecordComponent[] locComponents = aOwnerClass.getRecordComponents();
+	    if (locComponents == null || locComponents.length == 0) {
+	        return false;
+	    }
+
+	    for (RecordComponent locComponent : locComponents) {
+	        if (aPropertyName.equals(locComponent.getName())) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+
+	private static boolean containsFieldNameInHierarchy(Class<?> aOwnerClass, String aPropertyName) {
+	    Class<?> locType = aOwnerClass;
+	    while (locType != null && locType != Object.class) {
+	        try {
+	            Field locField = locType.getDeclaredField(aPropertyName);
+	            if (locField != null) {
+	                return true;
+	            }
+	        } catch (NoSuchFieldException locException) {
+	            /* Ignore. */
+	        }
+	        locType = locType.getSuperclass();
+	    }
+	    return false;
+	}
+
+	private static boolean containsPropertyMethodName(Class<?> aOwnerClass, String aPropertyName) {
+	    for (Method locMethod : aOwnerClass.getMethods()) {
+	        if (locMethod.getDeclaringClass() == Object.class) {
+	            continue;
+	        }
+	        String locResolvedPropertyNameOrNull = resolvePropertyNameFromMethod(locMethod);
+	        if (aPropertyName.equals(locResolvedPropertyNameOrNull)) {
+	            return true;
+	        }
+	    }
+	    return false;
 	}
 }
