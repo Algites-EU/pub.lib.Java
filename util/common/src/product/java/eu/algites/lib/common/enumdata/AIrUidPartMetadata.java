@@ -18,13 +18,14 @@ import java.util.function.Supplier;
  * </p>
  * @param displayLabelSupplier field name of the field in the UID record to be used for the resolution of the display label in UI
  * @param requiredForOrigin whether the field is required for given origin
+ * @param <O> type of the origin
  *
  * @author linhart1
  * @date 20.01.26 7:44
  */
-public record AIrUidPartMetadata(
+public record AIrUidPartMetadata<O extends AIiEnumDataOrigin>(
 		Supplier<String> displayLabelSupplier,
-		Map<AIiEnumDataOrigin, Boolean> requiredForOrigin
-) implements AIiUidPartMetadata {
+		Map<O, Boolean> requiredForOrigin
+) implements AIiUidPartMetadata<O> {
 
 }

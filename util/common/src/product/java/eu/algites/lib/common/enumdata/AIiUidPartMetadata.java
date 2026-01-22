@@ -17,6 +17,7 @@ import java.util.function.Supplier;
  * Company: Algites
  * </p>
  *
+ * @param <O> type of the origin
  * @author linhart1
  * @date 20.01.26 7:47
  */
