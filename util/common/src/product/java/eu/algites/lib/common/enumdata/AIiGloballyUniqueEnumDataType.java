@@ -30,7 +30,7 @@ public interface AIiGloballyUniqueEnumDataType<R extends AIiUidPartsRecord, O ex
 	 * Gets the constructor for the UID record.
 	 * @return the constructor
 	 */
-	TriFunction<AIiGloballyUniqueEnumDataType, String, List<String>, R> getUidRecordConstructor();
+	TriFunction<AIiGloballyUniqueEnumDataType<R, O>, String, List<String>, R> getUidRecordConstructor();
 
 	/**
 	 * Gets the origin resolver for this enum data type. The resolver throws an exception

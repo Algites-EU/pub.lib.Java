@@ -50,8 +50,8 @@ public class AItcAIsEnumDataUtilsTest {
 		);
 
 		@Override
-		public TriFunction<AIiGloballyUniqueEnumDataType, String, List<String>, AIcTestUidPartsRecord> getUidRecordConstructor() {
-			return (final AIiGloballyUniqueEnumDataType aEnumDataType,
+		public TriFunction<AIiGloballyUniqueEnumDataType<AIcTestUidPartsRecord, AInEnumDataOrigin>, String, List<String>, AIcTestUidPartsRecord> getUidRecordConstructor() {
+			return (final AIiGloballyUniqueEnumDataType<AIcTestUidPartsRecord, AInEnumDataOrigin> aEnumDataType,
 					final String aUid,
 					final List<String> aParts) -> new AIcTestUidPartsRecord(
 					AInEnumDataOrigin.getByCodeOrThrow(aParts.get(AIsEnumDataUtils.ORIGIN_CLASS_UID_POSITION)),
