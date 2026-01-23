@@ -1,7 +1,9 @@
 package eu.algites.lib.common.enumdata;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -28,4 +30,27 @@ public record AIrUidPartMetadata<O extends AIiEnumDataOrigin>(
 		Map<O, Boolean> requiredForOrigin
 ) implements AIiUidPartMetadata<O> {
 
+	/**
+	 * Constructor
+	 * @param aDisplayLabelSupplier field name of the field in the UID record to be used for the resolution of the display label in UI
+	 * @param aOriginValues origin-like enum values for which the requirement is defined
+	 * @param aRequiredForAllItems whether the field is required for all given origins
+	 */
+	public AIrUidPartMetadata(final Supplier<String> aDisplayLabelSupplier, O[] aOriginValues, boolean aRequiredForAllItems) {
+		this(aDisplayLabelSupplier, Arrays.stream(aOriginValues)
+				.collect(Collectors.toMap(
+						locEnumValue -> locEnumValue,
+						locEnumValue -> aRequiredForAllItems
+				)));
+	}
+
+	/**
+	 * Constructor using the default builtin origin {@link AInEnumDataOrigin} for all values.
+	 * @param aDisplayLabelSupplier field name of the field in the UID record to be used for the resolution of the display label in UI
+	 * @param aRequiredForAllItems whether the field is required for all given origins
+	 */
+	@SuppressWarnings("unchecked")
+	public AIrUidPartMetadata(final Supplier<String> aDisplayLabelSupplier, boolean aRequiredForAllItems) {
+		this(aDisplayLabelSupplier, (O[]) AInEnumDataOrigin.values(), aRequiredForAllItems);
+	}
 }
