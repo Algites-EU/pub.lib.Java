@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-import org.gradle.internal.impldep.org.apache.commons.lang3.function.TriFunction;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -54,7 +53,7 @@ public class AItcAIsEnumDataUtilsTest {
 		public BiFunction<String, List<String>, ? extends AIcTestUidPartsRecord> getUidRecordConstructor() {
 			return (BiFunction<String, List<String>, AIcTestUidPartsRecord>) (aUid, aParts)
 					-> new AIcTestUidPartsRecord(
-							AInEnumDataOrigin.getByCodeOrThrow(aParts.get(AIsEnumDataUtils.ORIGIN_CLASS_UID_POSITION)),
+							AInEnumDataOrigin.getByCodeOrThrow(aParts.get(AIsEnumDataUtils.ORIGIN_UID_POSITION)),
 							aParts.get(AIsEnumDataUtils.NAMESPACE_UID_POSITION),
 							aParts.get(LAST_UID_HEADER_PART_POSITION + 1),
 							aParts.get(LAST_UID_HEADER_PART_POSITION + 2)

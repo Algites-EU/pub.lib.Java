@@ -44,8 +44,8 @@ public class AIsEnumDataUtils {
 	public static final String UID_PART_SEPARATOR = ":";
 	public static final Pattern UID_COMMON_PART_PATTERN = Pattern.compile("^[A-Za-z0-9._-]*$");
 	public static final Pattern UID_CUSTOM_NAMESPACE_PART_PATTERN = Pattern.compile("^[A-Za-z0-9._-]+$");
-	public static final int ORIGIN_CLASS_UID_POSITION = 0;
-	public static final int NAMESPACE_UID_POSITION = ORIGIN_CLASS_UID_POSITION + 1;
+	public static final int ORIGIN_UID_POSITION = 0;
+	public static final int NAMESPACE_UID_POSITION = ORIGIN_UID_POSITION + 1;
 	public static final int LAST_UID_HEADER_PART_POSITION = NAMESPACE_UID_POSITION;
 	public static final int FIRST_UID_SPECIFIC_PART_POSITION = LAST_UID_HEADER_PART_POSITION + 1;
 
@@ -149,7 +149,7 @@ public class AIsEnumDataUtils {
 		Objects.requireNonNull(aEnumDataType, () -> "Enum data type must not be null. Passed UID:" + aUid);
 		String locUid = Objects.requireNonNull(aUid, () -> "aUid must not be null. Passed enum data type:" + aEnumDataType);
 		String[] locParts = splitUidIntoParts(aEnumDataType, locUid);
-		O locOrigin = aEnumDataType.getOriginGetter().apply(locParts[ORIGIN_CLASS_UID_POSITION]);
+		O locOrigin = aEnumDataType.getOriginGetter().apply(locParts[ORIGIN_UID_POSITION]);
 
 		validatePartsSemantics(aEnumDataType, locOrigin, locParts);
 
