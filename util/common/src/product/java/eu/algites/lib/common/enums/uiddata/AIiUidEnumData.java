@@ -1,8 +1,8 @@
-package eu.algites.lib.common.enumdata;
+package eu.algites.lib.common.enums.uiddata;
 
 /**
  * <p>
- * Title: {@link AIiGloballyUniqueEnumData}
+ * Title: {@link AIiUidEnumData}
  * </p>
  * <p>
  * Description: Basic interface for enums and enum-like classes
@@ -18,13 +18,13 @@ package eu.algites.lib.common.enumdata;
  * @author linhart1
  * @date 20.01.26 6:58
  */
-public interface AIiGloballyUniqueEnumData<R extends AIiUidRecord,
-		O extends AIiEnumDataOrigin,
-		GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> {
+public interface AIiUidEnumData<R extends AIiUidRecord,
+		O extends AIiUidEnumDataOrigin,
+		GUEDT extends AIiUidEnumDataType<? extends R, O>> {
 
 	/**
-	 * Gets the data type of the enum.
-	 * @return data type
+	 * Gets the uiddata type of the enum.
+	 * @return uiddata type
 	 */
 	GUEDT getDataType();
 
@@ -38,11 +38,11 @@ public interface AIiGloballyUniqueEnumData<R extends AIiUidRecord,
 	String uid();
 
 	/**
-	 * Gets the UID parsed data record.
-	 * @return parsed Uid data record
+	 * Gets the UID parsed uiddata record.
+	 * @return parsed Uid uiddata record
 	 */
 	default R getUidPartsRecord() {
-		return AIsEnumDataUtils.parseUid(getDataType(), uid());
+		return AIsUidEnumDataUtils.parseUid(getDataType(), uid());
 	}
 
 }

@@ -1,4 +1,4 @@
-package eu.algites.lib.common.enumdata;
+package eu.algites.lib.common.enums.uiddata;
 
 import eu.algites.lib.common.exception.AIxDevelopmentErrorException;
 import jakarta.annotation.Nonnull;
@@ -12,11 +12,11 @@ import java.util.regex.Pattern;
 
 /**
  * <p>
- * Title: {@link AIsEnumDataUtils}
+ * Title: {@link AIsUidEnumDataUtils}
  * </p>
  * <p>
- * Description: Utilities for the Enum data handling.
- *    especially for creating and parsing globally unique Identifications of the enum data from and to UIDs.
+ * Description: Utilities for the Enum uiddata handling.
+ *    especially for creating and parsing globally unique Identifications of the enum uiddata from and to UIDs.
  *
  * <p>UID format with i+2 specific segments (always at least 3 or more ):
  * {@code <origin-class>:<namespace>:<specific-segment-1>[:<specific-segment-2[ ... [:<specific-segment-i>]]>]}
@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  *   <li>{@code originClass} is {@code builtin} or {@code custom}</li>
  *   <li>For {@code builtin}, {@code namespace} MUST be empty</li>
  *   <li>For {@code custom}, {@code namespace} MUST be non-empty</li>
- *   <li>{@code specific-segment-i} MAY be empty or non according to the given usage and enum data specification</li>
+ *   <li>{@code specific-segment-i} MAY be empty or non according to the given usage and enum uiddata specification</li>
  *   <li>{@code fileType} MUST be non-empty</li>
  * </ul>
  * </p>
@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
  * @author linhart1
  * @date 13.01.26 17:08
  */
-public class AIsEnumDataUtils {
+public class AIsUidEnumDataUtils {
 
 	public static final String UID_PART_SEPARATOR = ":";
 	public static final Pattern UID_COMMON_PART_PATTERN = Pattern.compile("^[A-Za-z0-9._-]*$");
@@ -49,7 +49,7 @@ public class AIsEnumDataUtils {
 	public static final int LAST_UID_HEADER_PART_POSITION = NAMESPACE_UID_POSITION;
 	public static final int FIRST_UID_SPECIFIC_PART_POSITION = LAST_UID_HEADER_PART_POSITION + 1;
 
-	private AIsEnumDataUtils() {}
+	private AIsUidEnumDataUtils() {}
 
 
 	/**
@@ -64,7 +64,7 @@ public class AIsEnumDataUtils {
 	 * @return UID string for the builtin UID
 	 * @param <O> origin type
 	 */
-	public static <O extends AIiEnumDataOrigin> String createUid(@Nonnull O aOrigin,
+	public static <O extends AIiUidEnumDataOrigin> String createUid(@Nonnull O aOrigin,
 			String aUidNamespacePart,
 			@Nonnull List<String> aSpecificUidParts,
 			@Nonnull List<AIiUidPartMetadata<O>> aSpecificUidPartsMetadata) {
@@ -100,7 +100,7 @@ public class AIsEnumDataUtils {
 	}
 
 	/**
-	 * Create a Builtin UID with specified parameters. Uses {@link AInEnumDataOrigin#BUILTIN} as origin and empty namespace.
+	 * Create a Builtin UID with specified parameters. Uses {@link AInUidEnumDataOrigin#BUILTIN} as origin and empty namespace.
 	 *
 	 * <p>Example: {@code builtin:::jar} or {@code builtin::sources:jar}
 	 *
@@ -110,12 +110,12 @@ public class AIsEnumDataUtils {
 	 */
 	public static String createBuiltinUid(
 			@Nonnull List<String> aSpecificUidParts,
-			@Nonnull List<AIiUidPartMetadata<AInEnumDataOrigin>> aSpecificUidPartsMetadata) {
-		return createUid(AInEnumDataOrigin.BUILTIN, "", aSpecificUidParts, aSpecificUidPartsMetadata);
+			@Nonnull List<AIiUidPartMetadata<AInUidEnumDataOrigin>> aSpecificUidPartsMetadata) {
+		return createUid(AInUidEnumDataOrigin.BUILTIN, "", aSpecificUidParts, aSpecificUidPartsMetadata);
 	}
 
 	/**
-	 * Create a Builtin UID with specified parameters. Uses {@link AInEnumDataOrigin#BUILTIN} as origin.
+	 * Create a Builtin UID with specified parameters. Uses {@link AInUidEnumDataOrigin#BUILTIN} as origin.
 	 *
 	 * <p>Example: {@code builtin:::jar} or {@code builtin::sources:jar}
 	 *
@@ -127,27 +127,27 @@ public class AIsEnumDataUtils {
 	public static String createCustomUid(
 			String aUidNamespacePart,
 			@Nonnull List<String> aSpecificUidParts,
-			@Nonnull List<AIiUidPartMetadata<AInEnumDataOrigin>> aSpecificUidPartsMetadata) {
-		return createUid(AInEnumDataOrigin.BUILTIN, aUidNamespacePart, aSpecificUidParts, aSpecificUidPartsMetadata);
+			@Nonnull List<AIiUidPartMetadata<AInUidEnumDataOrigin>> aSpecificUidPartsMetadata) {
+		return createUid(AInUidEnumDataOrigin.BUILTIN, aUidNamespacePart, aSpecificUidParts, aSpecificUidPartsMetadata);
 	}
 
 	/**
 	 * Parse and validate an OutputType UID.
 	 *
-	 * @param aEnumDataType enum data type for which the result has to be returned
+	 * @param aEnumDataType enum uiddata type for which the result has to be returned
 	 * @param aUid uid string
 	 * @return parsed parts
 	 * @throws IllegalArgumentException if invalid
-	 * @param <R> type of the result enum data type expected.
+	 * @param <R> type of the result enum uiddata type expected.
 	 * @param <O> origin type
-	 * @param <GUEDT> type of the globally unique enum data type
+	 * @param <GUEDT> type of the globally unique enum uiddata type
 	 */
-	public static <R extends AIiUidRecord, O extends AIiEnumDataOrigin,
-			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> R parseUid(
+	public static <R extends AIiUidRecord, O extends AIiUidEnumDataOrigin,
+			GUEDT extends AIiUidEnumDataType<? extends R, O>> R parseUid(
 			@Nonnull GUEDT aEnumDataType,
 			@Nonnull String aUid) {
-		Objects.requireNonNull(aEnumDataType, () -> "Enum data type must not be null. Passed UID:" + aUid);
-		String locUid = Objects.requireNonNull(aUid, () -> "aUid must not be null. Passed enum data type:" + aEnumDataType);
+		Objects.requireNonNull(aEnumDataType, () -> "Enum uiddata type must not be null. Passed UID:" + aUid);
+		String locUid = Objects.requireNonNull(aUid, () -> "aUid must not be null. Passed enum uiddata type:" + aEnumDataType);
 		String[] locParts = splitUidIntoParts(aEnumDataType, locUid);
 		O locOrigin = aEnumDataType.getOriginGetter().apply(locParts[ORIGIN_UID_POSITION]);
 
@@ -162,25 +162,25 @@ public class AIsEnumDataUtils {
 	 * @param aEnumDataType component type to be examined
 	 * @param aUid uid string
 	 * @throws IllegalArgumentException if invalid
-	 * @param <R> type of the enum data type expected.
+	 * @param <R> type of the enum uiddata type expected.
 	 * @param <O> origin type
 	 */
-	public static <R extends AIiUidRecord, O extends AIiEnumDataOrigin,
-			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> void validateUid(
+	public static <R extends AIiUidRecord, O extends AIiUidEnumDataOrigin,
+			GUEDT extends AIiUidEnumDataType<? extends R, O>> void validateUid(
 			@Nonnull final GUEDT aEnumDataType, @Nonnull String aUid)
 			throws IllegalArgumentException {
 		parseUid(aEnumDataType, aUid);
 	}
 
 	/**
-	 * @param aEnumDataType enum data type to be examined
+	 * @param aEnumDataType enum uiddata type to be examined
 	 * @param aUid uid string
 	 * @return true if valid, else false
-	 * @param <R> type of the enum data type expected.
+	 * @param <R> type of the enum uiddata type expected.
 	 * @param <O> origin type
 	 */
-	public static <R extends AIiUidRecord, O extends AIiEnumDataOrigin,
-			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>>
+	public static <R extends AIiUidRecord, O extends AIiUidEnumDataOrigin,
+			GUEDT extends AIiUidEnumDataType<? extends R, O>>
 	boolean isValidOutputTypeUid(
 			@Nonnull final GUEDT aEnumDataType,
 			@Nonnull String aUid) {
@@ -196,11 +196,11 @@ public class AIsEnumDataUtils {
 	 * @param aEnumDataType component type to be examined
 	 * @param aUid uid string
 	 * @return kind class
-	 * @param <R> type of the enum data type expected.
+	 * @param <R> type of the enum uiddata type expected.
 	 * @param <O> origin type
 	 */
-	public static <R extends AIiUidRecord, O extends AIiEnumDataOrigin,
-			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> AIiEnumDataOrigin getOrigin(
+	public static <R extends AIiUidRecord, O extends AIiUidEnumDataOrigin,
+			GUEDT extends AIiUidEnumDataType<? extends R, O>> AIiUidEnumDataOrigin getOrigin(
 			@Nonnull final GUEDT aEnumDataType,
 			@Nonnull String aUid) {
 		return parseUid(aEnumDataType, aUid).origin();
@@ -210,26 +210,26 @@ public class AIsEnumDataUtils {
 	 * @param aComponentType component type to be examined
 	 * @param aUid uid string
 	 * @return namespace segment (empty for builtin)
-	 * @param <R> type of the enum data type expected.
+	 * @param <R> type of the enum uiddata type expected.
 	 * @param <O> origin type
 	 */
-	public static <R extends AIiUidRecord, O extends AIiEnumDataOrigin,
-			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> String getNamespace(
+	public static <R extends AIiUidRecord, O extends AIiUidEnumDataOrigin,
+			GUEDT extends AIiUidEnumDataType<? extends R, O>> String getNamespace(
 			final GUEDT aComponentType, String aUid) {
 		return parseUid(aComponentType, aUid).namespace();
 	}
 
 	/**
 	 * Split a UID into parts.
-	 * @param aEnumDataType enum data type to be examined
+	 * @param aEnumDataType enum uiddata type to be examined
 	 * @param aUid uid string
-	 * @return parts split according to the definition of the enum data type
-	 * @param <R> type of the enum data type expected.
+	 * @return parts split according to the definition of the enum uiddata type
+	 * @param <R> type of the enum uiddata type expected.
 	 * @param <O> origin type
 	 * @throws IllegalArgumentException if uid is invalid
 	 */
-	public static <R extends AIiUidRecord, O extends AIiEnumDataOrigin,
-			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> String[] splitUidIntoParts(
+	public static <R extends AIiUidRecord, O extends AIiUidEnumDataOrigin,
+			GUEDT extends AIiUidEnumDataType<? extends R, O>> String[] splitUidIntoParts(
 			@Nonnull final GUEDT aEnumDataType,
 			@Nonnull final String aUid)
 	throws IllegalArgumentException {
@@ -250,8 +250,8 @@ public class AIsEnumDataUtils {
 		return locParts;
 	}
 
-	private static <R extends AIiUidRecord, O extends AIiEnumDataOrigin,
-			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> void validatePartsSemantics(
+	private static <R extends AIiUidRecord, O extends AIiUidEnumDataOrigin,
+			GUEDT extends AIiUidEnumDataType<? extends R, O>> void validatePartsSemantics(
 			@Nonnull GUEDT aEnumDataType,
 			@Nonnull O aEnumDataOrigin,
 			@Nonnull String[] aEnumDataParts

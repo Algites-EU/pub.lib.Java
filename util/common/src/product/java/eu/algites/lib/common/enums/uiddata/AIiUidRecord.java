@@ -1,4 +1,4 @@
-package eu.algites.lib.common.enumdata;
+package eu.algites.lib.common.enums.uiddata;
 
 /**
  * <p>
@@ -28,15 +28,15 @@ public interface AIiUidRecord {
 
 	/**
 	 * The component of the Uid, returned by {@link #uid()} method,
-	 * siding on the position {@link AIsEnumDataUtils#ORIGIN_UID_POSITION}
+	 * siding on the position {@link AIsUidEnumDataUtils#ORIGIN_UID_POSITION}
 	 * @return origin (builtin/custom)
 	 */
-	AIiEnumDataOrigin origin();
+	AIiUidEnumDataOrigin origin();
 
 	/**
 	 * The component of the Uid, returned by {@link #uid()} method,
-	 * siding on the position {@link AIsEnumDataUtils#ORIGIN_UID_POSITION}
-	 * @return namespace segment (empty for origins, where {@link AIiEnumDataOrigin#namespaceUsed()}
+	 * siding on the position {@link AIsUidEnumDataUtils#ORIGIN_UID_POSITION}
+	 * @return namespace segment (empty for origins, where {@link AIiUidEnumDataOrigin#namespaceUsed()}
 	 *    return false and not empty otherwise)
 	 */
 	String namespace();

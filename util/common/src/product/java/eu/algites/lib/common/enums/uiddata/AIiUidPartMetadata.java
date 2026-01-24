@@ -1,4 +1,4 @@
-package eu.algites.lib.common.enumdata;
+package eu.algites.lib.common.enums.uiddata;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -21,7 +21,7 @@ import java.util.function.Supplier;
  * @author linhart1
  * @date 20.01.26 7:47
  */
-public interface AIiUidPartMetadata<O extends AIiEnumDataOrigin> {
+public interface AIiUidPartMetadata<O extends AIiUidEnumDataOrigin> {
 	/**
 	 * Supplier of Label to be displayed in the UI
 	 * @return label

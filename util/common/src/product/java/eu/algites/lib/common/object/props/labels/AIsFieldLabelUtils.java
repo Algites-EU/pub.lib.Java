@@ -54,14 +54,14 @@ public class AIsFieldLabelUtils {
 			AIiFieldLabelResolver labelResolverOrNull,
 			AIiStringOutputModeResolver modeResolverOrNull
 	) {
-		/* Record as data carrier. */
+		/* Record as uiddata carrier. */
 	}
 
 	private record AIcFieldMetaNode(
 			Map<String, AIcFieldMeta> declaredByPropertyName,
 			AIcFieldMetaNode parentOrNull
 	) {
-		/* Record as data carrier. */
+		/* Record as uiddata carrier. */
 	}
 
 	private static final ClassValue<AIcFieldMetaNode> CACHE = new ClassValue<>() {

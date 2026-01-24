@@ -268,7 +268,7 @@ public void testFindLabelResolvesInterfaceAnnotationEvenIfClassDeclaresUnannotat
 			})
 			String myProperty
 	) {
-		/* Record as data carrier. */
+		/* Record as uiddata carrier. */
 	}
 
 	private interface AIiTestInterfaceWithAnnotatedAccessor {
@@ -281,7 +281,7 @@ public void testFindLabelResolvesInterfaceAnnotationEvenIfClassDeclaresUnannotat
 	private record AIcTestRecordImplementsInterface(
 			String myProperty
 	) implements AIiTestInterfaceWithAnnotatedAccessor {
-		/* Record as data carrier. */
+		/* Record as uiddata carrier. */
 	}
 
 

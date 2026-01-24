@@ -1,4 +1,4 @@
-package eu.algites.lib.common.enumdata;
+package eu.algites.lib.common.enums.uiddata;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * @author linhart1
  * @date 20.01.26 7:44
  */
-public record AIrUidPartMetadata<O extends AIiEnumDataOrigin>(
+public record AIrUidPartMetadata<O extends AIiUidEnumDataOrigin>(
 		Supplier<String> displayLabelSupplier,
 		Map<O, Boolean> requiredForOrigin
 ) implements AIiUidPartMetadata<O> {
@@ -45,12 +45,12 @@ public record AIrUidPartMetadata<O extends AIiEnumDataOrigin>(
 	}
 
 	/**
-	 * Constructor using the default builtin origin {@link AInEnumDataOrigin} for all values.
+	 * Constructor using the default builtin origin {@link AInUidEnumDataOrigin} for all values.
 	 * @param aDisplayLabelSupplier field name of the field in the UID record to be used for the resolution of the display label in UI
 	 * @param aRequiredForAllItems whether the field is required for all given origins
 	 */
 	@SuppressWarnings("unchecked")
 	public AIrUidPartMetadata(final Supplier<String> aDisplayLabelSupplier, boolean aRequiredForAllItems) {
-		this(aDisplayLabelSupplier, (O[]) AInEnumDataOrigin.values(), aRequiredForAllItems);
+		this(aDisplayLabelSupplier, (O[]) AInUidEnumDataOrigin.values(), aRequiredForAllItems);
 	}
 }

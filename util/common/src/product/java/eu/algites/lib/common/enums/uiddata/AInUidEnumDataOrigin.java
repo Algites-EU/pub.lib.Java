@@ -1,13 +1,13 @@
-package eu.algites.lib.common.enumdata;
+package eu.algites.lib.common.enums.uiddata;
 
 import org.jetbrains.annotations.Nullable;
 
 /**
  * <p>
- * Title: {@link AInEnumDataOrigin}
+ * Title: {@link AInUidEnumDataOrigin}
  * </p>
  * <p>
- * Description: Definition of the origin of the given data - builtin or custom.
+ * Description: Definition of the origin of the given uiddata - builtin or custom.
  * </p>
  * <p>
  * Copyright: Copyright (c) 2026 Artur Linhart, Algites
@@ -19,14 +19,14 @@ import org.jetbrains.annotations.Nullable;
  * @author linhart1
  * @date 13.01.26 17:00
  */
-public enum AInEnumDataOrigin implements AIiEnumDataOrigin {
+public enum AInUidEnumDataOrigin implements AIiUidEnumDataOrigin {
 	BUILTIN("builtin", false),
 	CUSTOM("custom", true);
 
 	private final String code;
 	private boolean namespaceUsed;
 
-	AInEnumDataOrigin(String aCode, final boolean aNamespaceUsed) {
+	AInUidEnumDataOrigin(String aCode, final boolean aNamespaceUsed) {
 		code = aCode;
 		namespaceUsed = aNamespaceUsed;
 	}
@@ -45,8 +45,8 @@ public enum AInEnumDataOrigin implements AIiEnumDataOrigin {
 	 * @return parsed enum value
 	 * @throws IllegalArgumentException if the code is unknown
 	 */
-	public static AInEnumDataOrigin getByCodeOrThrow(String aCode) throws IllegalArgumentException {
-		final AInEnumDataOrigin builtin = findByCodeOrNull(aCode);
+	public static AInUidEnumDataOrigin getByCodeOrThrow(String aCode) throws IllegalArgumentException {
+		final AInUidEnumDataOrigin builtin = findByCodeOrNull(aCode);
 		if (builtin != null)
 			return builtin;
 		throw new IllegalArgumentException("Unsupported enumItemOrigin: '" + aCode + "'");
@@ -58,7 +58,7 @@ public enum AInEnumDataOrigin implements AIiEnumDataOrigin {
 	 * @param aCode kind class code
 	 * @return parsed enum value or null if no item matches
 	 */
-	public static @Nullable AInEnumDataOrigin findByCodeOrNull(final String aCode) {
+	public static @Nullable AInUidEnumDataOrigin findByCodeOrNull(final String aCode) {
 		if (BUILTIN.code.equals(aCode)) {
 			return BUILTIN;
 		}

@@ -1,4 +1,4 @@
-package eu.algites.lib.common.enumdata;
+package eu.algites.lib.common.enums;
 
 /**
  * <p>

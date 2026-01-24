@@ -1,4 +1,4 @@
-package eu.algites.lib.common.enumdata;
+package eu.algites.lib.common.enums.uiddata;
 
 /**
  * <p>
@@ -20,6 +20,6 @@ package eu.algites.lib.common.enumdata;
  * @date 18.01.26 15:46
  */
 public record AIrUidPartsRecord(
-		AInEnumDataOrigin origin,
+		AInUidEnumDataOrigin origin,
 		String namespace
 ) { }
