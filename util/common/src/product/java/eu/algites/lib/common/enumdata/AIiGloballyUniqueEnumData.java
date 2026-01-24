@@ -18,13 +18,15 @@ package eu.algites.lib.common.enumdata;
  * @author linhart1
  * @date 20.01.26 6:58
  */
-public interface AIiGloballyUniqueEnumData<R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin> {
+public interface AIiGloballyUniqueEnumData<R extends AIiUidPartsRecord,
+		O extends AIiEnumDataOrigin,
+		GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> {
 
 	/**
 	 * Gets the data type of the enum.
 	 * @return data type
 	 */
-	AIiGloballyUniqueEnumDataType<R, O> getDataType();
+	GUEDT getDataType();
 
 	/**
 	 * Gets the uid of the enum. It is the value, used for writing into databases

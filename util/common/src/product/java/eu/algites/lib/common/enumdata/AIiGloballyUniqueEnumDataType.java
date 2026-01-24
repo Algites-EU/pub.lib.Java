@@ -3,9 +3,8 @@ package eu.algites.lib.common.enumdata;
 import static eu.algites.lib.common.enumdata.AIsEnumDataUtils.LAST_UID_HEADER_PART_POSITION;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
-
-import org.gradle.internal.impldep.org.apache.commons.lang3.function.TriFunction;
 
 /**
  * <p>
@@ -28,9 +27,10 @@ public interface AIiGloballyUniqueEnumDataType<R extends AIiUidPartsRecord, O ex
 
 	/**
 	 * Gets the constructor for the UID record.
+	 *
 	 * @return the constructor
 	 */
-	TriFunction<AIiGloballyUniqueEnumDataType<R, O>, String, List<String>, R> getUidRecordConstructor();
+	BiFunction<String, List<String>, ? extends R> getUidRecordConstructor();
 
 	/**
 	 * Gets the origin resolver for this enum data type. The resolver throws an exception
