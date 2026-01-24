@@ -142,7 +142,7 @@ public class AIsEnumDataUtils {
 	 * @param <O> origin type
 	 * @param <GUEDT> type of the globally unique enum data type
 	 */
-	public static <R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin,
+	public static <R extends AIiUidRecord, O extends AIiEnumDataOrigin,
 			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> R parseUid(
 			@Nonnull GUEDT aEnumDataType,
 			@Nonnull String aUid) {
@@ -165,7 +165,7 @@ public class AIsEnumDataUtils {
 	 * @param <R> type of the enum data type expected.
 	 * @param <O> origin type
 	 */
-	public static <R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin,
+	public static <R extends AIiUidRecord, O extends AIiEnumDataOrigin,
 			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> void validateUid(
 			@Nonnull final GUEDT aEnumDataType, @Nonnull String aUid)
 			throws IllegalArgumentException {
@@ -179,7 +179,7 @@ public class AIsEnumDataUtils {
 	 * @param <R> type of the enum data type expected.
 	 * @param <O> origin type
 	 */
-	public static <R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin,
+	public static <R extends AIiUidRecord, O extends AIiEnumDataOrigin,
 			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>>
 	boolean isValidOutputTypeUid(
 			@Nonnull final GUEDT aEnumDataType,
@@ -199,8 +199,8 @@ public class AIsEnumDataUtils {
 	 * @param <R> type of the enum data type expected.
 	 * @param <O> origin type
 	 */
-	public static <R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin,
-			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> AInEnumDataOrigin getOrigin(
+	public static <R extends AIiUidRecord, O extends AIiEnumDataOrigin,
+			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> AIiEnumDataOrigin getOrigin(
 			@Nonnull final GUEDT aEnumDataType,
 			@Nonnull String aUid) {
 		return parseUid(aEnumDataType, aUid).origin();
@@ -213,7 +213,7 @@ public class AIsEnumDataUtils {
 	 * @param <R> type of the enum data type expected.
 	 * @param <O> origin type
 	 */
-	public static <R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin,
+	public static <R extends AIiUidRecord, O extends AIiEnumDataOrigin,
 			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> String getNamespace(
 			final GUEDT aComponentType, String aUid) {
 		return parseUid(aComponentType, aUid).namespace();
@@ -228,7 +228,7 @@ public class AIsEnumDataUtils {
 	 * @param <O> origin type
 	 * @throws IllegalArgumentException if uid is invalid
 	 */
-	public static <R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin,
+	public static <R extends AIiUidRecord, O extends AIiEnumDataOrigin,
 			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> String[] splitUidIntoParts(
 			@Nonnull final GUEDT aEnumDataType,
 			@Nonnull final String aUid)
@@ -250,7 +250,7 @@ public class AIsEnumDataUtils {
 		return locParts;
 	}
 
-	private static <R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin,
+	private static <R extends AIiUidRecord, O extends AIiEnumDataOrigin,
 			GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> void validatePartsSemantics(
 			@Nonnull GUEDT aEnumDataType,
 			@Nonnull O aEnumDataOrigin,

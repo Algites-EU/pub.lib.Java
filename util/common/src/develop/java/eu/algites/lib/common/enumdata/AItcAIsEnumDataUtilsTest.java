@@ -21,27 +21,29 @@ import org.testng.annotations.Test;
  */
 public class AItcAIsEnumDataUtilsTest {
 
-	private static final AIiGloballyUniqueEnumDataType<AIcTestUidPartsRecord, AInEnumDataOrigin> TEST_ENUM_DATA_TYPE = new AIcTestEnumDataType();
+	private static final AIiGloballyUniqueEnumDataType<AIcTestUidRecord, AInEnumDataOrigin> TEST_ENUM_DATA_TYPE = new AIcTestEnumDataType();
 
 	/**
 	 * Test record used as a parsed representation for the test UID format.
 	 *
+	 * @param uid UID string
 	 * @param origin origin (builtin/custom)
 	 * @param namespace namespace part (empty for builtin)
 	 * @param classifier optional classifier
 	 * @param fileType required file type
 	 */
-	public record AIcTestUidPartsRecord(
+	public record AIcTestUidRecord(
+			String uid,
 			AInEnumDataOrigin origin,
 			String namespace,
 			String classifier,
 			String fileType
-	) implements AIiUidPartsRecord { }
+	) implements AIiUidRecord { }
 
 	/**
 	 * Test enum-data-type used by tests.
 	 */
-	private static final class AIcTestEnumDataType implements AIiGloballyUniqueEnumDataType<AIcTestUidPartsRecord, AInEnumDataOrigin> {
+	private static final class AIcTestEnumDataType implements AIiGloballyUniqueEnumDataType<AIcTestUidRecord, AInEnumDataOrigin> {
 
 		@SuppressWarnings("unchecked")
 		private static final List<AIiUidPartMetadata<AInEnumDataOrigin>> SPECIFIC_UID_PARTS_METADATA = List.of(
@@ -50,9 +52,10 @@ public class AItcAIsEnumDataUtilsTest {
 		);
 
 		@Override
-		public BiFunction<String, List<String>, ? extends AIcTestUidPartsRecord> getUidRecordFactory() {
-			return (BiFunction<String, List<String>, AIcTestUidPartsRecord>) (aUid, aParts)
-					-> new AIcTestUidPartsRecord(
+		public BiFunction<String, List<String>, ? extends AIcTestUidRecord> getUidRecordFactory() {
+			return (BiFunction<String, List<String>, AIcTestUidRecord>) (aUid, aParts)
+					-> new AIcTestUidRecord(
+							aUid,
 							AInEnumDataOrigin.getByCodeOrThrow(aParts.get(AIsEnumDataUtils.ORIGIN_UID_POSITION)),
 							aParts.get(AIsEnumDataUtils.NAMESPACE_UID_POSITION),
 							aParts.get(LAST_UID_HEADER_PART_POSITION + 1),
@@ -85,7 +88,7 @@ public class AItcAIsEnumDataUtilsTest {
 		final String locUid = AIsEnumDataUtils.createBuiltinUid(locSpecificUidParts, locSpecificUidPartsMetadata);
 		Assert.assertEquals(locUid, "builtin:::jar");
 
-		final AIcTestUidPartsRecord locParts = AIsEnumDataUtils.parseUid(TEST_ENUM_DATA_TYPE, locUid);
+		final AIcTestUidRecord locParts = AIsEnumDataUtils.parseUid(TEST_ENUM_DATA_TYPE, locUid);
 		Assert.assertEquals(locParts.origin(), AInEnumDataOrigin.BUILTIN);
 		Assert.assertEquals(locParts.namespace(), "");
 		Assert.assertEquals(locParts.classifier(), "");
@@ -98,7 +101,7 @@ public class AItcAIsEnumDataUtilsTest {
 	@Test
 	public void testGetOriginAndNamespace() {
 		final String locUid = "builtin:::jar";
-		final AInEnumDataOrigin locOrigin = AIsEnumDataUtils.getOrigin(TEST_ENUM_DATA_TYPE, locUid);
+		final AIiEnumDataOrigin locOrigin = AIsEnumDataUtils.getOrigin(TEST_ENUM_DATA_TYPE, locUid);
 		final String locNamespace = AIsEnumDataUtils.getNamespace(TEST_ENUM_DATA_TYPE, locUid);
 		Assert.assertEquals(locOrigin, AInEnumDataOrigin.BUILTIN);
 		Assert.assertEquals(locNamespace, "");
@@ -121,7 +124,7 @@ public class AItcAIsEnumDataUtilsTest {
 	public void testCustomNamespaceMustBeNonBlank() {
 		final String locValidUid = "custom:eu.algites::jar";
 		Assert.assertTrue(AIsEnumDataUtils.isValidOutputTypeUid(TEST_ENUM_DATA_TYPE, locValidUid));
-		final AIcTestUidPartsRecord locParts = AIsEnumDataUtils.parseUid(TEST_ENUM_DATA_TYPE, locValidUid);
+		final AIcTestUidRecord locParts = AIsEnumDataUtils.parseUid(TEST_ENUM_DATA_TYPE, locValidUid);
 		Assert.assertEquals(locParts.origin(), AInEnumDataOrigin.CUSTOM);
 		Assert.assertEquals(locParts.namespace(), "eu.algites");
 

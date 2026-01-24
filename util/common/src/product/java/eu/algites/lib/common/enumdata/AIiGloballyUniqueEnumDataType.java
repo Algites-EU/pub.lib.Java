@@ -23,7 +23,7 @@ import java.util.function.Function;
  * @author linhart1
  * @date 20.01.26 8:36
  */
-public interface AIiGloballyUniqueEnumDataType<R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin> {
+public interface AIiGloballyUniqueEnumDataType<R extends AIiUidRecord, O extends AIiEnumDataOrigin> {
 
 	/**
 	 * Gets the factory for the UID parts record instance.

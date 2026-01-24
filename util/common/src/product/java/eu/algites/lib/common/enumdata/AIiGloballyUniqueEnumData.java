@@ -18,7 +18,7 @@ package eu.algites.lib.common.enumdata;
  * @author linhart1
  * @date 20.01.26 6:58
  */
-public interface AIiGloballyUniqueEnumData<R extends AIiUidPartsRecord,
+public interface AIiGloballyUniqueEnumData<R extends AIiUidRecord,
 		O extends AIiEnumDataOrigin,
 		GUEDT extends AIiGloballyUniqueEnumDataType<? extends R, O>> {
 
