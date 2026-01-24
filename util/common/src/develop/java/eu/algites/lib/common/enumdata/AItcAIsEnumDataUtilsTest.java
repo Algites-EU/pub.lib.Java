@@ -50,7 +50,7 @@ public class AItcAIsEnumDataUtilsTest {
 		);
 
 		@Override
-		public BiFunction<String, List<String>, ? extends AIcTestUidPartsRecord> getUidRecordProvider() {
+		public BiFunction<String, List<String>, ? extends AIcTestUidPartsRecord> getUidRecordFactory() {
 			return (BiFunction<String, List<String>, AIcTestUidPartsRecord>) (aUid, aParts)
 					-> new AIcTestUidPartsRecord(
 							AInEnumDataOrigin.getByCodeOrThrow(aParts.get(AIsEnumDataUtils.ORIGIN_UID_POSITION)),

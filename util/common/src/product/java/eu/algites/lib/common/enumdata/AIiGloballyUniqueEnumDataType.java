@@ -26,11 +26,11 @@ import java.util.function.Function;
 public interface AIiGloballyUniqueEnumDataType<R extends AIiUidPartsRecord, O extends AIiEnumDataOrigin> {
 
 	/**
-	 * Gets the constructor for the UID record.
+	 * Gets the factory for the UID parts record instance.
 	 *
-	 * @return the constructor
+	 * @return the factory for the UID parts record instance
 	 */
-	BiFunction<String, List<String>, ? extends R> getUidRecordProvider();
+	BiFunction<String, List<String>, ? extends R> getUidRecordFactory();
 
 	/**
 	 * Gets the origin resolver for this enum data type. The resolver throws an exception
