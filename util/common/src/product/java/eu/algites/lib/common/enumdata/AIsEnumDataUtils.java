@@ -153,7 +153,7 @@ public class AIsEnumDataUtils {
 
 		validatePartsSemantics(aEnumDataType, locOrigin, locParts);
 
-		return aEnumDataType.getUidRecordConstructor().apply(aUid, List.of(locParts));
+		return aEnumDataType.getUidRecordProvider().apply(aUid, List.of(locParts));
 	}
 
 	/**
