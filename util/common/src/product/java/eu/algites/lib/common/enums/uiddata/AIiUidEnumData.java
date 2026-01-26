@@ -18,7 +18,7 @@ package eu.algites.lib.common.enums.uiddata;
  * @author linhart1
  * @date 20.01.26 6:58
  */
-public interface AIiUidEnumData<R extends AIiUidRecord,
+public interface AIiUidEnumData<R extends AIiUidEnumDataRecord,
 		O extends AIiUidEnumDataOrigin,
 		GUEDT extends AIiUidEnumDataType<? extends R, O>> {
 
@@ -38,10 +38,10 @@ public interface AIiUidEnumData<R extends AIiUidRecord,
 	String uid();
 
 	/**
-	 * Gets the UID parsed uiddata record.
-	 * @return parsed Uid uiddata record
+	 * Gets the UID parsed data record.
+	 * @return parsed Uid data record
 	 */
-	default R getUidPartsRecord() {
+	default R getDataRecord() {
 		return AIsUidEnumDataUtils.parseUid(getDataType(), uid());
 	}
 

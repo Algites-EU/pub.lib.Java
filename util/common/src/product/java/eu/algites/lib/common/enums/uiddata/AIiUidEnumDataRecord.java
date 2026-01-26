@@ -2,7 +2,7 @@ package eu.algites.lib.common.enums.uiddata;
 
 /**
  * <p>
- * Title: {@link AIiUidRecord}
+ * Title: {@link AIiUidEnumDataRecord}
  * </p>
  * <p>
  * Description: General interface for the Uid records,
@@ -18,7 +18,7 @@ package eu.algites.lib.common.enums.uiddata;
  * @author linhart1
  * @date 18.01.26 15:46
  */
-public interface AIiUidRecord {
+public interface AIiUidEnumDataRecord {
 
 	/**
 	 * Unique identifier of the record
