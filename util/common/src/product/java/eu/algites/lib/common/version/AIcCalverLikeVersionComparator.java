@@ -18,7 +18,7 @@ import java.util.Objects;
  * </p>
  * <ul>
  *   <li>Create a comparator implementing {@link AIiVersionComparator}.</li>
- *   <li>Optionally add a mode (e.g. enum constant) or use {@link AIcCustomVersionHandlingMode}.</li>
+ *   <li>Optionally add a mode (e.g. enum constant) or use {@link AIcCustomVersionScheme}.</li>
  *   <li>Use {@link AIsVersionComparator#compare(AIcVersion, AIcVersion, AIiVersionComparator)}.</li>
  * </ul>
  * <p>

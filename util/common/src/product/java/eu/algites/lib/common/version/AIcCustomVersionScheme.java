@@ -8,10 +8,10 @@ import java.util.Objects;
 
 /**
  * <p>
- * Title: {@link AIcCustomVersionHandlingMode}
+ * Title: {@link AIcCustomVersionScheme}
  * </p>
  * <p>
- * Description: Simple reusable implementation of {@link AIiVersionHandlingMode}.
+ * Description: Simple reusable implementation of {@link AIiVersionScheme}.
  * </p>
  * <p>
  * This class exists to make it trivial to introduce a new version handling mode without changing
@@ -21,7 +21,7 @@ import java.util.Objects;
  * @author linhart1
  * @date 26.01.26
  */
-public final class AIcCustomVersionHandlingMode implements AIiVersionHandlingMode, Serializable {
+public final class AIcCustomVersionScheme implements AIiVersionScheme, Serializable {
 
 	@Serial
 	private static final long serialVersionUID = 1L;
@@ -32,7 +32,7 @@ public final class AIcCustomVersionHandlingMode implements AIiVersionHandlingMod
 	@Nonnull
 	private final AIiVersionComparator versionComparator;
 
-	public AIcCustomVersionHandlingMode(@Nonnull final String aCode, @Nonnull final AIiVersionComparator aVersionComparator) {
+	public AIcCustomVersionScheme(@Nonnull final String aCode, @Nonnull final AIiVersionComparator aVersionComparator) {
 		code = Objects.requireNonNull(aCode, "Code must not be null");
 		versionComparator = Objects.requireNonNull(aVersionComparator, "Comparator must not be null");
 

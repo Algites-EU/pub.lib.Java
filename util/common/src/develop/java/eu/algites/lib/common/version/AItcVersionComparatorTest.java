@@ -30,7 +30,7 @@ public class AItcVersionComparatorTest {
 		AIcVersion locRelease = new AIcVersion("1.0");
 		AIcVersion locRc = new AIcVersion("1.0-rc1");
 
-		int locCmp = AIsVersionComparator.compare(locRelease, locRc, AInVersionHandlingMode.MAVEN);
+		int locCmp = AIsVersionComparator.compare(locRelease, locRc, AInBuiltinVersionScheme.MAVEN);
 		Assert.assertTrue(locCmp > 0, "Release must be greater than RC");
 	}
 
@@ -39,7 +39,7 @@ public class AItcVersionComparatorTest {
 		AIcVersion locSnapshot = new AIcVersion("1.0-SNAPSHOT");
 		AIcVersion locRelease = new AIcVersion("1.0");
 
-		int locCmp = AIsVersionComparator.compare(locSnapshot, locRelease, AInVersionHandlingMode.MAVEN);
+		int locCmp = AIsVersionComparator.compare(locSnapshot, locRelease, AInBuiltinVersionScheme.MAVEN);
 		Assert.assertTrue(locCmp < 0, "Snapshot must be lower than release");
 	}
 
@@ -48,7 +48,7 @@ public class AItcVersionComparatorTest {
 		AIcVersion locA = new AIcVersion("1.10");
 		AIcVersion locB = new AIcVersion("1.2");
 
-		int locCmp = AIsVersionComparator.compare(locA, locB, AInVersionHandlingMode.MAVEN);
+		int locCmp = AIsVersionComparator.compare(locA, locB, AInBuiltinVersionScheme.MAVEN);
 		Assert.assertTrue(locCmp > 0, "1.10 must be greater than 1.2");
 	}
 
@@ -57,7 +57,7 @@ public class AItcVersionComparatorTest {
 		AIcVersion locA = new AIcVersion("1.2.3+build.7");
 		AIcVersion locB = new AIcVersion("1.2.3+build.8");
 
-		int locCmp = AIsVersionComparator.compare(locA, locB, AInVersionHandlingMode.SEMVER);
+		int locCmp = AIsVersionComparator.compare(locA, locB, AInBuiltinVersionScheme.SEMVER);
 		Assert.assertEquals(locCmp, 0, "Build metadata must be ignored for precedence");
 	}
 
@@ -67,7 +67,7 @@ public class AItcVersionComparatorTest {
 		AIcVersion locB = new AIcVersion("2.0");
 
 		AIiVersionComparator locComparator = (aLeft, aRight) -> 123;
-		AIiVersionHandlingMode locMode = new AIcCustomVersionHandlingMode("test", locComparator);
+		AIiVersionScheme locMode = new AIcCustomVersionScheme("test", locComparator);
 
 		int locCmp = AIsVersionComparator.compare(locA, locB, locMode);
 		Assert.assertEquals(locCmp, 123, "compare(left,right,mode) must delegate to mode.versionComparator()");
@@ -90,7 +90,7 @@ public class AItcVersionComparatorTest {
 		AIcVersion locB = new AIcVersion("2.0");
 
 		AIiVersionComparator locComparator = (aLeft, aRight) -> 77;
-		AIiVersionHandlingMode locMode = new AIcCustomVersionHandlingMode("test2", locComparator);
+		AIiVersionScheme locMode = new AIcCustomVersionScheme("test2", locComparator);
 
 		int locCmp = locA.compareTo(locB, locMode);
 		Assert.assertEquals(locCmp, 77, "AIcVersion.compareTo(other, mode) must delegate to mode.versionComparator()");

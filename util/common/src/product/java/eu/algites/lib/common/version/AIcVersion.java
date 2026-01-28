@@ -27,7 +27,7 @@ public class AIcVersion implements Comparable<AIcVersion>, Serializable {
 	 * Default handling mode used by {@link #compareTo(AIcVersion)}.
 	 */
 	@Nonnull
-	public static final AIiVersionHandlingMode DEFAULT_HANDLING_MODE = AInVersionHandlingMode.MAVEN;
+	public static final AIiVersionScheme DEFAULT_HANDLING_MODE = AInBuiltinVersionScheme.MAVEN;
 
 	@Nonnull
 	private final String originalText;
@@ -56,7 +56,7 @@ public class AIcVersion implements Comparable<AIcVersion>, Serializable {
 		return compareTo(aOther, getHandlingMode());
 	}
 
-	public int compareTo(@Nonnull final AIcVersion aOther, @Nonnull final AIiVersionHandlingMode aHandlingMode) {
+	public int compareTo(@Nonnull final AIcVersion aOther, @Nonnull final AIiVersionScheme aHandlingMode) {
 		Objects.requireNonNull(aOther, "Other version must not be null");
 		Objects.requireNonNull(aHandlingMode, "Handling mode must not be null");
 		return AIsVersionComparator.compare(this, aOther, aHandlingMode);
@@ -90,7 +90,7 @@ public class AIcVersion implements Comparable<AIcVersion>, Serializable {
 		return originalText.hashCode();
 	}
 
-	protected AIiVersionHandlingMode getHandlingMode() {
+	protected AIiVersionScheme getHandlingMode() {
 		return DEFAULT_HANDLING_MODE;
 	}
 }

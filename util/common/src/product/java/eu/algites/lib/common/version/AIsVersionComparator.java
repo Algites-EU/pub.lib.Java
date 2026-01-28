@@ -18,7 +18,7 @@ import java.util.Objects;
  * </p>
  * <p>
  * The comparator is extensible via {@link AIiVersionComparator} implementations, which can be provided by
- * {@link AIiVersionHandlingMode} instances.
+ * {@link AIiVersionScheme} instances.
  * </p>
  *
  * @author linhart1
@@ -33,15 +33,15 @@ public final class AIsVersionComparator {
 	}
 
 	/**
-	 * Compares two versions using a {@link AIiVersionHandlingMode}. The mode provides its comparator via
-	 * {@link AIiVersionHandlingMode#versionComparator()}.
+	 * Compares two versions using a {@link AIiVersionScheme}. The mode provides its comparator via
+	 * {@link AIiVersionScheme#versionComparator()}.
 	 *
 	 * @param aLeft left version
 	 * @param aRight right version
 	 * @param aMode handling mode
 	 * @return comparison result
 	 */
-	public static int compare(@Nonnull final AIcVersion aLeft, @Nonnull final AIcVersion aRight, @Nonnull final AIiVersionHandlingMode aMode) {
+	public static int compare(@Nonnull final AIcVersion aLeft, @Nonnull final AIcVersion aRight, @Nonnull final AIiVersionScheme aMode) {
 		Objects.requireNonNull(aMode, "Handling mode must not be null");
 		return compare(aLeft, aRight, aMode.versionComparator());
 	}
@@ -62,7 +62,7 @@ public final class AIsVersionComparator {
 	}
 
 	/**
-	 * Performs Maven-like comparison. This is the canonical implementation for {@link AInVersionHandlingMode#MAVEN}.
+	 * Performs Maven-like comparison. This is the canonical implementation for {@link AInBuiltinVersionScheme#MAVEN}.
 	 *
 	 * @param aLeft left version
 	 * @param aRight right version
@@ -79,7 +79,7 @@ public final class AIsVersionComparator {
 	}
 
 	/**
-	 * Performs SemVer-like comparison. This is the canonical implementation for {@link AInVersionHandlingMode#SEMVER}.
+	 * Performs SemVer-like comparison. This is the canonical implementation for {@link AInBuiltinVersionScheme#SEMVER}.
 	 *
 	 * @param aLeft left version
 	 * @param aRight right version

@@ -4,7 +4,7 @@ import eu.algites.lib.common.enums.AIiEnumItem;
 
 /**
  * <p>
- * Title: {@link AIiVersionHandlingMode}
+ * Title: {@link AIiVersionScheme}
  * </p>
  * <p>
  * Description: General interface for version comparison modes.
@@ -23,7 +23,7 @@ import eu.algites.lib.common.enums.AIiEnumItem;
  * @author linhart1
  * @date 26.01.26 22:45
  */
-public interface AIiVersionHandlingMode extends AIiEnumItem {
+public interface AIiVersionScheme extends AIiEnumItem {
 
 	/**
 	 * Provides the comparator implementing the given handling mode.
