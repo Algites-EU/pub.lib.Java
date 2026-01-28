@@ -137,8 +137,8 @@ public class AItsIntervalUtilsTest {
 		);
 
 		Assert.assertTrue(AIsIntervalUtils.contains(locLeftUnbounded, -1000), "(∞,3] must contain -1000");
-		Assert.assertTrue(AIsIntervalUtils.contains(locLeftUnbounded, 3), "(∞,3] must contain 3");
-		Assert.assertFalse(AIsIntervalUtils.contains(locLeftUnbounded, 4), "(∞,3] must not contain 4");
+		Assert.assertTrue(AIsIntervalUtils.contains(locLeftUnbounded, 3), "(*,3] must contain 3");
+		Assert.assertFalse(AIsIntervalUtils.contains(locLeftUnbounded, 4), "(*,3] must not contain 4");
 
 		AIcInterval<Integer> locRightUnbounded = new AIcInterval<>(
 				AInIntervalBoundary.CLOSED,
@@ -147,8 +147,8 @@ public class AItsIntervalUtilsTest {
 				null
 		);
 
-		Assert.assertFalse(AIsIntervalUtils.contains(locRightUnbounded, 0), "[1,∞) must not contain 0");
-		Assert.assertTrue(AIsIntervalUtils.contains(locRightUnbounded, 1000), "[1,∞) must contain 1000");
+		Assert.assertFalse(AIsIntervalUtils.contains(locRightUnbounded, 0), "[1,*) must not contain 0");
+		Assert.assertTrue(AIsIntervalUtils.contains(locRightUnbounded, 1000), "[1,*) must contain 1000");
 	}
 
 	@Test
@@ -295,7 +295,7 @@ public class AItsIntervalUtilsTest {
 				3
 		);
 
-		Assert.assertEquals(AIsIntervalUtils.toStringRepresentation(locLeftUnbounded), "(∞, 3]", "Unbounded-left string representation must match");
+		Assert.assertEquals(AIsIntervalUtils.toStringRepresentation(locLeftUnbounded), "(*, 3]", "Unbounded-left string representation must match");
 
 		AIcInterval<Integer> locRightUnbounded = new AIcInterval<>(
 				AInIntervalBoundary.CLOSED,
@@ -304,6 +304,6 @@ public class AItsIntervalUtilsTest {
 				null
 		);
 
-		Assert.assertEquals(AIsIntervalUtils.toStringRepresentation(locRightUnbounded), "[1, ∞)", "Unbounded-right string representation must match");
+		Assert.assertEquals(AIsIntervalUtils.toStringRepresentation(locRightUnbounded), "[1, *)", "Unbounded-right string representation must match");
 	}
 }
