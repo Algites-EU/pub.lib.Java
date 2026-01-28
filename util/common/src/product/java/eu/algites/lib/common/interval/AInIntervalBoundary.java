@@ -22,7 +22,7 @@ import eu.algites.lib.common.enums.AIiEnumItem;
 public enum AInIntervalBoundary implements AIiEnumItem {
 	OPEN("open", false, true, "(", ")"),
 	CLOSED("closed", false, false, "[", "]"),
-	UNBOUNDED("unbounded", true, true, "(∞", "∞)");
+	UNBOUNDED("unbounded", true, true, "(*", "*)");
 
 	private final String code;
 	private final boolean boundaryValueIgnored;
