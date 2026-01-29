@@ -27,7 +27,7 @@ val ALGITES_PUB_LIB_JAVA_VERSION = project.version.toString()
 dependencies {
     testImplementation("org.testng:testng:" + TESTNG_VERSION)
     implementation("jakarta.annotation:jakarta.annotation-api:" + JAKARTA_ANNOTATION_VERSION)
-    api("eu.algites.lib.common:pub.lib.Java_util.common:" + ALGITES_PUB_LIB_JAVA_VERSION)
-    testImplementation("eu.algites.lib.common:pub.lib.Java_util.common:" + ALGITES_PUB_LIB_JAVA_VERSION)
+    api(project(":util:common"))
+    testImplementation(project(":util:common"))
 }
 

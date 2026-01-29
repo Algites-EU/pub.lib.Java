@@ -117,7 +117,7 @@ public class AItcVersionComparatorTest {
 	public void testSemVerBuildFirstSchemeSplitsBuildBeforeVersion() {
 		AIiVersionScheme locScheme = AInBuiltinVersionScheme.SEMVER_BUILD_FIRST;
 
-		AIrVersionSchemeTextParts locParts = locScheme.splitVersionAndBuildText("build.7+1.2.3");
+		AIiVersionSchemeTextParts locParts = locScheme.splitVersionAndBuildText("build.7+1.2.3");
 		Assert.assertEquals(locParts.versionText(), "1.2.3", "Split must treat the part after delimiter as version when versionBeforeBuild is false");
 		Assert.assertEquals(locParts.buildText(), "build.7", "Split must treat the part before delimiter as build when versionBeforeBuild is false");
 
