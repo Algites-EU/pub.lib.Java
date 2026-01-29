@@ -11,7 +11,7 @@ import java.util.Objects;
  * Title: {@link AIcDefaultVersionFormatter}
  * </p>
  * <p>
- * Description: Default formatter using {@link AIiVersionStructure} and {@link AIiVersionFormatSpec}.
+ * Description: Default formatter using {@link AIiVersionStructure} and {@link AIiVersionFormat}.
  * </p>
  *
  * @author linhart1
@@ -35,14 +35,14 @@ public final class AIcDefaultVersionFormatter implements AIiVersionFormatter, Se
 		Objects.requireNonNull(aScheme, "Scheme must not be null");
 
 		AIiVersionStructure locStructure = aScheme.versionStructure();
-		AIiVersionFormatSpec locFormatSpec = aScheme.versionFormatSpec();
+		AIiVersionFormat locFormat = aScheme.versionFormat();
 
-		AIiVersionSchemeTextParts locParts = aScheme.splitVersionAndBuildText(aVersion.getOriginalText());
+		AIiVersionSchemeTextParts locParts = aScheme.versionStructure().splitVersionAndBuildText(aVersion.getOriginalText());
 
 		String locVersionPart = locParts.versionText();
 		String locBuildPart = locParts.buildText();
 
-		AInVersionBuildFormatPolicy locBuildPolicy = locFormatSpec.buildFormatPolicy();
+		AInVersionBuildFormatPolicy locBuildPolicy = locFormat.buildFormatPolicy();
 		if (locBuildPart.isEmpty() || locBuildPolicy == AInVersionBuildFormatPolicy.OMIT) {
 			return locVersionPart;
 		}
@@ -59,7 +59,7 @@ public final class AIcDefaultVersionFormatter implements AIiVersionFormatter, Se
 		}
 
 		if (locBuildPolicy == AInVersionBuildFormatPolicy.MAP_TO_QUALIFIER) {
-			return mapBuildToQualifier(locVersionPart, locBuildPart, locFormatSpec);
+			return mapBuildToQualifier(locVersionPart, locBuildPart, locFormat);
 		}
 
 		throw new IllegalStateException("Unsupported build format policy: " + locBuildPolicy);
@@ -69,11 +69,11 @@ public final class AIcDefaultVersionFormatter implements AIiVersionFormatter, Se
 	private static String mapBuildToQualifier(
 			@Nonnull final String aVersionPart,
 			@Nonnull final String aBuildPart,
-			@Nonnull final AIiVersionFormatSpec aFormatSpec
+			@Nonnull final AIiVersionFormat aFormat
 	) {
-		String locQualifierDelimiter = aFormatSpec.qualifierDelimiter();
-		String locTokenDelimiter = aFormatSpec.qualifierTokenDelimiter();
-		String locPrefix = aFormatSpec.mappedBuildPrefix();
+		String locQualifierDelimiter = aFormat.qualifierDelimiter();
+		String locTokenDelimiter = aFormat.qualifierTokenDelimiter();
+		String locPrefix = aFormat.mappedBuildPrefix();
 
 		String locMapped = locPrefix + locTokenDelimiter + aBuildPart;
 

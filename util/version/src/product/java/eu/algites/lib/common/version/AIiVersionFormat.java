@@ -5,7 +5,7 @@ import jakarta.annotation.Nonnull;
 
 /**
  * <p>
- * Title: {@link AIiVersionFormatSpec}
+ * Title: {@link AIiVersionFormat}
  * </p>
  * <p>
  * Description: Formatting preferences for rendering version texts under a given {@link AIiVersionScheme}.
@@ -19,15 +19,15 @@ import jakarta.annotation.Nonnull;
  * @author linhart1
  * @date 28.01.26
  */
-public interface AIiVersionFormatSpec extends AIiEnumItem {
+public interface AIiVersionFormat extends AIiEnumItem {
 
 	/**
-	 * Determines how the build-identification part should be emitted when formatting.
-	 *
-	 * @return build formatting policy
+	 * @return policy defining how the build-identification part is formatted when serializing versions
 	 */
 	@Nonnull
-	AInVersionBuildFormatPolicy buildFormatPolicy();
+	default AInVersionBuildFormatPolicy buildFormatPolicy() {
+		return AInVersionBuildFormatPolicy.OMIT;
+	}
 
 	/**
 	 * Prefix used when {@link #buildFormatPolicy()} is {@link AInVersionBuildFormatPolicy#MAP_TO_QUALIFIER}.
@@ -58,4 +58,6 @@ public interface AIiVersionFormatSpec extends AIiEnumItem {
 	default String qualifierTokenDelimiter() {
 		return ".";
 	}
+
+
 }

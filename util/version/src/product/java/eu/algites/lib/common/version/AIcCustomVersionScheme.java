@@ -4,7 +4,8 @@ import jakarta.annotation.Nonnull;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * <p>
@@ -32,55 +33,39 @@ public final class AIcCustomVersionScheme implements AIiVersionScheme, Serializa
 	@Nonnull
 	private final AIiVersionComparator versionComparator;
 
-	private final boolean versionBeforeBuild;
-
-	@Nonnull
-	private final String buildDelimiter;
-
-	@Nonnull
-	private final AInVersionBuildComparisonPolicy buildComparisonPolicy;
-
-	@Nonnull
-	private final AInVersionBuildFormatPolicy buildFormatPolicy;
-
 	@Nonnull
 	private final AIiVersionStructure versionStructure;
 
 	@Nonnull
-	private final AIiVersionFormatSpec versionFormatSpec;
+	private final AIiVersionFormat versionFormat;
 
-	public AIcCustomVersionScheme(@Nonnull final String aCode, @Nonnull final AIiVersionComparator aVersionComparator) {
-		this(
-			aCode,
-			aVersionComparator,
-			true,
-			"",
-			AInVersionBuildComparisonPolicy.IGNORE,
-			AInVersionBuildFormatPolicy.OMIT
-		);
+	@NotNull
+	private final AIiVersionCodec versionCodec;
+
+	public AIcCustomVersionScheme(
+			@Nonnull final String aCode,
+			@Nonnull final AIiVersionComparator aVersionComparator,
+			@Nonnull final AIiVersionStructure aVersionStructure,
+			@Nonnull final AIiVersionFormat aVersionFormat,
+			@Nonnull final AIiVersionCodec aVersionCodec
+	) {
+		if (aCode.isBlank()) {
+			throw new IllegalArgumentException("Code must not be empty or blank");
+		}
+		code = aCode.trim();
+		versionComparator = aVersionComparator;
+		versionStructure = aVersionStructure;
+		versionFormat = aVersionFormat;
+		versionCodec = aVersionCodec;
 	}
 
 	public AIcCustomVersionScheme(
 			@Nonnull final String aCode,
 			@Nonnull final AIiVersionComparator aVersionComparator,
-			final boolean aVersionBeforeBuild,
-			@Nonnull final String aBuildDelimiter,
-			@Nonnull final AInVersionBuildComparisonPolicy aBuildComparisonPolicy,
-			@Nonnull final AInVersionBuildFormatPolicy aBuildFormatPolicy
+			@Nonnull final AIiVersionStructure aVersionStructure,
+			@Nonnull final AIiVersionFormat aVersionFormat
 	) {
-		code = Objects.requireNonNull(aCode, "Code must not be null");
-		versionComparator = Objects.requireNonNull(aVersionComparator, "Comparator must not be null");
-		versionBeforeBuild = aVersionBeforeBuild;
-		buildDelimiter = Objects.requireNonNull(aBuildDelimiter, "Build delimiter must not be null");
-		buildComparisonPolicy = Objects.requireNonNull(aBuildComparisonPolicy, "Build comparison policy must not be null");
-		buildFormatPolicy = Objects.requireNonNull(aBuildFormatPolicy, "Build format policy must not be null");
-
-		versionStructure = new AIcCustomVersionStructure(code + "-structure", versionBeforeBuild, buildDelimiter, buildComparisonPolicy);
-		versionFormatSpec = new AIcCustomVersionFormatSpec(code + "-format", buildFormatPolicy);
-
-		if (code.trim().isEmpty()) {
-			throw new IllegalArgumentException("Code must not be empty");
-		}
+		this(aCode, aVersionComparator, aVersionStructure, aVersionFormat, AIcDefaultVersionCodec.INSTANCE);
 	}
 
 	@Override
@@ -96,28 +81,6 @@ public final class AIcCustomVersionScheme implements AIiVersionScheme, Serializa
 	}
 
 	@Override
-	public boolean versionBeforeBuild() {
-		return versionBeforeBuild;
-	}
-
-	@Override
-	@Nonnull
-	public String buildDelimiter() {
-		return buildDelimiter;
-	}
-
-	@Override
-	@Nonnull
-	public AInVersionBuildComparisonPolicy buildComparisonPolicy() {
-		return buildComparisonPolicy;
-	}
-
-	@Override
-	@Nonnull
-	public AInVersionBuildFormatPolicy buildFormatPolicy() {
-		return buildFormatPolicy;
-	}
-	@Override
 	@Nonnull
 	public AIiVersionStructure versionStructure() {
 		return versionStructure;
@@ -125,7 +88,13 @@ public final class AIcCustomVersionScheme implements AIiVersionScheme, Serializa
 
 	@Override
 	@Nonnull
-	public AIiVersionFormatSpec versionFormatSpec() {
-		return versionFormatSpec;
+	public AIiVersionFormat versionFormat() {
+		return versionFormat;
 	}
+
+	@Override
+	@NotNull public AIiVersionCodec versionCodec() {
+		return versionCodec;
+	}
+
 }

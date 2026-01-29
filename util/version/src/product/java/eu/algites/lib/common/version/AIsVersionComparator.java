@@ -38,22 +38,22 @@ public final class AIsVersionComparator {
 	 *
 	 * @param aLeft left version
 	 * @param aRight right version
-	 * @param aMode handling mode
+	 * @param aScheme handling mode
 	 * @return comparison result
 	 */
-	public static int compare(@Nonnull final AIcVersion aLeft, @Nonnull final AIcVersion aRight, @Nonnull final AIiVersionScheme aMode) {
-		Objects.requireNonNull(aMode, "Handling mode must not be null");
-		AIiVersionComparator locComparator = Objects.requireNonNull(aMode.versionComparator(), "Comparator must not be null");
-		String locBuildDelimiter = aMode.buildDelimiter();
+	public static int compare(@Nonnull final AIcVersion aLeft, @Nonnull final AIcVersion aRight, @Nonnull final AIiVersionScheme aScheme) {
+		Objects.requireNonNull(aScheme, "Handling mode must not be null");
+		AIiVersionComparator locComparator = aScheme.versionComparator();
+		String locBuildDelimiter = aScheme.versionStructure().buildDelimiter();
 		boolean locNeedsBuildAwareWrapper = !locBuildDelimiter.isEmpty()
-				|| !aMode.versionBeforeBuild()
-				|| aMode.buildComparisonPolicy() != AInVersionBuildComparisonPolicy.IGNORE;
+				|| !aScheme.versionStructure().versionBeforeBuild()
+				|| aScheme.versionStructure().buildComparisonPolicy() != AInVersionBuildComparisonPolicy.IGNORE;
 		if (locNeedsBuildAwareWrapper) {
 			locComparator = new AIcBuildAwareVersionComparator(
 					locComparator,
 					locBuildDelimiter,
-					aMode.versionBeforeBuild(),
-					aMode.buildComparisonPolicy()
+					aScheme.versionStructure().versionBeforeBuild(),
+					aScheme.versionStructure().buildComparisonPolicy()
 			);
 		}
 		return compare(aLeft, aRight, locComparator);
@@ -75,7 +75,8 @@ public final class AIsVersionComparator {
 	}
 
 	/**
-	 * Performs Maven-like comparison. This is the canonical implementation for {@link AInBuiltinVersionScheme#MAVEN}.
+	 * Performs Maven-like comparison. This is the canonical implementation for
+	 * {@link AIcMavenLikeVersionComparator} and {@link AIcCalverLikeVersionComparator}.
 	 *
 	 * @param aLeft left version
 	 * @param aRight right version
@@ -92,7 +93,7 @@ public final class AIsVersionComparator {
 	}
 
 	/**
-	 * Performs SemVer-like comparison. This is the canonical implementation for {@link AInBuiltinVersionScheme#SEMVER}.
+	 * Performs SemVer-like comparison. This is the canonical implementation for {@link AIcSemverLikeVersionComparator}.
 	 *
 	 * @param aLeft left version
 	 * @param aRight right version

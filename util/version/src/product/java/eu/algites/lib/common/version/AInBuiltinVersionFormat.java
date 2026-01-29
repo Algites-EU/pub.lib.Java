@@ -2,16 +2,16 @@ package eu.algites.lib.common.version;
 
 /**
  * <p>
- * Title: {@link AInBuiltinVersionFormatSpec}
+ * Title: {@link AInBuiltinVersionFormat}
  * </p>
  * <p>
- * Description: Built-in {@link AIiVersionFormatSpec} definitions.
+ * Description: Built-in {@link AIiVersionFormat} definitions.
  * </p>
  *
  * @author linhart1
  * @date 28.01.26
  */
-public enum AInBuiltinVersionFormatSpec implements AIiVersionFormatSpec {
+public enum AInBuiltinVersionFormat implements AIiVersionFormat {
 
 	/**
 	 * Default format: emits build metadata if structure has it.
@@ -32,7 +32,7 @@ public enum AInBuiltinVersionFormatSpec implements AIiVersionFormatSpec {
 	private final String code;
 	private final AInVersionBuildFormatPolicy buildFormatPolicy;
 
-	AInBuiltinVersionFormatSpec(final String aCode, final AInVersionBuildFormatPolicy aBuildFormatPolicy) {
+	AInBuiltinVersionFormat(final String aCode, final AInVersionBuildFormatPolicy aBuildFormatPolicy) {
 		code = aCode;
 		buildFormatPolicy = aBuildFormatPolicy;
 	}

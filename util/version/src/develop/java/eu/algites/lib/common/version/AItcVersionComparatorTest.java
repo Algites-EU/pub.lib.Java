@@ -67,7 +67,9 @@ public class AItcVersionComparatorTest {
 		AIcVersion locB = new AIcVersion("2.0");
 
 		AIiVersionComparator locComparator = (aLeft, aRight) -> 123;
-		AIiVersionScheme locMode = new AIcCustomVersionScheme("test", locComparator);
+		AIiVersionScheme locMode = new AIcCustomVersionScheme("test", locComparator,
+				AInBuiltinVersionStructure.NO_BUILD,
+				AInBuiltinVersionFormat.OMIT_BUILD);
 
 		int locCmp = AIsVersionComparator.compare(locA, locB, locMode);
 		Assert.assertEquals(locCmp, 123, "compare(left,right,mode) must delegate to mode.versionComparator()");
@@ -90,7 +92,9 @@ public class AItcVersionComparatorTest {
 		AIcVersion locB = new AIcVersion("2.0");
 
 		AIiVersionComparator locComparator = (aLeft, aRight) -> 77;
-		AIiVersionScheme locMode = new AIcCustomVersionScheme("test2", locComparator);
+		AIiVersionScheme locMode = new AIcCustomVersionScheme("test2", locComparator,
+				AInBuiltinVersionStructure.NO_BUILD,
+				AInBuiltinVersionFormat.OMIT_BUILD);
 
 		int locCmp = locA.compareTo(locB, locMode);
 		Assert.assertEquals(locCmp, 77, "AIcVersion.compareTo(other, mode) must delegate to mode.versionComparator()");
@@ -117,7 +121,7 @@ public class AItcVersionComparatorTest {
 	public void testSemVerBuildFirstSchemeSplitsBuildBeforeVersion() {
 		AIiVersionScheme locScheme = AInBuiltinVersionScheme.SEMVER_BUILD_FIRST;
 
-		AIiVersionSchemeTextParts locParts = locScheme.splitVersionAndBuildText("build.7+1.2.3");
+		AIiVersionSchemeTextParts locParts = locScheme.versionStructure().splitVersionAndBuildText("build.7+1.2.3");
 		Assert.assertEquals(locParts.versionText(), "1.2.3", "Split must treat the part after delimiter as version when versionBeforeBuild is false");
 		Assert.assertEquals(locParts.buildText(), "build.7", "Split must treat the part before delimiter as build when versionBeforeBuild is false");
 

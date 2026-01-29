@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.gradle.internal.impldep.com.fasterxml.jackson.annotation.JsonCreator;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
  *   <li>A {@link AIiVersionComparator} used for precedence comparisons.</li>
  *   <li>A {@link AIiVersionStructure} defining how the textual form is structurally interpreted
  *       (e.g. build delimiter, whether version comes before build, build comparison policy).</li>
- *   <li>A {@link AIiVersionFormatSpec} defining how the version is formatted back to text
+ *   <li>A {@link AIiVersionFormat} defining how the version is formatted back to text
  *       (e.g. whether build metadata is emitted, omitted or mapped).</li>
  * </ul>
  * <p>
@@ -50,14 +51,14 @@ public enum AInBuiltinVersionScheme implements AIiVersionSchemeData {
 			"maven-default",
 			new AIcMavenLikeVersionComparator(),
 			AInBuiltinVersionStructure.NO_BUILD,
-			AInBuiltinVersionFormatSpec.OMIT_BUILD
+			AInBuiltinVersionFormat.OMIT_BUILD
 	),
 
 	MAVEN_BUILD_METADATA_IGNORED(
 			"maven-build-metadata-ignored",
 			new AIcMavenLikeVersionComparator(),
 			AInBuiltinVersionStructure.BUILD_AFTER_PLUS_IGNORED,
-			AInBuiltinVersionFormatSpec.MAP_BUILD_TO_QUALIFIER
+			AInBuiltinVersionFormat.MAP_BUILD_TO_QUALIFIER
 	),
 
 	/**
@@ -68,21 +69,21 @@ public enum AInBuiltinVersionScheme implements AIiVersionSchemeData {
 			"semver-default",
 			new AIcSemverLikeVersionComparator(),
 			AInBuiltinVersionStructure.BUILD_AFTER_PLUS_IGNORED,
-			AInBuiltinVersionFormatSpec.EMIT_BUILD
+			AInBuiltinVersionFormat.EMIT_BUILD
 	),
 
 	SEMVER_BUILD_FIRST(
 			"semver-build-first",
 			new AIcSemverLikeVersionComparator(),
 			AInBuiltinVersionStructure.BUILD_BEFORE_PLUS_IGNORED,
-			AInBuiltinVersionFormatSpec.EMIT_BUILD
+			AInBuiltinVersionFormat.EMIT_BUILD
 	),
 
 	SEMVER_BUILD_ORDERED(
 			"semver-build-ordered",
 			new AIcSemverLikeVersionComparator(),
 			AInBuiltinVersionStructure.BUILD_AFTER_PLUS_ORDERED,
-			AInBuiltinVersionFormatSpec.EMIT_BUILD
+			AInBuiltinVersionFormat.EMIT_BUILD
 	),
 
 	/**
@@ -92,13 +93,14 @@ public enum AInBuiltinVersionScheme implements AIiVersionSchemeData {
 			"calver-default",
 			new AIcCalverLikeVersionComparator(),
 			AInBuiltinVersionStructure.NO_BUILD,
-			AInBuiltinVersionFormatSpec.OMIT_BUILD
+			AInBuiltinVersionFormat.OMIT_BUILD
 	);
 
 	private final String code;
 	private final AIiVersionComparator versionComparator;
 	private final AIiVersionStructure versionStructure;
-	private final AIiVersionFormatSpec versionFormatSpec;
+	private final AIiVersionFormat versionFormat;
+	private final AIiVersionCodec versionCodec;
 	private final String uid;
 
 	private static final AIiVersionSchemeDataType DATA_TYPE = new AIcVersionSchemeDataType();
@@ -107,12 +109,14 @@ public enum AInBuiltinVersionScheme implements AIiVersionSchemeData {
 			final String aCode,
 			final AIiVersionComparator aVersionComparator,
 			final AIiVersionStructure aVersionStructure,
-			final AIiVersionFormatSpec aVersionFormatSpec
+			final AIiVersionFormat aVersionFormat
 	) {
 		code = Objects.requireNonNull(aCode, "code");
 		versionComparator = Objects.requireNonNull(aVersionComparator, "versionComparator");
 		versionStructure = Objects.requireNonNull(aVersionStructure, "versionStructure");
-		versionFormatSpec = Objects.requireNonNull(aVersionFormatSpec, "versionFormatSpec");
+		versionFormat = Objects.requireNonNull(aVersionFormat, "versionFormat");
+		versionCodec = AIcDefaultVersionCodec.INSTANCE;
+
 		uid = AIsUidEnumDataUtils.createBuiltinUid(
 				List.of(code),
 				AIiVersionSchemeDataUidRecord.RECORD_SPECIFIC_PARTS_METADATA);
@@ -134,28 +138,13 @@ public enum AInBuiltinVersionScheme implements AIiVersionSchemeData {
 	}
 
 	@Override
-	public AIiVersionFormatSpec versionFormatSpec() {
-		return versionFormatSpec;
+	public AIiVersionFormat versionFormat() {
+		return versionFormat;
 	}
 
 	@Override
-	public boolean versionBeforeBuild() {
-		return versionStructure().versionBeforeBuild();
-	}
-
-	@Override
-	public String buildDelimiter() {
-		return versionStructure().buildDelimiter();
-	}
-
-	@Override
-	public AInVersionBuildComparisonPolicy buildComparisonPolicy() {
-		return versionStructure().buildComparisonPolicy();
-	}
-
-	@Override
-	public AInVersionBuildFormatPolicy buildFormatPolicy() {
-		return versionFormatSpec().buildFormatPolicy();
+	public @NotNull AIiVersionCodec versionCodec() {
+		return versionCodec;
 	}
 
 	@Override
@@ -255,7 +244,7 @@ public enum AInBuiltinVersionScheme implements AIiVersionSchemeData {
 		if (aUid == null || aUid.isBlank()) {
 			return Optional.empty();
 		}
-		AIiVersionSchemeDataUidRecord locParsedRecord = (AIiVersionSchemeDataUidRecord) parseUid(
+		AIiVersionSchemeDataUidRecord locParsedRecord = parseUid(
 				DATA_TYPE, aUid);
 		if (locParsedRecord.origin() != BUILTIN) {
 			return Optional.empty();

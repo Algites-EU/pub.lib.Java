@@ -21,13 +21,14 @@ public class AItcVersionCodecTest {
 		AIiVersionScheme locScheme = new AIcCustomVersionScheme(
 				"custom-omit-build",
 				new AIcMavenLikeVersionComparator(),
-				true,
+				new AIcCustomVersionStructure("custom-omit-build-structure", true,
 				"+",
-				AInVersionBuildComparisonPolicy.IGNORE,
-				AInVersionBuildFormatPolicy.OMIT
+				AInVersionBuildComparisonPolicy.IGNORE),
+				AInBuiltinVersionFormat.OMIT_BUILD,
+				AIcDefaultVersionCodec.INSTANCE
 		);
 
-		String locNormalized = locScheme.normalizeVersionText("1.2.3+45");
+		String locNormalized = locScheme.versionCodec().normalizeVersionText("1.2.3+45", locScheme);
 
 		Assert.assertEquals(locNormalized, "1.2.3", "Build part must be omitted when policy is OMIT");
 	}
@@ -36,7 +37,7 @@ public class AItcVersionCodecTest {
 	public void testSemverSchemeEmitsBuildAndKeepsText() {
 		AIiVersionScheme locScheme = AInBuiltinVersionScheme.SEMVER_DEFAULT;
 
-		String locNormalized = locScheme.normalizeVersionText("1.2.3+45");
+		String locNormalized = locScheme.versionCodec().normalizeVersionText("1.2.3+45", locScheme);
 
 		Assert.assertEquals(locNormalized, "1.2.3+45", "SemVer scheme must keep build metadata in formatted output");
 	}
@@ -46,16 +47,17 @@ public class AItcVersionCodecTest {
 		AIiVersionScheme locScheme = new AIcCustomVersionScheme(
 				"custom-map-build",
 				new AIcSemverLikeVersionComparator(),
-				true,
-				"+",
-				AInVersionBuildComparisonPolicy.IGNORE,
-				AInVersionBuildFormatPolicy.MAP_TO_QUALIFIER
+				new AIcCustomVersionStructure("custom-map-build-structure", true,
+						"+",
+						AInVersionBuildComparisonPolicy.IGNORE),
+				AInBuiltinVersionFormat.MAP_BUILD_TO_QUALIFIER,
+				AIcDefaultVersionCodec.INSTANCE
 		);
 
-		String locNormalizedPlain = locScheme.normalizeVersionText("1.2.3+7");
+		String locNormalizedPlain = locScheme.versionCodec().normalizeVersionText("1.2.3+7", locScheme);
 		Assert.assertEquals(locNormalizedPlain, "1.2.3-build.7", "Build part must be mapped into qualifier section");
 
-		String locNormalizedWithQualifier = locScheme.normalizeVersionText("1.2.3-rc1+7");
+		String locNormalizedWithQualifier = locScheme.versionCodec().normalizeVersionText("1.2.3-rc1+7", locScheme);
 		Assert.assertEquals(locNormalizedWithQualifier, "1.2.3-rc1.build.7", "Build part must be appended as additional qualifier token");
 	}
 }

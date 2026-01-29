@@ -8,16 +8,16 @@ import java.util.Objects;
 
 /**
  * <p>
- * Title: {@link AIcCustomVersionFormatSpec}
+ * Title: {@link AIcCustomVersionFormat}
  * </p>
  * <p>
- * Description: Simple reusable implementation of {@link AIiVersionFormatSpec}.
+ * Description: Simple reusable implementation of {@link AIiVersionFormat}.
  * </p>
  *
  * @author linhart1
  * @date 28.01.26
  */
-public final class AIcCustomVersionFormatSpec implements AIiVersionFormatSpec, Serializable {
+public final class AIcCustomVersionFormat implements AIiVersionFormat, Serializable {
 
 	@Serial
 	private static final long serialVersionUID = 1L;
@@ -37,14 +37,14 @@ public final class AIcCustomVersionFormatSpec implements AIiVersionFormatSpec, S
 	@Nonnull
 	private final String qualifierTokenDelimiter;
 
-	public AIcCustomVersionFormatSpec(
+	public AIcCustomVersionFormat(
 			@Nonnull final String aCode,
 			@Nonnull final AInVersionBuildFormatPolicy aBuildFormatPolicy
 	) {
 		this(aCode, aBuildFormatPolicy, "build", "-", ".");
 	}
 
-	public AIcCustomVersionFormatSpec(
+	public AIcCustomVersionFormat(
 			@Nonnull final String aCode,
 			@Nonnull final AInVersionBuildFormatPolicy aBuildFormatPolicy,
 			@Nonnull final String aMappedBuildPrefix,
