@@ -45,9 +45,6 @@ public final class AIsVersionComparator {
 		Objects.requireNonNull(aMode, "Handling mode must not be null");
 		AIiVersionComparator locComparator = Objects.requireNonNull(aMode.versionComparator(), "Comparator must not be null");
 		String locBuildDelimiter = aMode.buildDelimiter();
-		if (locBuildDelimiter == null) {
-			locBuildDelimiter = "";
-		}
 		boolean locNeedsBuildAwareWrapper = !locBuildDelimiter.isEmpty()
 				|| !aMode.versionBeforeBuild()
 				|| aMode.buildComparisonPolicy() != AInVersionBuildComparisonPolicy.IGNORE;

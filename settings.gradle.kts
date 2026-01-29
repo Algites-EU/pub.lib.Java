@@ -41,3 +41,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "pub.lib.Java"
 include(":util:common")
+include(":util:version")

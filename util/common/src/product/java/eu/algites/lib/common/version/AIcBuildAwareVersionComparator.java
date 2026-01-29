@@ -58,8 +58,8 @@ public final class AIcBuildAwareVersionComparator implements AIiVersionComparato
 		Objects.requireNonNull(aLeft, "Left version must not be null");
 		Objects.requireNonNull(aRight, "Right version must not be null");
 
-		AIrVersionSchemeTextParts locLeftParts = splitText(aLeft.getOriginalText());
-		AIrVersionSchemeTextParts locRightParts = splitText(aRight.getOriginalText());
+		AIiVersionSchemeTextParts locLeftParts = splitText(aLeft.getOriginalText());
+		AIiVersionSchemeTextParts locRightParts = splitText(aRight.getOriginalText());
 
 		AIcVersion locLeftVersion = new AIcVersion(locLeftParts.versionText());
 		AIcVersion locRightVersion = new AIcVersion(locRightParts.versionText());
@@ -77,7 +77,7 @@ public final class AIcBuildAwareVersionComparator implements AIiVersionComparato
 	}
 
 	@Nonnull
-	private AIrVersionSchemeTextParts splitText(@Nonnull final String aText) {
+	private AIiVersionSchemeTextParts splitText(@Nonnull final String aText) {
 		Objects.requireNonNull(aText, "Text must not be null");
 
 		if (buildDelimiter.isEmpty()) {

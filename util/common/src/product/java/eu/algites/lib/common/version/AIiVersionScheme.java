@@ -85,7 +85,7 @@ public interface AIiVersionScheme extends AIiEnumItem {
 	 * @return split parts
 	 */
 	@Nonnull
-	default AIrVersionSchemeTextParts splitVersionAndBuildText(@Nonnull final String aVersionText) {
+	default AIiVersionSchemeTextParts splitVersionAndBuildText(@Nonnull final String aVersionText) {
 		Objects.requireNonNull(aVersionText, "Version text must not be null");
 
 		String locDelimiter = buildDelimiter();

@@ -37,7 +37,7 @@ public final class AIcDefaultVersionFormatter implements AIiVersionFormatter, Se
 		AIiVersionStructure locStructure = aScheme.versionStructure();
 		AIiVersionFormatSpec locFormatSpec = aScheme.versionFormatSpec();
 
-		AIrVersionSchemeTextParts locParts = aScheme.splitVersionAndBuildText(aVersion.getOriginalText());
+		AIiVersionSchemeTextParts locParts = aScheme.splitVersionAndBuildText(aVersion.getOriginalText());
 
 		String locVersionPart = locParts.versionText();
 		String locBuildPart = locParts.buildText();

@@ -21,13 +21,14 @@ import java.util.Objects;
 public record AIrVersionSchemeTextParts(
 		@Nonnull String versionText,
 		@Nonnull String buildText
-) {
+) implements AIiVersionSchemeTextParts {
 
 	public AIrVersionSchemeTextParts {
 		Objects.requireNonNull(versionText, "versionText must not be null");
 		Objects.requireNonNull(buildText, "buildText must not be null");
 	}
 
+	@Override
 	public boolean hasBuild() {
 		return !buildText.isEmpty();
 	}
