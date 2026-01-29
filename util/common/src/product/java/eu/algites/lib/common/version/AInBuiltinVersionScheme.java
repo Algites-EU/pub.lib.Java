@@ -8,6 +8,7 @@ import eu.algites.lib.common.enums.uiddata.AInUidEnumDataOrigin;
 import eu.algites.lib.common.enums.uiddata.AIsUidEnumDataUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -19,45 +20,102 @@ import org.jetbrains.annotations.Nullable;
  * Title: {@link AInBuiltinVersionScheme}
  * </p>
  * <p>
- * Description: Common built-in handling modes defining how version precedence is computed.
+ * Description: Common built-in version schemes defining how version precedence is computed and
+ * how the version string is structurally interpreted (build delimiter/order) and formatted.
  * </p>
  * <p>
- * Extendability pattern:
+ * A version scheme is a composite of:
  * </p>
  * <ul>
- *   <li>Create a new {@link AIiVersionComparator} implementation (e.g. {@code AIcMyStyleVersionComparator}).</li>
- *   <li>Either add a new enum constant here, or use {@link AIcCustomVersionScheme} to avoid enum changes.</li>
- *   <li>Use {@link AIsVersionComparator#compare(AIcVersion, AIcVersion, AIiVersionScheme)} everywhere.</li>
+ *   <li>A {@link AIiVersionComparator} used for precedence comparisons.</li>
+ *   <li>A {@link AIiVersionStructure} defining how the textual form is structurally interpreted
+ *       (e.g. build delimiter, whether version comes before build, build comparison policy).</li>
+ *   <li>A {@link AIiVersionFormatSpec} defining how the version is formatted back to text
+ *       (e.g. whether build metadata is emitted, omitted or mapped).</li>
  * </ul>
- * <ul>
- *   <li>{@link #MAVEN}: Practical Maven/Gradle-friendly ordering, tolerant to common patterns.</li>
- *   <li>{@link #SEMVER}: Semantic Versioning precedence (build metadata after '+' ignored for precedence).</li>
- *   <li>{@link #CALVER}: Example calendar-versioning comparator.</li>
- * </ul>
+ * <p>
+ * Built-in items are identified by their {@link #schemeCode()} only. Structure/format are not part of the UID,
+ * so the config can continue using the scheme UID without needing separate UIDs for structure/format.
+ * </p>
  *
  * @author linhart1
  * @date 26.01.26
  */
 public enum AInBuiltinVersionScheme implements AIiVersionSchemeData {
 
-	MAVEN("maven", new AIcMavenLikeVersionComparator()),
-	SEMVER("semver", new AIcSemverLikeVersionComparator()),
-	CALVER("calver", new AIcCalverLikeVersionComparator());
+	/**
+	 * Practical Maven/Gradle-friendly ordering, tolerant to common patterns.
+	 */
+	MAVEN_DEFAULT(
+			"maven-default",
+			new AIcMavenLikeVersionComparator(),
+			AInBuiltinVersionStructure.NO_BUILD,
+			AInBuiltinVersionFormatSpec.OMIT_BUILD
+	),
+
+	MAVEN_BUILD_METADATA_IGNORED(
+			"maven-build-metadata-ignored",
+			new AIcMavenLikeVersionComparator(),
+			AInBuiltinVersionStructure.BUILD_AFTER_PLUS_IGNORED,
+			AInBuiltinVersionFormatSpec.MAP_BUILD_TO_QUALIFIER
+	),
+
+	/**
+	 * Semantic Versioning precedence.
+	 * Build metadata after '+' is ignored for precedence comparisons but can be emitted in formatted output.
+	 */
+	SEMVER_DEFAULT(
+			"semver-default",
+			new AIcSemverLikeVersionComparator(),
+			AInBuiltinVersionStructure.BUILD_AFTER_PLUS_IGNORED,
+			AInBuiltinVersionFormatSpec.EMIT_BUILD
+	),
+
+	SEMVER_BUILD_FIRST(
+			"semver-build-first",
+			new AIcSemverLikeVersionComparator(),
+			AInBuiltinVersionStructure.BUILD_BEFORE_PLUS_IGNORED,
+			AInBuiltinVersionFormatSpec.EMIT_BUILD
+	),
+
+	SEMVER_BUILD_ORDERED(
+			"semver-build-ordered",
+			new AIcSemverLikeVersionComparator(),
+			AInBuiltinVersionStructure.BUILD_AFTER_PLUS_ORDERED,
+			AInBuiltinVersionFormatSpec.EMIT_BUILD
+	),
+
+	/**
+	 * Example calendar-versioning comparator.
+	 */
+	CALVER_DEFAULT(
+			"calver-default",
+			new AIcCalverLikeVersionComparator(),
+			AInBuiltinVersionStructure.NO_BUILD,
+			AInBuiltinVersionFormatSpec.OMIT_BUILD
+	);
 
 	private final String code;
-
 	private final AIiVersionComparator versionComparator;
+	private final AIiVersionStructure versionStructure;
+	private final AIiVersionFormatSpec versionFormatSpec;
 	private final String uid;
 
 	private static final AIiVersionSchemeDataType DATA_TYPE = new AIcVersionSchemeDataType();
 
-	AInBuiltinVersionScheme(final String aCode, final AIiVersionComparator aVersionComparator) {
-		code = aCode;
-		versionComparator = aVersionComparator;
+	AInBuiltinVersionScheme(
+			final String aCode,
+			final AIiVersionComparator aVersionComparator,
+			final AIiVersionStructure aVersionStructure,
+			final AIiVersionFormatSpec aVersionFormatSpec
+	) {
+		code = Objects.requireNonNull(aCode, "code");
+		versionComparator = Objects.requireNonNull(aVersionComparator, "versionComparator");
+		versionStructure = Objects.requireNonNull(aVersionStructure, "versionStructure");
+		versionFormatSpec = Objects.requireNonNull(aVersionFormatSpec, "versionFormatSpec");
 		uid = AIsUidEnumDataUtils.createBuiltinUid(
 				List.of(code),
 				AIiVersionSchemeDataUidRecord.RECORD_SPECIFIC_PARTS_METADATA);
-
 	}
 
 	@Override
@@ -68,6 +126,36 @@ public enum AInBuiltinVersionScheme implements AIiVersionSchemeData {
 	@Override
 	public AIiVersionComparator versionComparator() {
 		return versionComparator;
+	}
+
+	@Override
+	public AIiVersionStructure versionStructure() {
+		return versionStructure;
+	}
+
+	@Override
+	public AIiVersionFormatSpec versionFormatSpec() {
+		return versionFormatSpec;
+	}
+
+	@Override
+	public boolean versionBeforeBuild() {
+		return versionStructure().versionBeforeBuild();
+	}
+
+	@Override
+	public String buildDelimiter() {
+		return versionStructure().buildDelimiter();
+	}
+
+	@Override
+	public AInVersionBuildComparisonPolicy buildComparisonPolicy() {
+		return versionStructure().buildComparisonPolicy();
+	}
+
+	@Override
+	public AInVersionBuildFormatPolicy buildFormatPolicy() {
+		return versionFormatSpec().buildFormatPolicy();
 	}
 
 	@Override
@@ -102,10 +190,11 @@ public enum AInBuiltinVersionScheme implements AIiVersionSchemeData {
 	 */
 	@JsonCreator
 	public static AInBuiltinVersionScheme getByCodeOrThrow(final String aCode) throws IllegalArgumentException {
-		final AInBuiltinVersionScheme value = findByCode(aCode);
-		if (value != null)
-			return value;
-		throw new IllegalArgumentException("Unknown sourceSet: " + aCode);
+		final AInBuiltinVersionScheme locValue = findByCode(aCode);
+		if (locValue != null) {
+			return locValue;
+		}
+		throw new IllegalArgumentException("Unknown version scheme: " + aCode);
 	}
 
 	/**
@@ -124,34 +213,36 @@ public enum AInBuiltinVersionScheme implements AIiVersionSchemeData {
 	/**
 	 * Gets the {@link AInBuiltinVersionScheme} by its properties.
 	 *
-	 * @param aOrigin the origin 
+	 * @param aOrigin the origin
 	 * @param aNamespace the namespace
-	 * @param aSourceSetsCode the source Sets Code (last UID component)
-	 * @return the found source set or throws an exception if not found
-	 * @throws IllegalArgumentException if origin class is not {@link AInUidEnumDataOrigin#BUILTIN}
+	 * @param aSchemeCode the scheme code (last UID component)
+	 * @return the found scheme or throws an exception if not found
+	 * @throws IllegalArgumentException if origin is not {@link AInUidEnumDataOrigin#BUILTIN}
 	 *                                  or {@link #getByUidOrThrow(String)} throws an exception
 	 */
 	public static AInBuiltinVersionScheme getByPropsOrThrow(
 			final AInUidEnumDataOrigin aOrigin,
 			final String aNamespace,
-			final String aSourceSetsCode) throws IllegalArgumentException {
+			final String aSchemeCode) throws IllegalArgumentException {
 		if (aOrigin != BUILTIN) {
 			throw new IllegalArgumentException("Unsupported origin: '" + aOrigin + "' for parameters namespace='"
-					+ aNamespace + "', source-set-id='" + aSourceSetsCode + "'");
+					+ aNamespace + "', scheme-code='" + aSchemeCode + "'");
 		}
-		return getByUidOrThrow(createBuiltinUid(List.of(aSourceSetsCode), AIiVersionSchemeDataUidRecord.RECORD_SPECIFIC_PARTS_METADATA));
+		return getByUidOrThrow(createBuiltinUid(
+				List.of(aSchemeCode),
+				AIiVersionSchemeDataUidRecord.RECORD_SPECIFIC_PARTS_METADATA));
 	}
 
 	/**
-	 * Gets the {@link AInBuiltinVersionScheme} by its source set UID.
+	 * Gets the {@link AInBuiltinVersionScheme} by its UID.
 	 *
-	 * @param aUid source set UID
-	 * @return the found source set or throws an exception if not found
+	 * @param aUid scheme UID
+	 * @return the found scheme or throws an exception if not found
 	 * @throws IllegalArgumentException if the UID is invalid or not found among enum values
 	 */
 	public static AInBuiltinVersionScheme getByUidOrThrow(final String aUid) throws IllegalArgumentException {
 		return findByUid(aUid)
-				.orElseThrow(() -> new IllegalArgumentException("Illegal source set Uid: '" + aUid + "'"));
+				.orElseThrow(() -> new IllegalArgumentException("Illegal version scheme UID: '" + aUid + "'"));
 	}
 
 	/**
@@ -173,5 +264,5 @@ public enum AInBuiltinVersionScheme implements AIiVersionSchemeData {
 				.filter(locItem -> locItem.code().equals(locParsedRecord.code()))
 				.findAny();
 	}
-	
+
 }

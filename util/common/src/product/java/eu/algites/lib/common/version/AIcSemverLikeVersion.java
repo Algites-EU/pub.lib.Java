@@ -26,7 +26,7 @@ public final class AIcSemverLikeVersion extends AIcVersion {
 
 	@Override
 	protected AIiVersionScheme getHandlingMode() {
-		return AInBuiltinVersionScheme.SEMVER;
+		return AInBuiltinVersionScheme.SEMVER_DEFAULT;
 	}
 
 }

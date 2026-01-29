@@ -43,7 +43,23 @@ public final class AIsVersionComparator {
 	 */
 	public static int compare(@Nonnull final AIcVersion aLeft, @Nonnull final AIcVersion aRight, @Nonnull final AIiVersionScheme aMode) {
 		Objects.requireNonNull(aMode, "Handling mode must not be null");
-		return compare(aLeft, aRight, aMode.versionComparator());
+		AIiVersionComparator locComparator = Objects.requireNonNull(aMode.versionComparator(), "Comparator must not be null");
+		String locBuildDelimiter = aMode.buildDelimiter();
+		if (locBuildDelimiter == null) {
+			locBuildDelimiter = "";
+		}
+		boolean locNeedsBuildAwareWrapper = !locBuildDelimiter.isEmpty()
+				|| !aMode.versionBeforeBuild()
+				|| aMode.buildComparisonPolicy() != AInVersionBuildComparisonPolicy.IGNORE;
+		if (locNeedsBuildAwareWrapper) {
+			locComparator = new AIcBuildAwareVersionComparator(
+					locComparator,
+					locBuildDelimiter,
+					aMode.versionBeforeBuild(),
+					aMode.buildComparisonPolicy()
+			);
+		}
+		return compare(aLeft, aRight, locComparator);
 	}
 
 	/**

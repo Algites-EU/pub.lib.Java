@@ -26,7 +26,7 @@ public final class AIcCalverLikeVersion extends AIcVersion {
 
 	@Override
 	protected AIiVersionScheme getHandlingMode() {
-		return AInBuiltinVersionScheme.CALVER;
+		return AInBuiltinVersionScheme.CALVER_DEFAULT;
 	}
 
 }

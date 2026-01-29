@@ -136,7 +136,7 @@ public class AItsIntervalUtilsTest {
 				3
 		);
 
-		Assert.assertTrue(AIsIntervalUtils.contains(locLeftUnbounded, -1000), "(∞,3] must contain -1000");
+		Assert.assertTrue(AIsIntervalUtils.contains(locLeftUnbounded, -1000), "(*,3] must contain -1000");
 		Assert.assertTrue(AIsIntervalUtils.contains(locLeftUnbounded, 3), "(*,3] must contain 3");
 		Assert.assertFalse(AIsIntervalUtils.contains(locLeftUnbounded, 4), "(*,3] must not contain 4");
 

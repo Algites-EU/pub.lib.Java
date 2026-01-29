@@ -26,6 +26,6 @@ public final class AIcMavenLikeVersion extends AIcVersion {
 
 	@Override
 	protected AIiVersionScheme getHandlingMode() {
-		return AInBuiltinVersionScheme.MAVEN;
+		return AInBuiltinVersionScheme.MAVEN_DEFAULT;
 	}
 }

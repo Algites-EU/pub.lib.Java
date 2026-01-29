@@ -25,7 +25,7 @@ import java.util.Objects;
  * @author linhart1
  * @date 26.01.26
  */
-public final class AIcInterval<T extends Comparable> implements AIiInterval<T>, Serializable {
+public class AIcInterval<T extends Comparable> implements AIiInterval<T>, Serializable {
 
 	@Serial
 	private static final long serialVersionUID = 1L;
@@ -54,12 +54,36 @@ public final class AIcInterval<T extends Comparable> implements AIiInterval<T>, 
 			@Nullable final T aLeftValue,
 			@Nonnull final AInIntervalBoundary aRightBoundary,
 			@Nullable final T aRightValue) {
+		this(aLeftBoundary, aLeftValue, aRightBoundary, aRightValue, false);
+	}
+
+	/**
+	 * Creates a new interval.
+	 *
+	 * <p>
+	 * This constructor exists primarily for subclasses that need to defer validation
+	 * (e.g., when ordering must be evaluated using a custom comparator).
+	 * </p>
+	 *
+	 * @param aLeftBoundary left boundary
+	 * @param aLeftValue left value (may be {@code null} if the boundary ignores its value)
+	 * @param aRightBoundary right boundary
+	 * @param aRightValue right value (may be {@code null} if the boundary ignores its value)
+	 * @param aSkipValidation when {@code true}, the constructor does not validate the interval
+	 */
+	protected AIcInterval(@Nonnull final AInIntervalBoundary aLeftBoundary,
+			@Nullable final T aLeftValue,
+			@Nonnull final AInIntervalBoundary aRightBoundary,
+			@Nullable final T aRightValue,
+			final boolean aSkipValidation) {
 		leftBoundary = Objects.requireNonNull(aLeftBoundary, "Left boundary must not be null");
 		rightBoundary = Objects.requireNonNull(aRightBoundary, "Right boundary must not be null");
 		leftValue = aLeftValue;
 		rightValue = aRightValue;
 
-		AIsIntervalUtils.validateInterval(this);
+		if (!aSkipValidation) {
+			AIsIntervalUtils.validateInterval(this);
+		}
 	}
 
 	@Override

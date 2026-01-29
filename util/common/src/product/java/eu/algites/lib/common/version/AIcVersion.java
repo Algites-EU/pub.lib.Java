@@ -27,7 +27,7 @@ public class AIcVersion implements Comparable<AIcVersion>, Serializable {
 	 * Default handling mode used by {@link #compareTo(AIcVersion)}.
 	 */
 	@Nonnull
-	public static final AIiVersionScheme DEFAULT_HANDLING_MODE = AInBuiltinVersionScheme.MAVEN;
+	public static final AIiVersionScheme DEFAULT_HANDLING_MODE = AInBuiltinVersionScheme.MAVEN_DEFAULT;
 
 	@Nonnull
 	private final String originalText;
