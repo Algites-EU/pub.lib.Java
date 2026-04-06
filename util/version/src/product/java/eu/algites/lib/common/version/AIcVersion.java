@@ -24,7 +24,7 @@ public class AIcVersion implements Comparable<AIcVersion>, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Default handling mode used by {@link #compareTo(AIcVersion)}.
+	 * Default handling purpose used by {@link #compareTo(AIcVersion)}.
 	 */
 	@Nonnull
 	public static final AIiVersionScheme DEFAULT_HANDLING_MODE = AInBuiltinVersionScheme.MAVEN_DEFAULT;
@@ -58,7 +58,7 @@ public class AIcVersion implements Comparable<AIcVersion>, Serializable {
 
 	public int compareTo(@Nonnull final AIcVersion aOther, @Nonnull final AIiVersionScheme aHandlingMode) {
 		Objects.requireNonNull(aOther, "Other version must not be null");
-		Objects.requireNonNull(aHandlingMode, "Handling mode must not be null");
+		Objects.requireNonNull(aHandlingMode, "Handling purpose must not be null");
 		return AIsVersionComparator.compare(this, aOther, aHandlingMode);
 	}
 

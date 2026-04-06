@@ -1,9 +1,11 @@
 package eu.algites.lib.common.exception;
 
-import static eu.algites.lib.common.object.stringoutput.AIsStringOutputUtils.resolveStringOutput;
+import static eu.algites.lib.common.object.rendering.AIsRenderingOutputUtils.resolveStringOutput;
 
-import eu.algites.lib.common.object.stringoutput.AInStringOutputMode;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputFormat;
+import eu.algites.lib.common.object.rendering.AInRenderingOutputBuiltinPurpose;
 
+import java.util.Locale;
 import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,11 +28,12 @@ import org.jetbrains.annotations.NotNull;
  * @date 12.01.26 4:11
  */
 public class AIxRuntimeException extends RuntimeException{
-	private final AInStringOutputMode messageOutputMode;
+	private final AInRenderingOutputBuiltinPurpose messageOutputPurpose;
 
-	public AIxRuntimeException(final Supplier<String> aMessageSupplier, final Throwable aCause, final AInStringOutputMode aMessageOutputMode) {
-		super(resolveStringOutput(aMessageSupplier, aMessageOutputMode), aCause);
-		messageOutputMode = aMessageOutputMode;
+	public AIxRuntimeException(final Supplier<String> aMessageSupplier, final Throwable aCause, final AInRenderingOutputBuiltinPurpose aMessageOutputPurpose,
+			final AIiRenderingOutputFormat aRenderingOutputFormat, final Locale aLocale) {
+		super(resolveStringOutput(aMessageSupplier, aMessageOutputPurpose, aRenderingOutputFormat, aLocale), aCause);
+		messageOutputPurpose = aMessageOutputPurpose;
 	}
 
 	public AIxRuntimeException(
@@ -38,20 +41,22 @@ public class AIxRuntimeException extends RuntimeException{
 			final Throwable aCause,
 			final boolean aEnableSuppression,
 			final boolean aWritableStackTrace,
-			final AInStringOutputMode aMessageOutputMode) {
-		super(resolveStringOutput(aMessageSupplier, aMessageOutputMode), aCause, aEnableSuppression, aWritableStackTrace);
-		messageOutputMode = aMessageOutputMode;
+			final AInRenderingOutputBuiltinPurpose aMessageOutputPurpose, final AIiRenderingOutputFormat aRenderingOutputFormat,
+			final Locale aLocale) {
+		super(resolveStringOutput(aMessageSupplier, aMessageOutputPurpose, aRenderingOutputFormat, aLocale), aCause, aEnableSuppression, aWritableStackTrace);
+		messageOutputPurpose = aMessageOutputPurpose;
 	}
 
-	public AIxRuntimeException(@NotNull final Supplier<String> aMessageSupplier, AInStringOutputMode aMessageOutputMode) {
-		super(resolveStringOutput(aMessageSupplier, aMessageOutputMode));
-		messageOutputMode = aMessageOutputMode;
+	public AIxRuntimeException(@NotNull final Supplier<String> aMessageSupplier, AInRenderingOutputBuiltinPurpose aMessageOutputPurpose,
+			final AIiRenderingOutputFormat aRenderingOutputFormat, final Locale aLocale) {
+		super(resolveStringOutput(aMessageSupplier, aMessageOutputPurpose, aRenderingOutputFormat, aLocale));
+		messageOutputPurpose = aMessageOutputPurpose;
 	}
 
 	/**
-	 * @return the messageOutputMode
+	 * @return the messageOutputPurpose
 	 */
-	public AInStringOutputMode getMessageOutputMode() {
-		return messageOutputMode;
+	public AInRenderingOutputBuiltinPurpose getMessageOutputPurpose() {
+		return messageOutputPurpose;
 	}
 }

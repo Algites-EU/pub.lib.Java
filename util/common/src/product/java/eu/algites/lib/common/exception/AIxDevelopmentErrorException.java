@@ -1,9 +1,13 @@
 package eu.algites.lib.common.exception;
 
-import static eu.algites.lib.common.object.stringoutput.AInStringOutputMode.SYSTEM;
+import static eu.algites.lib.common.object.rendering.AInRenderingOutputBuiltinFormat.PLAIN_TEXT;
+import static eu.algites.lib.common.object.rendering.AInRenderingOutputBuiltinPurpose.SYSTEM;
 
-import eu.algites.lib.common.object.stringoutput.AInStringOutputMode;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputFormat;
+import eu.algites.lib.common.object.rendering.AInRenderingOutputBuiltinFormat;
+import eu.algites.lib.common.object.rendering.AInRenderingOutputBuiltinPurpose;
 
+import java.util.Locale;
 import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,8 +33,9 @@ public class AIxDevelopmentErrorException extends AIxRuntimeException {
 	public AIxDevelopmentErrorException(
 			final Supplier<String> aMessageSupplier,
 			final Throwable aCause,
-			final AInStringOutputMode aMessageOutputMode) {
-		super(aMessageSupplier, aCause, aMessageOutputMode);
+			final AInRenderingOutputBuiltinPurpose aMessageOutputPurpose, final AIiRenderingOutputFormat aRenderingOutputFormat,
+			final Locale aLocale) {
+		super(aMessageSupplier, aCause, aMessageOutputPurpose, aRenderingOutputFormat, aLocale);
 	}
 
 	public AIxDevelopmentErrorException(
@@ -38,19 +43,22 @@ public class AIxDevelopmentErrorException extends AIxRuntimeException {
 			final Throwable aCause,
 			final boolean aEnableSuppression,
 			final boolean aWritableStackTrace,
-			final AInStringOutputMode aMessageOutputMode) {
-		super(getDevelopmentErrorMessageSupplier(aMessageSupplier), aCause, aEnableSuppression, aWritableStackTrace, aMessageOutputMode);
+			final AInRenderingOutputBuiltinPurpose aMessageOutputPurpose, final AIiRenderingOutputFormat aRenderingOutputFormat,
+			final Locale aLocale) {
+		super(getDevelopmentErrorMessageSupplier(aMessageSupplier), aCause, aEnableSuppression, aWritableStackTrace, aMessageOutputPurpose,
+				aRenderingOutputFormat, aLocale);
 	}
 
 	public AIxDevelopmentErrorException(
 			final @NotNull Supplier<String> aMessageSupplier,
-			final AInStringOutputMode aMessageOutputMode) {
-		super(getDevelopmentErrorMessageSupplier(aMessageSupplier), aMessageOutputMode);
+			final AInRenderingOutputBuiltinPurpose aMessageOutputPurpose, final AIiRenderingOutputFormat aRenderingOutputFormat,
+			final Locale aLocale) {
+		super(getDevelopmentErrorMessageSupplier(aMessageSupplier), aMessageOutputPurpose, aRenderingOutputFormat, aLocale);
 	}
 	public AIxDevelopmentErrorException(
 			final String aMessage,
 			final Throwable aCause) {
-		super(getDevelopmentErrorMessageSupplier(aMessage), aCause, SYSTEM);
+		super(getDevelopmentErrorMessageSupplier(aMessage), aCause, null, null, null);
 	}
 
 	public AIxDevelopmentErrorException(
@@ -58,12 +66,12 @@ public class AIxDevelopmentErrorException extends AIxRuntimeException {
 			final Throwable aCause,
 			final boolean aEnableSuppression,
 			final boolean aWritableStackTrace) {
-		super(getDevelopmentErrorMessageSupplier(aMessage), aCause, aEnableSuppression, aWritableStackTrace, SYSTEM);
+		super(getDevelopmentErrorMessageSupplier(aMessage), aCause, aEnableSuppression, aWritableStackTrace, null, null,	null);
 	}
 
 	public AIxDevelopmentErrorException(
 			final @NotNull String aMessage) {
-		super(getDevelopmentErrorMessageSupplier(aMessage), SYSTEM);
+		super(getDevelopmentErrorMessageSupplier(aMessage), null, null,	null);
 	}
 
 	private static @NotNull Supplier<String> getDevelopmentErrorMessageSupplier(final @NotNull String aMessage) {

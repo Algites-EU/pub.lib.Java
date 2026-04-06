@@ -1,12 +1,16 @@
 package eu.algites.lib.common.object.props.labels;
 
-import eu.algites.lib.common.object.stringoutput.AIiStringOutputModeResolver;
-import eu.algites.lib.common.object.stringoutput.AInStringOutputMode;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputFormatResolver;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputLocaleResolver;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputPurposeResolver;
+import eu.algites.lib.common.object.rendering.AInRenderingOutputBuiltinFormat;
+import eu.algites.lib.common.object.rendering.AInRenderingOutputBuiltinPurpose;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Locale;
 
 /**
  * <p>
@@ -34,14 +38,14 @@ public @interface AIaFieldLabel {
 	/* --- LABEL axis --- */
 
 	/**
-	 * Hard label definition (single label mode)
+	 * Hard label definition (single label purpose)
 	 * @return hard labe definition
 	 */
 	String label() default "";
 
 	/**
-	 * Mapping, according to mode
-	 * @return mapping, according to mode
+	 * Mapping, according to purpose
+	 * @return mapping, according to purpose
 	 */
 	Entry[] labels() default {};
 
@@ -56,22 +60,48 @@ public @interface AIaFieldLabel {
 	/* --- MODE axis --- */
 
 
-	AInStringOutputMode mode() default AInStringOutputMode.DEFAULT; /* nice enum selection in iDE */
-	String modeCode() default ""; /* for custom modes without  enums */
-	Class<? extends AIiStringOutputModeResolver> modeResolver() default NoModeResolver.class;
+	AInRenderingOutputBuiltinPurpose purpose() default AInRenderingOutputBuiltinPurpose.DEFAULT; /* nice enum selection in iDE */
+	String purposeCode() default ""; /* for custom purposes without  enums */
+	Class<? extends AIiRenderingOutputPurposeResolver> purposeResolver() default NoPurposeResolver.class;
 
+	AInRenderingOutputBuiltinFormat format() default AInRenderingOutputBuiltinFormat.DEFAULT; /* nice enum selection in iDE */
+	String formatCode() default ""; /* for custom formats without  enums */
+	Class<? extends AIiRenderingOutputFormatResolver> formatResolver() default NoFormatResolver.class;
+
+	String localeCode() default ""; /* for custom locales without  enums */
+	Class<? extends AIiRenderingOutputLocaleResolver> localeResolver() default NoLocaleResolver.class;
+	
 	@interface Entry {
-		/**
-		 * Mode of the label if the default {@link AInStringOutputMode} is sufficient to be used.
-		 * @return mode of the label
-		 */
-		AInStringOutputMode mode() default AInStringOutputMode.DEFAULT;
 
 		/**
-		 * Mode of the label if the default {@link AInStringOutputMode} is not sufficient.
-		 * @return custom mode code of the label
+		 * Mode of the label if the default {@link AInRenderingOutputBuiltinPurpose} is sufficient to be used.
+		 * @return purpose of the label
 		 */
-		String modeCode() default "";
+		AInRenderingOutputBuiltinPurpose purpose() default AInRenderingOutputBuiltinPurpose.DEFAULT;
+
+		/**
+		 * Mode of the label if the default {@link AInRenderingOutputBuiltinPurpose} is not sufficient.
+		 * @return custom purpose code of the label
+		 */
+		String purposeCode() default "";
+
+		/**
+		 * Mode of the label if the default {@link AInRenderingOutputBuiltinFormat} is sufficient to be used.
+		 * @return format of the label
+		 */
+		AInRenderingOutputBuiltinFormat format() default AInRenderingOutputBuiltinFormat.DEFAULT;
+
+		/**
+		 * Mode of the label if the default {@link AInRenderingOutputBuiltinFormat} is not sufficient.
+		 * @return custom format code of the label
+		 */
+		String formatCode() default "";
+
+		/**
+		 * Mode of the label if the default {@link Locale} is not sufficient.
+		 * @return custom locale code of the label
+		 */
+		String localeCode() default "";
 
 		/**
 		 * Label value oif the label resolver is not used, otherwise ignored
@@ -81,6 +111,8 @@ public @interface AIaFieldLabel {
 	}
 
 	abstract class NoLabelResolver implements AIiFieldLabelResolver {}
-	abstract class NoModeResolver implements AIiStringOutputModeResolver {}
+	abstract class NoPurposeResolver implements AIiRenderingOutputPurposeResolver {}
+	abstract class NoFormatResolver implements AIiRenderingOutputFormatResolver {}
+	abstract class NoLocaleResolver implements AIiRenderingOutputLocaleResolver {}
 }
 

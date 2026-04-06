@@ -1,8 +1,12 @@
 package eu.algites.lib.common.object.props.labels;
 
-import eu.algites.lib.common.object.stringoutput.AIiStringOutputMode;
-import eu.algites.lib.common.object.stringoutput.AIiStringOutputModeResolver;
-import eu.algites.lib.common.object.stringoutput.AInStringOutputMode;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputFormat;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputPurpose;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputPurposeResolver;
+import eu.algites.lib.common.object.rendering.AInRenderingOutputBuiltinFormat;
+import eu.algites.lib.common.object.rendering.AInRenderingOutputBuiltinPurpose;
+
+import java.util.Locale;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -26,12 +30,12 @@ import org.testng.annotations.Test;
 public class AItsFieldLabelUtilsTest {
 
 	@Test
-	public void testFindLabelUsesMappedLabelsForExplicitMode() {
+	public void testFindLabelUsesMappedLabelsForExplicitPurpose() {
 		String locLabel = AIsFieldLabelUtils.findLabel(
 				AIcTestMappedLabels.class,
 				"myProperty",
-				AInStringOutputMode.USER
-		);
+				AInRenderingOutputBuiltinPurpose.USER,
+				AInRenderingOutputBuiltinFormat.PLAIN_TEXT, Locale.getDefault());
 
 		Assert.assertEquals(locLabel, "MyUserPropertyLabel", "Mapped label for USER must be returned");
 	}
@@ -41,8 +45,8 @@ public class AItsFieldLabelUtilsTest {
 		String locLabel = AIsFieldLabelUtils.findLabel(
 				AIcTestNoAnnotation.class,
 				"myProperty",
-				AInStringOutputMode.USER
-		);
+				AInRenderingOutputBuiltinPurpose.USER,
+				AInRenderingOutputBuiltinFormat.PLAIN_TEXT, Locale.getDefault());
 
 		Assert.assertEquals(locLabel, "myProperty", "Without annotation the field name must be returned");
 	}
@@ -52,19 +56,19 @@ public class AItsFieldLabelUtilsTest {
 		String locLabel = AIsFieldLabelUtils.findLabel(
 				AIcTestLabelResolver.class,
 				"myProperty",
-				AInStringOutputMode.USER
-		);
+				AInRenderingOutputBuiltinPurpose.USER,
+				AInRenderingOutputBuiltinFormat.PLAIN_TEXT, Locale.getDefault());
 
 		Assert.assertEquals(locLabel, "ResolvedLabel", "Label resolver must override mapping");
 	}
 
 	@Test
-	public void testFindLabelUsesModeResolverWhenExplicitModeIsNull() {
+	public void testFindLabelUsesModeResolverWhenExplicitPurposeIsNull() {
 		String locLabel = AIsFieldLabelUtils.findLabel(
 				AIcTestModeResolverWithMapping.class,
 				"myProperty",
-				null
-		);
+				null,
+				AInRenderingOutputBuiltinFormat.PLAIN_TEXT, Locale.getDefault());
 
 		Assert.assertEquals(locLabel, "MyUserPropertyLabel", "Mode resolver should drive the mapping");
 	}
@@ -74,8 +78,8 @@ public class AItsFieldLabelUtilsTest {
 		String locLabel = AIsFieldLabelUtils.findLabel(
 				AIcChildWithoutFields.class,
 				"myProperty",
-				AInStringOutputMode.USER
-		);
+				AInRenderingOutputBuiltinPurpose.USER,
+				AInRenderingOutputBuiltinFormat.PLAIN_TEXT, Locale.getDefault());
 
 		Assert.assertEquals(locLabel, "ParentUserLabel", "Inherited field label should be resolved from parent");
 	}
@@ -85,8 +89,8 @@ public class AItsFieldLabelUtilsTest {
 		String locLabel = AIsFieldLabelUtils.findLabel(
 				AIcChildWithShadowedField.class,
 				"myProperty",
-				AInStringOutputMode.USER
-		);
+				AInRenderingOutputBuiltinPurpose.USER,
+				AInRenderingOutputBuiltinFormat.PLAIN_TEXT, Locale.getDefault());
 
 		Assert.assertEquals(locLabel, "ChildUserLabel", "Shadowed field in child should win over parent");
 	}
@@ -98,8 +102,8 @@ public class AItsFieldLabelUtilsTest {
 			AIsFieldLabelUtils.findLabel(
 					AIcTestInvalidAnnotation.class,
 					"myProperty",
-					AInStringOutputMode.USER
-			);
+					AInRenderingOutputBuiltinPurpose.USER,
+					AInRenderingOutputBuiltinFormat.PLAIN_TEXT, Locale.getDefault());
 		} catch (IllegalArgumentException locException) {
 			locThrown = true;
 		}
@@ -113,8 +117,8 @@ public class AItsFieldLabelUtilsTest {
 
 	private static final class AIcTestMappedLabels {
 		@AIaFieldLabel(labels = {
-				@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "MyUserPropertyLabel"),
-				@AIaFieldLabel.Entry(mode = AInStringOutputMode.SYSTEM, label = "MySystemPropertyLabel")
+				@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.USER, label = "MyUserPropertyLabel"),
+				@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.SYSTEM, label = "MySystemPropertyLabel")
 		})
 		private String myProperty;
 	}
@@ -126,10 +130,10 @@ public class AItsFieldLabelUtilsTest {
 
 	private static final class AIcTestModeResolverWithMapping {
 		@AIaFieldLabel(
-				modeResolver = AIcUserModeResolver.class,
+				purposeResolver = AIcUserPurposeResolver.class,
 				labels = {
-						@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "MyUserPropertyLabel"),
-						@AIaFieldLabel.Entry(mode = AInStringOutputMode.SYSTEM, label = "MySystemPropertyLabel")
+						@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.USER, label = "MyUserPropertyLabel"),
+						@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.SYSTEM, label = "MySystemPropertyLabel")
 				}
 		)
 		private String myProperty;
@@ -137,7 +141,7 @@ public class AItsFieldLabelUtilsTest {
 
 	private static class AIcParentWithField {
 		@AIaFieldLabel(labels = {
-				@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "ParentUserLabel")
+				@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.USER, label = "ParentUserLabel")
 		})
 		private String myProperty;
 	}
@@ -147,14 +151,14 @@ public class AItsFieldLabelUtilsTest {
 
 	private static class AIcParentWithShadowedField {
 		@AIaFieldLabel(labels = {
-				@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "ParentUserLabel")
+				@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.USER, label = "ParentUserLabel")
 		})
 		private String myProperty;
 	}
 
 	private static final class AIcChildWithShadowedField extends AIcParentWithShadowedField {
 		@AIaFieldLabel(labels = {
-				@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "ChildUserLabel")
+				@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.USER, label = "ChildUserLabel")
 		})
 		private String myProperty;
 	}
@@ -163,7 +167,7 @@ public class AItsFieldLabelUtilsTest {
 		@AIaFieldLabel(
 				labelResolver = AIcConstantLabelResolver.class,
 				labels = {
-						@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "MyUserPropertyLabel")
+						@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.USER, label = "MyUserPropertyLabel")
 				}
 		)
 		private String myProperty;
@@ -171,15 +175,17 @@ public class AItsFieldLabelUtilsTest {
 
 	public static final class AIcConstantLabelResolver implements AIiFieldLabelResolver {
 		@Override
-		public String resolveLabel(Class<?> aOwnerClass, String aFieldName, AIiStringOutputMode aOutputMode) {
+		public String resolveLabel(Class<?> aOwnerClass, String aFieldName, AIiRenderingOutputPurpose aOutputPurpose,
+				final AIiRenderingOutputFormat aOutputFormat,
+				final Locale aOutputLocale) {
 			return "ResolvedLabel";
 		}
 	}
 
-	public static final class AIcUserModeResolver implements AIiStringOutputModeResolver {
+	public static final class AIcUserPurposeResolver implements AIiRenderingOutputPurposeResolver {
 		@Override
-		public AIiStringOutputMode resolveMode() {
-			return AInStringOutputMode.USER;
+		public AIiRenderingOutputPurpose resolvePurpose() {
+			return AInRenderingOutputBuiltinPurpose.USER;
 		}
 	}
 
@@ -189,8 +195,8 @@ public class AItsFieldLabelUtilsTest {
 		String locLabel = AIsFieldLabelUtils.findLabel(
 				AIcTestMethodAnnotation.class,
 				"myProperty",
-				AInStringOutputMode.USER
-		);
+				AInRenderingOutputBuiltinPurpose.USER,
+				AInRenderingOutputBuiltinFormat.PLAIN_TEXT, Locale.getDefault());
 
 		Assert.assertEquals(locLabel, "GetterUserLabel", "Getter annotation must be used when field has no annotation");
 	}
@@ -200,8 +206,8 @@ public class AItsFieldLabelUtilsTest {
 		String locLabel = AIsFieldLabelUtils.findLabel(
 				AIcTestRecordComponent.class,
 				"myProperty",
-				AInStringOutputMode.USER
-		);
+				AInRenderingOutputBuiltinPurpose.USER,
+				AInRenderingOutputBuiltinFormat.PLAIN_TEXT, Locale.getDefault());
 
 		Assert.assertEquals(locLabel, "RecordComponentUserLabel", "Record component annotation must be used for records");
 	}
@@ -211,8 +217,8 @@ public class AItsFieldLabelUtilsTest {
 		String locLabel = AIsFieldLabelUtils.findLabel(
 				AIcTestRecordImplementsInterface.class,
 				"myProperty",
-				AInStringOutputMode.USER
-		);
+				AInRenderingOutputBuiltinPurpose.USER,
+				AInRenderingOutputBuiltinFormat.PLAIN_TEXT, Locale.getDefault());
 
 		Assert.assertEquals(locLabel, "InterfaceUserLabel", "Interface method annotation must be resolved for record implementing the interface");
 	}
@@ -223,8 +229,8 @@ public void testFindLabelResolvesInterfaceAnnotationEvenIfClassDeclaresUnannotat
 	String locLabel = AIsFieldLabelUtils.findLabel(
 			AIcTestClassImplementsInterfaceWithUnannotatedGetter.class,
 			"myProperty",
-			AInStringOutputMode.USER
-	);
+			AInRenderingOutputBuiltinPurpose.USER,
+			AInRenderingOutputBuiltinFormat.PLAIN_TEXT, Locale.getDefault());
 
 	Assert.assertEquals(locLabel, "InterfaceGetterUserLabel", "Interface getter annotation must be resolved even if class declares an unannotated getter");
 }
@@ -234,8 +240,8 @@ public void testFindLabelResolvesInterfaceAnnotationEvenIfClassDeclaresUnannotat
 		String locLabel = AIsFieldLabelUtils.findLabel(
 				AIcTestFieldOverridesMethod.class,
 				"myProperty",
-				AInStringOutputMode.USER
-		);
+				AInRenderingOutputBuiltinPurpose.USER,
+				AInRenderingOutputBuiltinFormat.PLAIN_TEXT, Locale.getDefault());
 
 		Assert.assertEquals(locLabel, "FieldUserLabel", "Field annotation must override getter annotation");
 	}
@@ -245,8 +251,8 @@ public void testFindLabelResolvesInterfaceAnnotationEvenIfClassDeclaresUnannotat
 		String locLabel = AIsFieldLabelUtils.findLabel(
 				AIcTestRecordComponentOverridesMethod.class,
 				"myProperty",
-				AInStringOutputMode.USER
-		);
+				AInRenderingOutputBuiltinPurpose.USER,
+				AInRenderingOutputBuiltinFormat.PLAIN_TEXT, Locale.getDefault());
 
 		Assert.assertEquals(locLabel, "RecordComponentUserLabel", "Record component annotation must override accessor method annotation");
 	}
@@ -255,7 +261,7 @@ public void testFindLabelResolvesInterfaceAnnotationEvenIfClassDeclaresUnannotat
 		private String myProperty;
 
 		@AIaFieldLabel(labels = {
-				@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "GetterUserLabel")
+				@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.USER, label = "GetterUserLabel")
 		})
 		public String getMyProperty() {
 			return myProperty;
@@ -264,7 +270,7 @@ public void testFindLabelResolvesInterfaceAnnotationEvenIfClassDeclaresUnannotat
 
 	private record AIcTestRecordComponent(
 			@AIaFieldLabel(labels = {
-					@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "RecordComponentUserLabel")
+					@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.USER, label = "RecordComponentUserLabel")
 			})
 			String myProperty
 	) {
@@ -273,7 +279,7 @@ public void testFindLabelResolvesInterfaceAnnotationEvenIfClassDeclaresUnannotat
 
 	private interface AIiTestInterfaceWithAnnotatedAccessor {
 		@AIaFieldLabel(labels = {
-				@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "InterfaceUserLabel")
+				@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.USER, label = "InterfaceUserLabel")
 		})
 		String myProperty();
 	}
@@ -287,7 +293,7 @@ public void testFindLabelResolvesInterfaceAnnotationEvenIfClassDeclaresUnannotat
 
 private interface AIiTestInterfaceWithAnnotatedGetter {
 	@AIaFieldLabel(labels = {
-			@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "InterfaceGetterUserLabel")
+			@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.USER, label = "InterfaceGetterUserLabel")
 	})
 	String getMyProperty();
 }
@@ -302,12 +308,12 @@ private static final class AIcTestClassImplementsInterfaceWithUnannotatedGetter 
 	private static final class AIcTestFieldOverridesMethod {
 
 		@AIaFieldLabel(labels = {
-				@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "FieldUserLabel")
+				@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.USER, label = "FieldUserLabel")
 		})
 		private String myProperty;
 
 		@AIaFieldLabel(labels = {
-				@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "GetterUserLabel")
+				@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.USER, label = "GetterUserLabel")
 		})
 		public String getMyProperty() {
 			return myProperty;
@@ -316,12 +322,12 @@ private static final class AIcTestClassImplementsInterfaceWithUnannotatedGetter 
 
 	private record AIcTestRecordComponentOverridesMethod(
 			@AIaFieldLabel(labels = {
-					@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "RecordComponentUserLabel")
+					@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.USER, label = "RecordComponentUserLabel")
 			})
 			String myProperty
 	) {
 		@AIaFieldLabel(labels = {
-				@AIaFieldLabel.Entry(mode = AInStringOutputMode.USER, label = "GetterUserLabel")
+				@AIaFieldLabel.Entry(purpose = AInRenderingOutputBuiltinPurpose.USER, label = "GetterUserLabel")
 		})
 		@Override
 		public String myProperty() {

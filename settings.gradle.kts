@@ -19,8 +19,18 @@ pluginManagement {
     }
 }
 
+val locIsCi: Boolean =
+    providers.gradleProperty("CI")
+        .orElse(providers.environmentVariable("CI"))
+        .map { it.equals("true", ignoreCase = true) }
+        .orElse(false)
+        .get()
+
 dependencyResolutionManagement {
     repositories {
+        if (!locIsCi) {
+            mavenLocal()
+        }
         mavenCentral()
         maven {
             name = "algites-public-releases"

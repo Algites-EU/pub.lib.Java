@@ -1,8 +1,8 @@
-package eu.algites.lib.common.object.stringoutput;
+package eu.algites.lib.common.object.rendering;
 
 /**
  * <p>
- * Title: {@link AInStringOutputMode}
+ * Title: {@link AInRenderingOutputBuiltinPurpose}
  * </p>
  * <p>
  * Description: TODO: Add description
@@ -17,7 +17,7 @@ package eu.algites.lib.common.object.stringoutput;
  * @author linhart1
  * @date 12.01.26 4:48
  */
-public enum AInStringOutputMode implements AIiStringOutputMode {
+public enum AInRenderingOutputBuiltinPurpose implements AIiRenderingOutputPurpose {
 	/**
 	 * Some general behavior, predefined if nothing else specified
 	 */

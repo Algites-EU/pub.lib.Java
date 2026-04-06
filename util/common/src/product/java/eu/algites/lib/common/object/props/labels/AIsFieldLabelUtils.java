@@ -1,9 +1,12 @@
 package eu.algites.lib.common.object.props.labels;
 
-import eu.algites.lib.common.object.stringoutput.AIiStringOutputMode;
-import eu.algites.lib.common.object.stringoutput.AIiStringOutputModeResolver;
-import eu.algites.lib.common.object.stringoutput.AInStringOutputMode;
-import eu.algites.lib.common.object.stringoutput.AIsStringOutputUtils;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputFormat;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputFormatResolver;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputLocaleResolver;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputPurpose;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputPurposeResolver;
+import eu.algites.lib.common.object.rendering.AInRenderingOutputBuiltinPurpose;
+import eu.algites.lib.common.object.rendering.AIsRenderingOutputUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -11,6 +14,7 @@ import java.lang.reflect.RecordComponent;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,9 +54,11 @@ import java.util.Set;
 public class AIsFieldLabelUtils {
 
 	private record AIcFieldMeta(
-			Map<String, String> labelsByModeCode,
+			Map<String, String> labelsByPurposeCode,
 			AIiFieldLabelResolver labelResolverOrNull,
-			AIiStringOutputModeResolver modeResolverOrNull
+			AIiRenderingOutputPurposeResolver purposeResolverOrNull,
+			AIiRenderingOutputFormatResolver formatResolverOrNull,
+			AIiRenderingOutputLocaleResolver localeResolverOrNull
 	) {
 		/* Record as uiddata carrier. */
 	}
@@ -262,21 +268,25 @@ public class AIsFieldLabelUtils {
 		}
 
 		AIiFieldLabelResolver labelResolver = instantiateLabelResolverIfAny(ann);
-		AIiStringOutputModeResolver modeResolver = instantiateModeResolverIfAny(ann);
+		AIiRenderingOutputPurposeResolver purposeResolver = instantiatePurposeResolverIfAny(ann);
+		AIiRenderingOutputFormatResolver formatResolver = instantiateFormatResolverIfAny(ann);
+		AIiRenderingOutputLocaleResolver localeResolver = instantiateLocaleResolverIfAny(ann);
 
 		return new AIcFieldMeta(
 				Collections.unmodifiableMap(labels),
 				labelResolver,
-				modeResolver
+				purposeResolver,
+				formatResolver,
+				localeResolver
 		);
 	}
 
 	private static String resolveModeCode(AIaFieldLabel.Entry e) {
-		if (e.mode() != AInStringOutputMode.DEFAULT) {
-			return e.mode().code();
+		if (e.purpose() != AInRenderingOutputBuiltinPurpose.DEFAULT) {
+			return e.purpose().code();
 		}
-		if (e.modeCode() != null && !e.modeCode().isBlank()) {
-			return e.modeCode();
+		if (e.purposeCode() != null && !e.purposeCode().isBlank()) {
+			return e.purposeCode();
 		}
 		return null;
 	}
@@ -289,9 +299,25 @@ public class AIsFieldLabelUtils {
 		return newInstanceOrNull(locResolverClass);
 	}
 
-	private static AIiStringOutputModeResolver instantiateModeResolverIfAny(AIaFieldLabel ann) {
-		Class<? extends AIiStringOutputModeResolver> locResolverClass = ann.modeResolver();
-		if (locResolverClass == null || locResolverClass == AIaFieldLabel.NoModeResolver.class) {
+	private static AIiRenderingOutputPurposeResolver instantiatePurposeResolverIfAny(AIaFieldLabel ann) {
+		Class<? extends AIiRenderingOutputPurposeResolver> locResolverClass = ann.purposeResolver();
+		if (locResolverClass == null || locResolverClass == AIaFieldLabel.NoPurposeResolver.class) {
+			return null;
+		}
+		return newInstanceOrNull(locResolverClass);
+	}
+
+	private static AIiRenderingOutputFormatResolver instantiateFormatResolverIfAny(AIaFieldLabel ann) {
+		Class<? extends AIiRenderingOutputFormatResolver> locResolverClass = ann.formatResolver();
+		if (locResolverClass == null || locResolverClass == AIaFieldLabel.NoFormatResolver.class) {
+			return null;
+		}
+		return newInstanceOrNull(locResolverClass);
+	}
+
+	private static AIiRenderingOutputLocaleResolver instantiateLocaleResolverIfAny(AIaFieldLabel ann) {
+		Class<? extends AIiRenderingOutputLocaleResolver> locResolverClass = ann.localeResolver();
+		if (locResolverClass == null || locResolverClass == AIaFieldLabel.NoLocaleResolver.class) {
 			return null;
 		}
 		return newInstanceOrNull(locResolverClass);
@@ -316,10 +342,10 @@ public class AIsFieldLabelUtils {
 			);
 		}
 
-		boolean locHasModeResolver = aFieldLabelAnnotation.modeResolver() != AIaFieldLabel.NoModeResolver.class;
+		boolean locHasModeResolver = aFieldLabelAnnotation.purposeResolver() != AIaFieldLabel.NoPurposeResolver.class;
 		if (locHasModeResolver && locHasLabels) {
 			/*
-			 * This is allowed: modeResolver selects active mode, labels map mode->label.
+			 * This is allowed: purposeResolver selects active purpose, labels map purpose->label.
 			 */
 		}
 	}
@@ -343,38 +369,60 @@ public class AIsFieldLabelUtils {
 	 * @return label for the property name
 	 */
 	public static String findLabel(Class<?> aOwnerClass, String aPropertyName) {
-		return findLabel(aOwnerClass, aPropertyName, null);
+		return findLabel(aOwnerClass, aPropertyName, null, null, null);
 	}
 
 	/**
 	 * Example API for callers (toString code) to get a label for a field name.
+	 *
 	 * @param aOwnerClass class where the call is made
 	 * @param aPropertyName property name used (field/record component/getter)
-	 * @param aStringOutputMode to be used for label resolution
+	 * @param aRenderingOutputPurpose to be used for label resolution
+	 * @param aRenderingOutputFormat to be used for label resolution
+	 * @param aRenderingOutputLocale to be used for label resolution
 	 * @return label for the property name
 	 */
-	public static String findLabel(Class<?> aOwnerClass, String aPropertyName, AIiStringOutputMode aStringOutputMode) {
+	public static String findLabel(Class<?> aOwnerClass, String aPropertyName, AIiRenderingOutputPurpose aRenderingOutputPurpose,
+			final AIiRenderingOutputFormat aRenderingOutputFormat, final Locale aRenderingOutputLocale) {
 		AIcFieldMeta locMeta = findMeta(aOwnerClass, aPropertyName);
 		if (locMeta == null) {
 			return aPropertyName;
 		}
 
-		AIiStringOutputMode locResolvedMode = aStringOutputMode;
-		if (locResolvedMode == null && locMeta.modeResolverOrNull != null) {
-			locResolvedMode = locMeta.modeResolverOrNull.resolveMode();
+		AIiRenderingOutputPurpose locResolvedPurpose = aRenderingOutputPurpose;
+		if (locResolvedPurpose == null && locMeta.purposeResolverOrNull != null) {
+			locResolvedPurpose = locMeta.purposeResolverOrNull.resolvePurpose();
 		}
-		if (locResolvedMode == null) {
-			locResolvedMode = AIsStringOutputUtils.usedStringOutputMode();
+		if (locResolvedPurpose == null) {
+			locResolvedPurpose = AIsRenderingOutputUtils.usedRenderingOutputPurpose();
+		}
+
+		AIiRenderingOutputFormat locResolvedFormat = aRenderingOutputFormat;
+		if (locResolvedFormat == null && locMeta.formatResolverOrNull != null) {
+			locResolvedFormat = locMeta.formatResolverOrNull.resolveFormat();
+		}
+		if (locResolvedFormat == null) {
+			locResolvedFormat = AIsRenderingOutputUtils.usedRenderingOutputFormat();
+		}
+
+		Locale locResolvedLocale = aRenderingOutputLocale;
+		if (locResolvedLocale == null && locMeta.localeResolverOrNull != null) {
+			locResolvedLocale = locMeta.localeResolverOrNull.resolveLocale();
+		}
+		if (locResolvedLocale == null) {
+			locResolvedLocale = AIsRenderingOutputUtils.usedRenderingOutputLocale();
 		}
 
 		if (locMeta.labelResolverOrNull != null) {
-			String locResolved = locMeta.labelResolverOrNull.resolveLabel(aOwnerClass, aPropertyName, locResolvedMode);
+			String locResolved = locMeta.labelResolverOrNull.resolveLabel(aOwnerClass, aPropertyName, locResolvedPurpose,
+					aRenderingOutputFormat,
+					aRenderingOutputLocale);
 			if (locResolved != null && !locResolved.isBlank()) {
 				return locResolved;
 			}
 		}
 
-		String locMapped = locMeta.labelsByModeCode.get(locResolvedMode.code());
+		String locMapped = locMeta.labelsByPurposeCode.get(locResolvedPurpose.code());
 		return (locMapped != null && !locMapped.isBlank()) ? locMapped : aPropertyName;
 	}
 

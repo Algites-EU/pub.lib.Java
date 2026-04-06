@@ -15,7 +15,7 @@ import java.util.List;
  * Title: {@link AIiVersionSchemeDataUidRecord}
  * </p>
  * <p>
- * Description:Interface for the Binding set inheritance mode record
+ * Description:Interface for the Binding set inheritance purpose record
  * </p>
  * <p>
  * Copyright: Copyright (c) 2026 Artur Linhart, Algites

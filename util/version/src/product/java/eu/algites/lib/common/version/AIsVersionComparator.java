@@ -33,16 +33,16 @@ public final class AIsVersionComparator {
 	}
 
 	/**
-	 * Compares two versions using a {@link AIiVersionScheme}. The mode provides its comparator via
+	 * Compares two versions using a {@link AIiVersionScheme}. The purpose provides its comparator via
 	 * {@link AIiVersionScheme#versionComparator()}.
 	 *
 	 * @param aLeft left version
 	 * @param aRight right version
-	 * @param aScheme handling mode
+	 * @param aScheme handling purpose
 	 * @return comparison result
 	 */
 	public static int compare(@Nonnull final AIcVersion aLeft, @Nonnull final AIcVersion aRight, @Nonnull final AIiVersionScheme aScheme) {
-		Objects.requireNonNull(aScheme, "Handling mode must not be null");
+		Objects.requireNonNull(aScheme, "Handling purpose must not be null");
 		AIiVersionComparator locComparator = aScheme.versionComparator();
 		String locBuildDelimiter = aScheme.versionStructure().buildDelimiter();
 		boolean locNeedsBuildAwareWrapper = !locBuildDelimiter.isEmpty()

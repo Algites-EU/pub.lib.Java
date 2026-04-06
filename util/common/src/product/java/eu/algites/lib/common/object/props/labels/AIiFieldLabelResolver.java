@@ -1,6 +1,9 @@
 package eu.algites.lib.common.object.props.labels;
 
-import eu.algites.lib.common.object.stringoutput.AIiStringOutputMode;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputFormat;
+import eu.algites.lib.common.object.rendering.AIiRenderingOutputPurpose;
+
+import java.util.Locale;
 
 /**
  * <p>
@@ -22,10 +25,15 @@ import eu.algites.lib.common.object.stringoutput.AIiStringOutputMode;
 public interface AIiFieldLabelResolver {
 	/**
 	 * Performs the class property label resolution
+	 *
 	 * @param aOwnerClass
 	 * @param aFieldName
-	 * @param aOutputMode
+	 * @param aOutputPurpose
+	 * @param aOutputFormat
+	 * @param aOutputLocale
 	 * @return label or null => fallback
 	 */
-	String resolveLabel(Class<?> aOwnerClass, String aFieldName, AIiStringOutputMode aOutputMode);
+	String resolveLabel(Class<?> aOwnerClass, String aFieldName, AIiRenderingOutputPurpose aOutputPurpose,
+			final AIiRenderingOutputFormat aOutputFormat,
+			final Locale aOutputLocale);
 }

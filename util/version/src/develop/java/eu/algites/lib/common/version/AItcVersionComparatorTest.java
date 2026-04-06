@@ -72,7 +72,7 @@ public class AItcVersionComparatorTest {
 				AInBuiltinVersionFormat.OMIT_BUILD);
 
 		int locCmp = AIsVersionComparator.compare(locA, locB, locMode);
-		Assert.assertEquals(locCmp, 123, "compare(left,right,mode) must delegate to mode.versionComparator()");
+		Assert.assertEquals(locCmp, 123, "compare(left,right,purpose) must delegate to purpose.versionComparator()");
 	}
 
 	@Test
@@ -97,7 +97,7 @@ public class AItcVersionComparatorTest {
 				AInBuiltinVersionFormat.OMIT_BUILD);
 
 		int locCmp = locA.compareTo(locB, locMode);
-		Assert.assertEquals(locCmp, 77, "AIcVersion.compareTo(other, mode) must delegate to mode.versionComparator()");
+		Assert.assertEquals(locCmp, 77, "AIcVersion.compareTo(other, purpose) must delegate to purpose.versionComparator()");
 	}
 	@Test
 	public void testMavenBuildMetadataIgnoredSchemeIgnoresBuild() {
