@@ -367,7 +367,107 @@ private static final class AIcTestClassImplementsInterfaceWithUnannotatedGetter 
 	    Assert.assertTrue(locThrown, "Unknown property must throw IllegalArgumentException");
 	}
 
-	private static final class AIcTestGetterOnlyProperty {
+	
+
+	@Test
+	public void testFindLabelUsesMappedLabelsForExplicitFormatEnum() {
+		String locLabel = AIsFieldLabelUtils.findLabel(
+				AIcTestMappedLabelsByFormat.class,
+				"myProperty",
+				AInRenderingOutputBuiltinPurpose.USER,
+				AInRenderingOutputBuiltinFormat.JSON,
+				Locale.getDefault());
+
+		Assert.assertEquals(locLabel, "MyUserJsonLabel", "Mapped label for USER+JSON must be returned");
+	}
+
+	@Test
+	public void testFindLabelUsesMappedLabelsForExplicitFormatCode() {
+		AIiRenderingOutputFormat locCustomFormat = new AIcCustomRenderingOutputFormat("CUSTOM_FMT");
+
+		String locLabel = AIsFieldLabelUtils.findLabel(
+				AIcTestMappedLabelsByFormatCode.class,
+				"myProperty",
+				AInRenderingOutputBuiltinPurpose.USER,
+				locCustomFormat,
+				Locale.getDefault());
+
+		Assert.assertEquals(locLabel, "MyUserCustomFormatLabel", "Mapped label for USER+CUSTOM_FMT must be returned");
+	}
+
+	@Test
+	public void testFindLabelUsesMappedLabelsForExplicitLocaleCode() {
+		Locale locLocale = new Locale("cs", "CZ");
+
+		String locLabel = AIsFieldLabelUtils.findLabel(
+				AIcTestMappedLabelsByLocale.class,
+				"myProperty",
+				AInRenderingOutputBuiltinPurpose.USER,
+				AInRenderingOutputBuiltinFormat.PLAIN_TEXT,
+				locLocale);
+
+		Assert.assertEquals(locLabel, "MyUserCzechLabel", "Mapped label for USER+cs_CZ must be returned");
+	}
+
+	private static final class AIcTestMappedLabelsByFormat {
+		@AIaFieldLabel(labels = {
+				@AIaFieldLabel.Entry(
+					purpose = AInRenderingOutputBuiltinPurpose.USER,
+					format = AInRenderingOutputBuiltinFormat.PLAIN_TEXT,
+					label = "MyUserPlainTextLabel"
+				),
+				@AIaFieldLabel.Entry(
+					purpose = AInRenderingOutputBuiltinPurpose.USER,
+					format = AInRenderingOutputBuiltinFormat.JSON,
+					label = "MyUserJsonLabel"
+				)
+		})
+		private String myProperty;
+	}
+
+	private static final class AIcCustomRenderingOutputFormat implements AIiRenderingOutputFormat {
+
+		private final String customFormatCode;
+
+		private AIcCustomRenderingOutputFormat(String aCustomFormatCode) {
+			customFormatCode = aCustomFormatCode;
+		}
+
+		@Override
+		public String code() {
+			return customFormatCode;
+		}
+	}
+
+	private static final class AIcTestMappedLabelsByFormatCode {
+		@AIaFieldLabel(labels = {
+				@AIaFieldLabel.Entry(
+					purpose = AInRenderingOutputBuiltinPurpose.USER,
+					formatCode = "CUSTOM_FMT",
+					label = "MyUserCustomFormatLabel"
+				)
+		})
+		private String myProperty;
+	}
+
+	private static final class AIcTestMappedLabelsByLocale {
+		@AIaFieldLabel(labels = {
+				@AIaFieldLabel.Entry(
+					purpose = AInRenderingOutputBuiltinPurpose.USER,
+					localeCode = "cs_CZ",
+					label = "MyUserCzechLabel"
+				),
+				@AIaFieldLabel.Entry(
+					purpose = AInRenderingOutputBuiltinPurpose.USER,
+					localeCode = "en_US",
+					label = "MyUserEnglishLabel"
+				)
+		})
+		private String myProperty;
+	}
+
+
+private static final class AIcTestGetterOnlyProperty {
 	    public String getMyProperty() {
 	        return "value";
 	    }

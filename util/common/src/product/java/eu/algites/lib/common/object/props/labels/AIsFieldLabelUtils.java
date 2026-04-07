@@ -6,6 +6,7 @@ import eu.algites.lib.common.object.rendering.AIiRenderingOutputLocaleResolver;
 import eu.algites.lib.common.object.rendering.AIiRenderingOutputPurpose;
 import eu.algites.lib.common.object.rendering.AIiRenderingOutputPurposeResolver;
 import eu.algites.lib.common.object.rendering.AInRenderingOutputBuiltinPurpose;
+import eu.algites.lib.common.object.rendering.AInRenderingOutputBuiltinFormat;
 import eu.algites.lib.common.object.rendering.AIsRenderingOutputUtils;
 
 import java.lang.reflect.Field;
@@ -54,7 +55,7 @@ import java.util.Set;
 public class AIsFieldLabelUtils {
 
 	private record AIcFieldMeta(
-			Map<String, String> labelsByPurposeCode,
+			Map<AIcLabelKey, String> labelsByKey,
 			AIiFieldLabelResolver labelResolverOrNull,
 			AIiRenderingOutputPurposeResolver purposeResolverOrNull,
 			AIiRenderingOutputFormatResolver formatResolverOrNull,
@@ -63,7 +64,16 @@ public class AIsFieldLabelUtils {
 		/* Record as uiddata carrier. */
 	}
 
-	private record AIcFieldMetaNode(
+	
+	private record AIcLabelKey(
+			String purposeCode,
+			String formatCodeOrNull,
+			String localeCodeOrNull
+	) {
+		/* Record as uiddata carrier. */
+	}
+
+private record AIcFieldMetaNode(
 			Map<String, AIcFieldMeta> declaredByPropertyName,
 			AIcFieldMetaNode parentOrNull
 	) {
@@ -258,15 +268,19 @@ public class AIsFieldLabelUtils {
 	}
 
 	private static AIcFieldMeta buildMetaFromAnnotation(AIaFieldLabel ann) {
-		Map<String, String> labels = new HashMap<>();
+		Map<AIcLabelKey, String> labels = new HashMap<>();
 
 		for (AIaFieldLabel.Entry e : ann.labels()) {
-			String modeCode = resolveModeCode(e);
-			if (modeCode != null && !modeCode.isBlank()) {
-				labels.put(modeCode, e.label());
+			String locPurposeCode = resolvePurposeCodeOrNull(e);
+			if (locPurposeCode == null || locPurposeCode.isBlank()) {
+				continue;
 			}
-		}
 
+			String locFormatCodeOrNull = resolveFormatCodeOrNull(e);
+			String locLocaleCodeOrNull = normalizeLocaleCodeOrNull(e.localeCode());
+
+			labels.put(new AIcLabelKey(locPurposeCode, locFormatCodeOrNull, locLocaleCodeOrNull), e.label());
+		}
 		AIiFieldLabelResolver labelResolver = instantiateLabelResolverIfAny(ann);
 		AIiRenderingOutputPurposeResolver purposeResolver = instantiatePurposeResolverIfAny(ann);
 		AIiRenderingOutputFormatResolver formatResolver = instantiateFormatResolverIfAny(ann);
@@ -281,15 +295,39 @@ public class AIsFieldLabelUtils {
 		);
 	}
 
-	private static String resolveModeCode(AIaFieldLabel.Entry e) {
-		if (e.purpose() != AInRenderingOutputBuiltinPurpose.DEFAULT) {
-			return e.purpose().code();
+	private static String resolvePurposeCodeOrNull(AIaFieldLabel.Entry aEntry) {
+		if (aEntry == null) {
+			return null;
 		}
-		if (e.purposeCode() != null && !e.purposeCode().isBlank()) {
-			return e.purposeCode();
+		if (aEntry.purpose() != AInRenderingOutputBuiltinPurpose.DEFAULT) {
+			return aEntry.purpose().code();
+		}
+		if (aEntry.purposeCode() != null && !aEntry.purposeCode().isBlank()) {
+			return aEntry.purposeCode();
 		}
 		return null;
 	}
+
+	private static String resolveFormatCodeOrNull(AIaFieldLabel.Entry aEntry) {
+		if (aEntry == null) {
+			return null;
+		}
+		if (aEntry.format() != AInRenderingOutputBuiltinFormat.DEFAULT) {
+			return aEntry.format().code();
+		}
+		if (aEntry.formatCode() != null && !aEntry.formatCode().isBlank()) {
+			return aEntry.formatCode();
+		}
+		return null;
+	}
+
+	private static String normalizeLocaleCodeOrNull(String aLocaleCode) {
+		if (aLocaleCode == null || aLocaleCode.isBlank()) {
+			return null;
+		}
+		return aLocaleCode.trim();
+	}
+
 
 	private static AIiFieldLabelResolver instantiateLabelResolverIfAny(AIaFieldLabel ann) {
 		Class<? extends AIiFieldLabelResolver> locResolverClass = ann.labelResolver();
@@ -415,19 +453,128 @@ public class AIsFieldLabelUtils {
 
 		if (locMeta.labelResolverOrNull != null) {
 			String locResolved = locMeta.labelResolverOrNull.resolveLabel(aOwnerClass, aPropertyName, locResolvedPurpose,
-					aRenderingOutputFormat,
-					aRenderingOutputLocale);
+					locResolvedFormat,
+					locResolvedLocale);
 			if (locResolved != null && !locResolved.isBlank()) {
 				return locResolved;
 			}
 		}
 
-		String locMapped = locMeta.labelsByPurposeCode.get(locResolvedPurpose.code());
+		String locMapped = resolveMappedLabelOrNull(locMeta.labelsByKey, locResolvedPurpose, locResolvedFormat, locResolvedLocale);
 		return (locMapped != null && !locMapped.isBlank()) ? locMapped : aPropertyName;
 	}
 
 
 
+
+
+
+	/**
+	 * Resolves a mapped label based on the resolved purpose/format/locale.
+	 * <p>
+	 * The matching is performed in the following order:
+	 * </p>
+	 * <ol>
+	 *   <li>purpose + format + locale</li>
+	 *   <li>purpose + format</li>
+	 *   <li>purpose + locale</li>
+	 *   <li>purpose</li>
+	 * </ol>
+	 *
+	 * @param aLabelsByKey labels mapped by the label key
+	 * @param aResolvedPurpose resolved rendering output purpose
+	 * @param aResolvedFormat resolved rendering output format
+	 * @param aResolvedLocale resolved rendering output locale
+	 * @return mapped label or null
+	 */
+	private static String resolveMappedLabelOrNull(
+			Map<AIcLabelKey, String> aLabelsByKey,
+			AIiRenderingOutputPurpose aResolvedPurpose,
+			AIiRenderingOutputFormat aResolvedFormat,
+			Locale aResolvedLocale
+	) {
+		if (aLabelsByKey == null || aLabelsByKey.isEmpty()) {
+			return null;
+		}
+
+		String locPurposeCode = (aResolvedPurpose != null) ? normalizeKeyPartOrNull(aResolvedPurpose.code()) : null;
+		if (locPurposeCode == null) {
+			return null;
+		}
+
+		String locFormatCodeOrNull = (aResolvedFormat != null) ? normalizeKeyPartOrNull(aResolvedFormat.code()) : null;
+		Set<String> locLocaleCandidateCodes = buildLocaleCandidateCodes(aResolvedLocale);
+
+		if (locFormatCodeOrNull != null && !locLocaleCandidateCodes.isEmpty()) {
+			for (String locLocaleCode : locLocaleCandidateCodes) {
+				String locFound = aLabelsByKey.get(new AIcLabelKey(locPurposeCode, locFormatCodeOrNull, locLocaleCode));
+				if (locFound != null) {
+					return locFound;
+				}
+			}
+		}
+
+		if (locFormatCodeOrNull != null) {
+			String locFound = aLabelsByKey.get(new AIcLabelKey(locPurposeCode, locFormatCodeOrNull, null));
+			if (locFound != null) {
+				return locFound;
+			}
+		}
+
+		if (!locLocaleCandidateCodes.isEmpty()) {
+			for (String locLocaleCode : locLocaleCandidateCodes) {
+				String locFound = aLabelsByKey.get(new AIcLabelKey(locPurposeCode, null, locLocaleCode));
+				if (locFound != null) {
+					return locFound;
+				}
+			}
+		}
+
+		return aLabelsByKey.get(new AIcLabelKey(locPurposeCode, null, null));
+	}
+
+	private static String normalizeKeyPartOrNull(String aCode) {
+		if (aCode == null) {
+			return null;
+		}
+		String locTrimmed = aCode.trim();
+		return locTrimmed.isBlank() ? null : locTrimmed;
+	}
+
+	private static Set<String> buildLocaleCandidateCodes(Locale aLocale) {
+		if (aLocale == null) {
+			return Collections.emptySet();
+		}
+
+		Set<String> locCandidates = new java.util.LinkedHashSet<>();
+
+		String locLanguageTag = normalizeKeyPartOrNull(aLocale.toLanguageTag());
+		if (locLanguageTag != null && !"und".equalsIgnoreCase(locLanguageTag)) {
+			addLocaleVariants(locCandidates, locLanguageTag);
+		}
+
+		String locToString = normalizeKeyPartOrNull(aLocale.toString());
+		if (locToString != null) {
+			addLocaleVariants(locCandidates, locToString);
+		}
+
+		String locLanguage = normalizeKeyPartOrNull(aLocale.getLanguage());
+		if (locLanguage != null) {
+			addLocaleVariants(locCandidates, locLanguage);
+		}
+
+		return locCandidates;
+	}
+
+	private static void addLocaleVariants(Set<String> aTarget, String aLocaleCode) {
+		aTarget.add(aLocaleCode);
+
+		String locDashToUnderscore = aLocaleCode.replace('-', '_');
+		aTarget.add(locDashToUnderscore);
+
+		String locUnderscoreToDash = aLocaleCode.replace('_', '-');
+		aTarget.add(locUnderscoreToDash);
+	}
 
 	/**
 	 * Validates that the given property name exists on the owner type.
