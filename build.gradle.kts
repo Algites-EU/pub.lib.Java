@@ -50,10 +50,16 @@ val locRepoName = buildString {
 }
 
 val locIsCi = providers.environmentVariable("CI").orNull == "true"
-if (locIsCi && !locHasRemoteRepo) {
-    throw GradleException("CI build requires ALGITES_REPO_* for publishing.")
+val locRequestedTasks = gradle.startParameter.taskNames
+val locIsPublishRequested = locRequestedTasks.any {
+    it == "publish" ||
+            it.startsWith("publish") ||
+            it.contains("publish", ignoreCase = true)
 }
 
+if (locIsCi && locIsPublishRequested && !locHasRemoteRepo) {
+    throw GradleException("CI publish build requires ALGITES_REPO_* for publishing.")
+}
 
 subprojects {
     /* artifactId = "<rootProject.name>_<subproject-path-with-dots>" */
