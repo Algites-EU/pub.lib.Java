@@ -1,0 +1,4 @@
+artifact:
+  type: java
+  name: Common Java Utilities
+  description: Basic support for Java development 
