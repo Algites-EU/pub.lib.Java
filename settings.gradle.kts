@@ -1,6 +1,17 @@
+val locIsCi: Boolean =
+    providers.gradleProperty("CI")
+        .orElse(providers.environmentVariable("CI"))
+        .map { it.equals("true", ignoreCase = true) }
+        .orElse(false)
+        .get()
+
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
+        if (!locIsCi) {
+            mavenLocal()
+        }
         mavenCentral()
         maven {
             name = "algites-public-releases"
@@ -19,14 +30,8 @@ pluginManagement {
     }
 }
 
-val locIsCi: Boolean =
-    providers.gradleProperty("CI")
-        .orElse(providers.environmentVariable("CI"))
-        .map { it.equals("true", ignoreCase = true) }
-        .orElse(false)
-        .get()
-
 dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         if (!locIsCi) {
             mavenLocal()
@@ -49,6 +54,4 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "pub.lib.Java"
-include(":util:common")
-include(":util:version")
+apply(from = uri("https://raw.githubusercontent.com/Algites-EU/pub.gov.Algites/main/gradle/tool/repository/algites-root-settings-discovery.gradle.kts"))

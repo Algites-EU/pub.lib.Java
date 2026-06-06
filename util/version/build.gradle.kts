@@ -18,8 +18,6 @@ java {
     }
 }
 
-group = "eu.algites.lib.common"
-
 val TESTNG_VERSION = "7.11.0"
 val JAKARTA_ANNOTATION_VERSION = "3.0.0"
 val ALGITES_PUB_LIB_JAVA_VERSION = project.version.toString()
