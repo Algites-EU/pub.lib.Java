@@ -1,0 +1,28 @@
+name: Publish Preview documentation
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: docs-pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish-docs:
+    uses: Algites-EU/pub.gov.Algites/.github/workflows/algites-universal-docs-site-pub.yml@main
+    with:
+      gradle-task: generateAlgitesDocsSite
+      java-version: "21"
+      publication-kind: preview
+      publication-id: ${{ github.ref_name }}
+      pages-branch: gh-pages
+      gradle-arguments: "--warning-mode all"
+      publish-pages: true
