@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   publish-docs:
-    uses: Algites-EU/pub.gov.Algites/.github/workflows/algites-universal-docs-site-pub.yml@main
+    uses: Algites-EU/pub.gov.Algites/.github/workflows/algites-universal-docs-site.yml@main
     with:
       gradle-task: generateAlgitesDocsSite
       java-version: "21"
