@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * Title: {@link AIsRenderingOutputUtils}
  * </p>
  * <p>
- * Description: General utilities for the objects functionality handling.
+ * Description: General utilities for the Java objects functionality handling.
  * </p>
  * <p>
  * Copyright: Copyright (c) 2026 Artur Linhart, Algites
