@@ -39,7 +39,7 @@
                 dl {
                   display: grid;
                   grid-template-columns: minmax(10rem, 18rem) 1fr;
-                  gap: 0.35rem 1rem;
+                  gap: 0.22rem 0.75rem;
                 }
 
                 dt {
@@ -65,20 +65,21 @@
             <body>
               <main>
                                 <h1>util.common</h1>
-                <p class="muted">Artifact publication: <code>preview/main</code></p>
+                <p class="muted compact-lead">Artifact publication: <code>preview/main</code></p>
 
-                <section class="card">
-                  <h2>Artifact coordinates</h2>
-                  <dl>
-                    <dt>Group ID</dt><dd><strong><code>eu.algites.lib.common</code></strong></dd>
-                    <dt>Artifact ID</dt><dd><strong><code>pub.lib.Java_util.common</code></strong></dd>
-                  </dl>
-                </section>
+                <div class="artifact-publication-grid">
+                  <section class="card card-strong">
+                    <h2>Artifact coordinates</h2>
+                    <dl class="coordinates">
+                      <dt>Group ID</dt><dd><strong><code>eu.algites.lib.common</code></strong></dd>
+                      <dt>Artifact ID</dt><dd><strong><code>pub.lib.Java_util.common</code></strong></dd>
+                    </dl>
+                  </section>
 
-                <section class="card">
-                  <h2>Artifact metadata</h2>
-                  <dl>
-                    <dt>Local artifact ID</dt><dd>util.common</dd>
+                  <section class="card">
+                    <h2>Artifact metadata</h2>
+                    <dl class="compact-dl">
+                      <dt>Local artifact ID</dt><dd>util.common</dd>
 <dt>Publication kind</dt><dd>preview</dd>
 <dt>Publication ID</dt><dd>main</dd>
 <dt>Artifact path</dt><dd>util/common</dd>
@@ -91,18 +92,23 @@
 <dt>Resolved version</dt><dd>1.0-SNAPSHOT</dd>
 <dt>Version lane</dt><dd>1</dd>
 <dt>Version revision</dt><dd>0</dd>
-                  </dl>
-                </section>
+<dt>Qualifier kind</dt><dd>SNAPSHOT</dd>
+<dt>Qualifier label</dt><dd>SNAPSHOT</dd>
+                    </dl>
+                  </section>
 
-                <section class="card">
-                  <h2>Generated documentation</h2>
-                  <ul>
+                  <section class="card">
+                    <h2>Generated documentation</h2>
+                    <ul>
 <li><a href="javadoc/index.html">javadoc</a></li>
 </ul>
-                </section>
+                  </section>
+                </div>
 
-                <p><a href="../../../../publications/preview/main/index.html">Back to publication index</a></p>
-                <p><a href="../../../index.html">Back to artifact index</a></p>
+                <nav class="back-links">
+                  <a href="../../../../publications/preview/main/index.html">Back to publication index</a>
+                  <a href="../../../index.html">Back to artifact index</a>
+                </nav>
               </main>
             </body>
             </html>
