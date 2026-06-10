@@ -41,28 +41,13 @@
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     }
 
-    .nav-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      padding: 0;
-      list-style: none;
-    }
-
-    .nav-list a {
-      display: inline-block;
-      padding: 0.5rem 0.75rem;
-      border: 1px solid #d1d5db;
-      border-radius: 0.5rem;
-      background: #f9fafb;
-    }
-
     iframe {
       width: 100%;
-      min-height: 70vh;
+      min-height: 45vh;
       border: 1px solid #e5e7eb;
       border-radius: 0.75rem;
       background: white;
+      margin-bottom: 1.5rem;
     }
 
     a {
@@ -79,24 +64,27 @@
 
   <main>
     <section class="card">
-      <h2>Documentation sections</h2>
-      <ul class="nav-list">
-        <li><a href="publications/preview/index.html">Preview</a></li>
-        <li><a href="publications/snapshot/index.html">Snapshot</a></li>
-        <li><a href="publications/release/index.html">Release</a></li>
-      </ul>
-    </section>
-
-    <section class="card">
-      <h2>Current generated documentation</h2>
+      <h2>Artifacts</h2>
       <p>
-        Current publication: <strong>preview/main</strong>.
-        Open it directly here:
-        <a href="publications/preview/main/index.html">publications/preview/main/index.html</a>.
+        Canonical documentation pages are organized by artifact.
+        Open the artifact index directly here:
+        <a href="artifacts/index.html">artifacts/index.html</a>.
       </p>
     </section>
 
-    <iframe src="publications/preview/main/index.html" title="Current generated artifact documentation"></iframe>
+    <iframe src="artifacts/index.html" title="Generated artifact documentation"></iframe>
+
+    <section class="card">
+      <h2>Publications / versions</h2>
+      <p>
+        Publication indexes group artifacts by publication context, such as preview branch, snapshot, or release version.
+        Open the publication index directly here:
+        <a href="publications/index.html">publications/index.html</a>.
+      </p>
+      <p class="muted">Current publication: <strong>preview/main</strong>.</p>
+    </section>
+
+    <iframe src="publications/index.html" title="Generated publication documentation"></iframe>
 
     <p><a href="../index.html">Repository documentation root</a></p>
   </main>
