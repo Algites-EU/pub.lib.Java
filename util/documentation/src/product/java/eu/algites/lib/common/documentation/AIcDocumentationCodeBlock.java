@@ -1,0 +1,36 @@
+package eu.algites.lib.common.documentation;
+
+import java.util.Objects;
+
+/**
+ * Default implementation of {@link AIiDocumentationCodeBlock}.
+ * <p>
+ * See {@link AIiDocumentationCodeBlock} for the code block contract.
+ */
+public class AIcDocumentationCodeBlock
+        extends AIcDocumentationElement
+        implements AIiDocumentationCodeBlock {
+
+    private final String languageId;
+
+    private final String code;
+
+    public AIcDocumentationCodeBlock(
+            String aElementId,
+            String aLanguageId,
+            String aCode) {
+        super(aElementId);
+        languageId = Objects.requireNonNull(aLanguageId, "Parameter aLanguageId must not be null.");
+        code = Objects.requireNonNull(aCode, "Parameter aCode must not be null.");
+    }
+
+    @Override
+    public String getLanguageId() {
+        return languageId;
+    }
+
+    @Override
+    public String getCode() {
+        return code;
+    }
+}

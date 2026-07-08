@@ -1,0 +1,4 @@
+artifact:
+  type: java
+  name: Utilities for documentation AST building
+  description: Utilities for creation of the AST (abstract syntax tree) of any documentation structure.
