@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="AIcDocumentationCodeBlock.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationCodeBlock</a></code>, <code><a href="AIcDocumentationContainerElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationContainerElement</a></code>, <code><a href="AIcDocumentationLink.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationLink</a></code>, <code><a href="AIcDocumentationParagraph.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationParagraph</a></code>, <code><a href="AIcDocumentationTable.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationTable</a></code>, <code><a href="AIcDocumentationTableCell.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationTableCell</a></code>, <code><a href="AIcDocumentationTableColumn.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationTableColumn</a></code>, <code><a href="AIcDocumentationTableRow.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationTableRow</a></code></dd>
+<dd><code><a href="AIcDocumentationBlockElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationBlockElement</a></code>, <code><a href="AIcDocumentationInlineElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationInlineElement</a></code>, <code><a href="AIcDocumentationReferenceTarget.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationReferenceTarget</a></code>, <code><a href="AIcDocumentationTableCell.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationTableCell</a></code>, <code><a href="AIcDocumentationTableColumn.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationTableColumn</a></code>, <code><a href="AIcDocumentationTableRow.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationTableRow</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">AIcDocumentationElement</span>
@@ -193,7 +193,10 @@ implements <a href="AIiDocumentationElement.html" title="interface in eu.algites
 <h3>getElementId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getElementId</span>()</div>
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="AIiDocumentationElement.html#getElementId()">AIiDocumentationElement</a></code></span></div>
-<div class="block">Returns the stable identifier of this documentation element.</div>
+<div class="block">Returns the stable identifier of this documentation element.
+ <p>
+ The identifier should be stable across repeated generation runs whenever
+ the represented source object stays the same.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="AIiDocumentationElement.html#getElementId()">getElementId</a></code>&nbsp;in interface&nbsp;<code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code></dd>
@@ -209,8 +212,10 @@ implements <a href="AIiDocumentationElement.html" title="interface in eu.algites
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="AIiDocumentationElement.html#getMetadata()">AIiDocumentationElement</a></code></span></div>
 <div class="block">Returns metadata associated with this documentation element.
  <p>
- Implementations should return a read-only view unless mutability is
- explicitly part of the implementation contract.</div>
+ Metadata is intended for renderer-neutral annotations, diagnostics,
+ source mapping, and extension points. Implementations should return a
+ read-only view unless mutability is explicitly part of the implementation
+ contract.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="AIiDocumentationElement.html#getMetadata()">getMetadata</a></code>&nbsp;in interface&nbsp;<code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code></dd>

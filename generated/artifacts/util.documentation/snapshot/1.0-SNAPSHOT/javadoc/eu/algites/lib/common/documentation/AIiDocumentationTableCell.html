@@ -97,8 +97,9 @@ loadScripts(document, 'script');</script>
 extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></span></div>
 <div class="block">Represents a cell in a documentation table row.
  <p>
- The cell references a column by its column identifier and stores a
- renderer-neutral plain text value.</div>
+ The cell references a column by its column identifier and stores ordered
+ inline content. This allows table cells to contain not only plain text, but
+ also links, semantic references, line breaks, and inline code.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -113,15 +114,25 @@ extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.li
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#addInlineElement(eu.algites.lib.common.documentation.AIiDocumentationInlineElement)" class="member-name-link">addInlineElement</a><wbr>(<a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a>&nbsp;aInlineElement)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Adds an inline element to the cell.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#addInlineElements(java.util.List)" class="member-name-link">addInlineElements</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a>&gt;&nbsp;aInlineElements)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Adds multiple inline elements in the provided order.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getColumnId()" class="member-name-link">getColumnId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Returns the identifier of the column this cell belongs to.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getText()" class="member-name-link">getText</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getInlineElements()" class="member-name-link">getInlineElements</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Returns cell text.</div>
+<div class="block">Returns cell inline elements in their rendering order.</div>
 </div>
 </div>
 </div>
@@ -152,13 +163,35 @@ extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.li
 </section>
 </li>
 <li>
-<section class="detail" id="getText()">
-<h3>getText</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getText</span>()</div>
-<div class="block">Returns cell text.</div>
+<section class="detail" id="getInlineElements()">
+<h3>getInlineElements</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a>&gt;</span>&nbsp;<span class="element-name">getInlineElements</span>()</div>
+<div class="block">Returns cell inline elements in their rendering order.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>cell text</dd>
+<dd>ordered inline element list</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addInlineElement(eu.algites.lib.common.documentation.AIiDocumentationInlineElement)">
+<h3>addInlineElement</h3>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">addInlineElement</span><wbr><span class="parameters">(<a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a>&nbsp;aInlineElement)</span></div>
+<div class="block">Adds an inline element to the cell.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>aInlineElement</code> - inline element to add</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addInlineElements(java.util.List)">
+<h3>addInlineElements</h3>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">addInlineElements</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a>&gt;&nbsp;aInlineElements)</span></div>
+<div class="block">Adds multiple inline elements in the provided order.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>aInlineElements</code> - inline elements to add</dd>
 </dl>
 </section>
 </li>

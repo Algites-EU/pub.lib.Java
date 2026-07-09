@@ -68,11 +68,16 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="package-signature">package <span class="element-name">eu.algites.lib.common.documentation</span></div>
 <section class="package-description" id="package-description">
-<div class="block">Renderer-neutral documentation AST model.
+<div class="block">Renderer-neutral documentation element model.
  <p>
  The package contains interfaces and default implementations for a small
  documentation object tree. The model is intentionally independent from MPS,
- HTML, Markdown, and any other source or target technology.</div>
+ HTML, Markdown, and any other source or target technology.
+ <p>
+ The model distinguishes block elements, which form the document structure,
+ from inline elements, which form paragraph-like textual content. Semantic
+ references are represented separately from plain links so renderers can
+ resolve references to documented source objects in an output-specific way.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -83,21 +88,37 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AIcDocumentationCodeBlock.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationCodeBlock</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AIcDocumentationBlockElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationBlockElement</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Default base implementation of <a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationBlockElement</code></a>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AIcDocumentationCodeBlock.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationCodeBlock</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Default implementation of <a href="AIiDocumentationCodeBlock.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationCodeBlock</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AIcDocumentationContainerElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationContainerElement</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AIcDocumentationContainerElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationContainerElement</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Default base implementation of <a href="AIiDocumentationContainerElement.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationContainerElement</code></a>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AIcDocumentationDocument.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationDocument</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AIcDocumentationDocument.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationDocument</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Default implementation of <a href="AIiDocumentationDocument.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationDocument</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AIcDocumentationElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationElement</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AIcDocumentationElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationElement</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Default base implementation of <a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationElement</code></a>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AIcDocumentationInlineCode.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationInlineCode</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Default implementation of <a href="AIiDocumentationInlineCode.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationInlineCode</code></a>.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AIcDocumentationInlineElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationInlineElement</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Default base implementation of <a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationInlineElement</code></a>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AIcDocumentationLineBreak.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationLineBreak</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Default implementation of <a href="AIiDocumentationLineBreak.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationLineBreak</code></a>.</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="AIcDocumentationLink.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationLink</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
@@ -106,6 +127,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AIcDocumentationParagraph.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationParagraph</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Default implementation of <a href="AIiDocumentationParagraph.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationParagraph</code></a>.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AIcDocumentationReference.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationReference</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Default implementation of <a href="AIiDocumentationReference.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationReference</code></a>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AIcDocumentationReferenceTarget.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationReferenceTarget</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Default implementation of <a href="AIiDocumentationReferenceTarget.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationReferenceTarget</code></a>.</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="AIcDocumentationSection.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationSection</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
@@ -127,49 +156,81 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Default implementation of <a href="AIiDocumentationTableRow.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationTableRow</code></a>.</div>
 </div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AIcDocumentationText.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationText</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Default implementation of <a href="AIiDocumentationText.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationText</code></a>.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">Represents a block-level documentation element.</div>
+</div>
 <div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AIiDocumentationCodeBlock.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationCodeBlock</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">Represents a code block in the documentation AST.</div>
+<div class="block">Represents a standalone code block.</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab1"><a href="AIiDocumentationContainerElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationContainerElement</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
-<div class="block">Represents a documentation AST element that can contain child elements.</div>
+<div class="block">Represents a block-level documentation element that can contain child blocks.</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AIiDocumentationDocument.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationDocument</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">Represents the root of a documentation AST.</div>
+<div class="block">Represents the root of a documentation element tree.</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab1"><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
-<div class="block">Represents a common documentation AST element.</div>
+<div class="block">Represents a common renderer-neutral documentation element.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AIiDocumentationLink.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationLink</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AIiDocumentationInlineCode.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineCode</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">Represents a link in the documentation AST.</div>
+<div class="block">Represents inline code inside textual content.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AIiDocumentationParagraph.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationParagraph</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
-<div class="block">Represents a plain textual paragraph in the documentation AST.</div>
+<div class="block">Represents an inline documentation element.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AIiDocumentationSection.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationSection</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AIiDocumentationLineBreak.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationLineBreak</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">Represents an explicit line break inside inline content.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AIiDocumentationLink.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationLink</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">Represents a non-semantic inline link.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AIiDocumentationParagraph.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationParagraph</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">Represents a paragraph with ordered inline content.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AIiDocumentationReference.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationReference</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">Represents a semantic inline reference to another documented object.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AIiDocumentationReferenceTarget.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationReferenceTarget</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">Represents a renderer-neutral target of a semantic documentation reference.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AIiDocumentationSection.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationSection</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">Represents a hierarchical documentation section.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AIiDocumentationTable.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationTable</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
-<div class="block">Represents a tabular documentation element.</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AIiDocumentationTableCell.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationTableCell</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AIiDocumentationTable.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationTable</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">Represents a tabular block element.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AIiDocumentationTableCell.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationTableCell</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">Represents a cell in a documentation table row.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AIiDocumentationTableColumn.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationTableColumn</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AIiDocumentationTableColumn.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationTableColumn</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Represents metadata of a documentation table column.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AIiDocumentationTableRow.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationTableRow</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AIiDocumentationTableRow.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationTableRow</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">Represents a row in a documentation table.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AIiDocumentationText.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationText</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">Represents plain inline text.</div>
 </div>
 </div>
 </div>

@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="AIiDocumentationContainerElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationContainerElement</a></code>, <code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code></dd>
+<dd><code><a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a></code>, <code><a href="AIiDocumentationContainerElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationContainerElement</a></code>, <code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
@@ -97,8 +97,9 @@ loadScripts(document, 'script');</script>
 extends <a href="AIiDocumentationContainerElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationContainerElement</a></span></div>
 <div class="block">Represents a hierarchical documentation section.
  <p>
- Sections are structural documentation elements. A section may contain
- paragraphs, tables, links, code blocks, and nested sections.</div>
+ Sections are structural block elements. A section may contain paragraphs,
+ tables, code blocks, and nested sections. An empty description string means
+ that no section description is available.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -128,7 +129,7 @@ extends <a href="AIiDocumentationContainerElement.html" title="interface in eu.a
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-eu.algites.lib.common.documentation.AIiDocumentationContainerElement">Methods inherited from interface&nbsp;eu.algites.lib.common.documentation.<a href="AIiDocumentationContainerElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationContainerElement</a></h3>
-<code><a href="AIiDocumentationContainerElement.html#addChildElement(eu.algites.lib.common.documentation.AIiDocumentationElement)">addChildElement</a>, <a href="AIiDocumentationContainerElement.html#addChildElements(java.util.List)">addChildElements</a>, <a href="AIiDocumentationContainerElement.html#getChildElements()">getChildElements</a></code></div>
+<code><a href="AIiDocumentationContainerElement.html#addChildElement(eu.algites.lib.common.documentation.AIiDocumentationBlockElement)">addChildElement</a>, <a href="AIiDocumentationContainerElement.html#addChildElements(java.util.List)">addChildElements</a>, <a href="AIiDocumentationContainerElement.html#getChildElements()">getChildElements</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-eu.algites.lib.common.documentation.AIiDocumentationElement">Methods inherited from interface&nbsp;eu.algites.lib.common.documentation.<a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></h3>
 <code><a href="AIiDocumentationElement.html#getElementId()">getElementId</a>, <a href="AIiDocumentationElement.html#getMetadata()">getMetadata</a>, <a href="AIiDocumentationElement.html#getMetadataValue(java.lang.String)">getMetadataValue</a>, <a href="AIiDocumentationElement.html#putMetadataValue(java.lang.String,java.lang.String)">putMetadataValue</a>, <a href="AIiDocumentationElement.html#removeMetadataValue(java.lang.String)">removeMetadataValue</a></code></div>
@@ -161,7 +162,7 @@ extends <a href="AIiDocumentationContainerElement.html" title="interface in eu.a
 <div class="block">Returns the section description.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>section description</dd>
+<dd>section description, or an empty string if no description is available</dd>
 </dl>
 </section>
 </li>

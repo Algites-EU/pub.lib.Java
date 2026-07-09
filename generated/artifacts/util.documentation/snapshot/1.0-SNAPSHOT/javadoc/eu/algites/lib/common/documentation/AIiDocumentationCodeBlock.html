@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code></dd>
+<dd><code><a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a></code>, <code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
@@ -94,11 +94,12 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">AIiDocumentationCodeBlock</span><span class="extends-implements">
-extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></span></div>
-<div class="block">Represents a code block in the documentation AST.
+extends <a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a></span></div>
+<div class="block">Represents a standalone code block.
  <p>
  The language identifier is renderer-neutral. Renderers may use it for syntax
- highlighting, language labels, or output-specific metadata.</div>
+ highlighting, language labels, or output-specific metadata. An empty language
+ identifier means that the language is unspecified.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -147,7 +148,7 @@ extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.li
 <div class="block">Returns the language identifier of this code block.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>language identifier, for example <code>java</code>, <code>xml</code>, or <code>text</code></dd>
+<dd>language identifier, for example <code>java</code>, <code>xml</code>, <code>text</code>, or an empty string if unspecified</dd>
 </dl>
 </section>
 </li>

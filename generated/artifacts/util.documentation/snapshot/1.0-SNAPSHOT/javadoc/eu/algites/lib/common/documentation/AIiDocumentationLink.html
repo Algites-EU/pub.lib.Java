@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code></dd>
+<dd><code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code>, <code><a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
@@ -94,11 +94,13 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">AIiDocumentationLink</span><span class="extends-implements">
-extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></span></div>
-<div class="block">Represents a link in the documentation AST.
+extends <a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a></span></div>
+<div class="block">Represents a non-semantic inline link.
  <p>
- The target may be an external URL, an internal document path, or an anchor,
- depending on the renderer and linking strategy.</div>
+ Links are intended for external URLs, generated document paths, anchors, or
+ other renderer-understandable textual targets. References to documented
+ source objects should use <a href="AIiDocumentationReference.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationReference</code></a> instead, so that a
+ renderer can resolve them through a documentation reference resolver.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -126,7 +128,7 @@ extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.li
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getTitle()" class="member-name-link">getTitle</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Returns an optional human-readable link title.</div>
+<div class="block">Returns a human-readable link title.</div>
 </div>
 </div>
 </div>
@@ -160,7 +162,10 @@ extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.li
 <section class="detail" id="getTarget()">
 <h3>getTarget</h3>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getTarget</span>()</div>
-<div class="block">Returns the link target.</div>
+<div class="block">Returns the link target.
+ <p>
+ The target is renderer-neutral text, for example an absolute URL, a
+ relative path, or an anchor expression understood by the renderer.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>link target</dd>
@@ -171,10 +176,12 @@ extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.li
 <section class="detail" id="getTitle()">
 <h3>getTitle</h3>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getTitle</span>()</div>
-<div class="block">Returns an optional human-readable link title.</div>
+<div class="block">Returns a human-readable link title.
+ <p>
+ An empty string means that no title is available.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>link title</dd>
+<dd>link title, or an empty string if no title is available</dd>
 </dl>
 </section>
 </li>
