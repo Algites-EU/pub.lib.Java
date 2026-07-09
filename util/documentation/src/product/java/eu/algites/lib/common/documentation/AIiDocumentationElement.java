@@ -3,16 +3,19 @@ package eu.algites.lib.common.documentation;
 import java.util.Map;
 
 /**
- * Represents a common documentation AST element.
+ * Represents a common renderer-neutral documentation element.
  * <p>
  * Each element has a stable element identifier and optional string metadata.
  * The element identifier can be used by renderers for anchors, cross-links,
- * diagnostics, or source mapping.
+ * diagnostics, source mapping, or stable incremental generation.
  */
 public interface AIiDocumentationElement {
 
     /**
      * Returns the stable identifier of this documentation element.
+     * <p>
+     * The identifier should be stable across repeated generation runs whenever
+     * the represented source object stays the same.
      *
      * @return stable element identifier
      */
@@ -21,8 +24,10 @@ public interface AIiDocumentationElement {
     /**
      * Returns metadata associated with this documentation element.
      * <p>
-     * Implementations should return a read-only view unless mutability is
-     * explicitly part of the implementation contract.
+     * Metadata is intended for renderer-neutral annotations, diagnostics,
+     * source mapping, and extension points. Implementations should return a
+     * read-only view unless mutability is explicitly part of the implementation
+     * contract.
      *
      * @return element metadata keyed by metadata name
      */

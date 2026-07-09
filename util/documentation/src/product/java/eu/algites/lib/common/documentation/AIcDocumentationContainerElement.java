@@ -11,30 +11,30 @@ import java.util.Objects;
  * See {@link AIiDocumentationContainerElement} for the container contract.
  */
 public abstract class AIcDocumentationContainerElement
-        extends AIcDocumentationElement
+        extends AIcDocumentationBlockElement
         implements AIiDocumentationContainerElement {
 
-    private final List<AIiDocumentationElement> childElements = new ArrayList<>();
+    private final List<AIiDocumentationBlockElement> childElements = new ArrayList<>();
 
     protected AIcDocumentationContainerElement(String aElementId) {
         super(aElementId);
     }
 
     @Override
-    public List<AIiDocumentationElement> getChildElements() {
+    public List<AIiDocumentationBlockElement> getChildElements() {
         return Collections.unmodifiableList(childElements);
     }
 
     @Override
-    public void addChildElement(AIiDocumentationElement aChildElement) {
+    public void addChildElement(AIiDocumentationBlockElement aChildElement) {
         childElements.add(Objects.requireNonNull(aChildElement, "Parameter aChildElement must not be null."));
     }
 
     @Override
-    public void addChildElements(List<? extends AIiDocumentationElement> aChildElements) {
+    public void addChildElements(List<? extends AIiDocumentationBlockElement> aChildElements) {
         Objects.requireNonNull(aChildElements, "Parameter aChildElements must not be null.");
 
-        for (AIiDocumentationElement locChildElement : aChildElements) {
+        for (AIiDocumentationBlockElement locChildElement : aChildElements) {
             addChildElement(locChildElement);
         }
     }

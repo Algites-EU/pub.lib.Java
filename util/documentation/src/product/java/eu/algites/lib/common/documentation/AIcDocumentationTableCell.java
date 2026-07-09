@@ -1,5 +1,8 @@
 package eu.algites.lib.common.documentation;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -13,15 +16,21 @@ public class AIcDocumentationTableCell
 
     private final String columnId;
 
-    private final String text;
+    private final List<AIiDocumentationInlineElement> inlineElements = new ArrayList<>();
+
+    public AIcDocumentationTableCell(
+            String aElementId,
+            String aColumnId) {
+        super(aElementId);
+        columnId = Objects.requireNonNull(aColumnId, "Parameter aColumnId must not be null.");
+    }
 
     public AIcDocumentationTableCell(
             String aElementId,
             String aColumnId,
-            String aText) {
-        super(aElementId);
-        columnId = Objects.requireNonNull(aColumnId, "Parameter aColumnId must not be null.");
-        text = Objects.requireNonNull(aText, "Parameter aText must not be null.");
+            List<? extends AIiDocumentationInlineElement> aInlineElements) {
+        this(aElementId, aColumnId);
+        addInlineElements(aInlineElements);
     }
 
     @Override
@@ -30,7 +39,53 @@ public class AIcDocumentationTableCell
     }
 
     @Override
-    public String getText() {
-        return text;
+    public List<AIiDocumentationInlineElement> getInlineElements() {
+        return Collections.unmodifiableList(inlineElements);
+    }
+
+    @Override
+    public void addInlineElement(AIiDocumentationInlineElement aInlineElement) {
+        inlineElements.add(Objects.requireNonNull(aInlineElement, "Parameter aInlineElement must not be null."));
+    }
+
+    @Override
+    public void addInlineElements(List<? extends AIiDocumentationInlineElement> aInlineElements) {
+        Objects.requireNonNull(aInlineElements, "Parameter aInlineElements must not be null.");
+
+        for (AIiDocumentationInlineElement locInlineElement : aInlineElements) {
+            addInlineElement(locInlineElement);
+        }
+    }
+
+    public void addText(
+            String aElementId,
+            String aText) {
+        addInlineElement(new AIcDocumentationText(aElementId, aText));
+    }
+
+    public void addLineBreak(String aElementId) {
+        addInlineElement(new AIcDocumentationLineBreak(aElementId));
+    }
+
+    public void addLink(
+            String aElementId,
+            String aLabel,
+            String aTarget,
+            String aTitle) {
+        addInlineElement(new AIcDocumentationLink(aElementId, aLabel, aTarget, aTitle));
+    }
+
+    public void addReference(
+            String aElementId,
+            String aLabel,
+            AIiDocumentationReferenceTarget aReferenceTarget,
+            String aTitle) {
+        addInlineElement(new AIcDocumentationReference(aElementId, aLabel, aReferenceTarget, aTitle));
+    }
+
+    public void addInlineCode(
+            String aElementId,
+            String aCode) {
+        addInlineElement(new AIcDocumentationInlineCode(aElementId, aCode));
     }
 }

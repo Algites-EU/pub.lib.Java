@@ -1,12 +1,14 @@
 package eu.algites.lib.common.documentation;
 
 /**
- * Represents a link in the documentation AST.
+ * Represents a non-semantic inline link.
  * <p>
- * The target may be an external URL, an internal document path, or an anchor,
- * depending on the renderer and linking strategy.
+ * Links are intended for external URLs, generated document paths, anchors, or
+ * other renderer-understandable textual targets. References to documented
+ * source objects should use {@link AIiDocumentationReference} instead, so that a
+ * renderer can resolve them through a documentation reference resolver.
  */
-public interface AIiDocumentationLink extends AIiDocumentationElement {
+public interface AIiDocumentationLink extends AIiDocumentationInlineElement {
 
     /**
      * Returns the human-readable link label.
@@ -17,15 +19,20 @@ public interface AIiDocumentationLink extends AIiDocumentationElement {
 
     /**
      * Returns the link target.
+     * <p>
+     * The target is renderer-neutral text, for example an absolute URL, a
+     * relative path, or an anchor expression understood by the renderer.
      *
      * @return link target
      */
     String getTarget();
 
     /**
-     * Returns an optional human-readable link title.
+     * Returns a human-readable link title.
+     * <p>
+     * An empty string means that no title is available.
      *
-     * @return link title
+     * @return link title, or an empty string if no title is available
      */
     String getTitle();
 }

@@ -3,8 +3,9 @@ package eu.algites.lib.common.documentation;
 /**
  * Represents a hierarchical documentation section.
  * <p>
- * Sections are structural documentation elements. A section may contain
- * paragraphs, tables, links, code blocks, and nested sections.
+ * Sections are structural block elements. A section may contain paragraphs,
+ * tables, code blocks, and nested sections. An empty description string means
+ * that no section description is available.
  */
 public interface AIiDocumentationSection extends AIiDocumentationContainerElement {
 
@@ -18,7 +19,7 @@ public interface AIiDocumentationSection extends AIiDocumentationContainerElemen
     /**
      * Returns the section description.
      *
-     * @return section description
+     * @return section description, or an empty string if no description is available
      */
     String getSectionDescription();
 }

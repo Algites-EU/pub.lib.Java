@@ -3,31 +3,33 @@ package eu.algites.lib.common.documentation;
 import java.util.List;
 
 /**
- * Represents a documentation AST element that can contain child elements.
+ * Represents a block-level documentation element that can contain child blocks.
  * <p>
  * Containers are used for document roots, sections, and any future structural
- * elements that need to aggregate other documentation elements.
+ * block elements that need to aggregate other block elements. Inline elements
+ * such as links, text, and references belong inside paragraph-like elements, not
+ * directly inside containers.
  */
-public interface AIiDocumentationContainerElement extends AIiDocumentationElement {
+public interface AIiDocumentationContainerElement extends AIiDocumentationBlockElement {
 
     /**
-     * Returns child documentation elements in their rendering order.
+     * Returns child block elements in their rendering order.
      *
-     * @return ordered child element list
+     * @return ordered child block element list
      */
-    List<AIiDocumentationElement> getChildElements();
+    List<AIiDocumentationBlockElement> getChildElements();
 
     /**
-     * Adds a child documentation element.
+     * Adds a child block element.
      *
-     * @param aChildElement child element to add
+     * @param aChildElement child block element to add
      */
-    void addChildElement(AIiDocumentationElement aChildElement);
+    void addChildElement(AIiDocumentationBlockElement aChildElement);
 
     /**
-     * Adds multiple child documentation elements in the provided order.
+     * Adds multiple child block elements in the provided order.
      *
-     * @param aChildElements child elements to add
+     * @param aChildElements child block elements to add
      */
-    void addChildElements(List<? extends AIiDocumentationElement> aChildElements);
+    void addChildElements(List<? extends AIiDocumentationBlockElement> aChildElements);
 }

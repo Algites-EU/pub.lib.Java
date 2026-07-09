@@ -1,17 +1,35 @@
 package eu.algites.lib.common.documentation;
 
+import java.util.List;
+
 /**
- * Represents a plain textual paragraph in the documentation AST.
+ * Represents a paragraph with ordered inline content.
  * <p>
- * The paragraph text is renderer-neutral plain text. Renderers are responsible
- * for escaping and formatting it for their target output format.
+ * A paragraph is a block element whose visible text is composed from inline
+ * elements such as plain text, links, semantic references, line breaks, and
+ * inline code. Renderers should preserve the order of inline elements and apply
+ * output-specific escaping and formatting.
  */
-public interface AIiDocumentationParagraph extends AIiDocumentationElement {
+public interface AIiDocumentationParagraph extends AIiDocumentationBlockElement {
 
     /**
-     * Returns paragraph text.
+     * Returns paragraph inline elements in their rendering order.
      *
-     * @return paragraph text
+     * @return ordered inline element list
      */
-    String getText();
+    List<AIiDocumentationInlineElement> getInlineElements();
+
+    /**
+     * Adds an inline element to the paragraph.
+     *
+     * @param aInlineElement inline element to add
+     */
+    void addInlineElement(AIiDocumentationInlineElement aInlineElement);
+
+    /**
+     * Adds multiple inline elements in the provided order.
+     *
+     * @param aInlineElements inline elements to add
+     */
+    void addInlineElements(List<? extends AIiDocumentationInlineElement> aInlineElements);
 }

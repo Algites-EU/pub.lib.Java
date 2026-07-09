@@ -3,28 +3,28 @@ package eu.algites.lib.common.documentation;
 import java.util.Objects;
 
 /**
- * Default implementation of {@link AIiDocumentationLink}.
+ * Default implementation of {@link AIiDocumentationReference}.
  * <p>
- * See {@link AIiDocumentationLink} for the link contract.
+ * See {@link AIiDocumentationReference} for the reference contract.
  */
-public class AIcDocumentationLink
+public class AIcDocumentationReference
         extends AIcDocumentationInlineElement
-        implements AIiDocumentationLink {
+        implements AIiDocumentationReference {
 
     private final String label;
 
-    private final String target;
+    private final AIiDocumentationReferenceTarget referenceTarget;
 
     private final String title;
 
-    public AIcDocumentationLink(
+    public AIcDocumentationReference(
             String aElementId,
             String aLabel,
-            String aTarget,
+            AIiDocumentationReferenceTarget aReferenceTarget,
             String aTitle) {
         super(aElementId);
         label = Objects.requireNonNull(aLabel, "Parameter aLabel must not be null.");
-        target = Objects.requireNonNull(aTarget, "Parameter aTarget must not be null.");
+        referenceTarget = Objects.requireNonNull(aReferenceTarget, "Parameter aReferenceTarget must not be null.");
         title = Objects.requireNonNull(aTitle, "Parameter aTitle must not be null.");
     }
 
@@ -34,8 +34,8 @@ public class AIcDocumentationLink
     }
 
     @Override
-    public String getTarget() {
-        return target;
+    public AIiDocumentationReferenceTarget getReferenceTarget() {
+        return referenceTarget;
     }
 
     @Override

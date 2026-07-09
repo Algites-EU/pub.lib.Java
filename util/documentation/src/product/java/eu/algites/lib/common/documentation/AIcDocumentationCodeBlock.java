@@ -8,7 +8,7 @@ import java.util.Objects;
  * See {@link AIiDocumentationCodeBlock} for the code block contract.
  */
 public class AIcDocumentationCodeBlock
-        extends AIcDocumentationElement
+        extends AIcDocumentationBlockElement
         implements AIiDocumentationCodeBlock {
 
     private final String languageId;

@@ -1,10 +1,11 @@
 package eu.algites.lib.common.documentation;
 
 /**
- * Represents the root of a documentation AST.
+ * Represents the root of a documentation element tree.
  * <p>
- * A document contains top-level documentation elements, usually sections.
- * It also carries a document title and an optional document description.
+ * A document contains top-level block elements, usually sections. It also
+ * carries a human-readable document title and a document description. An empty
+ * description string means that no description is available.
  */
 public interface AIiDocumentationDocument extends AIiDocumentationContainerElement {
 
@@ -18,7 +19,7 @@ public interface AIiDocumentationDocument extends AIiDocumentationContainerEleme
     /**
      * Returns the document description.
      *
-     * @return document description
+     * @return document description, or an empty string if no description is available
      */
     String getDocumentDescription();
 }

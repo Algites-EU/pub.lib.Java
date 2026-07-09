@@ -11,7 +11,7 @@ import java.util.Objects;
  * See {@link AIiDocumentationTable} for the table contract.
  */
 public class AIcDocumentationTable
-        extends AIcDocumentationElement
+        extends AIcDocumentationBlockElement
         implements AIiDocumentationTable {
 
     private final String tableTitle;
