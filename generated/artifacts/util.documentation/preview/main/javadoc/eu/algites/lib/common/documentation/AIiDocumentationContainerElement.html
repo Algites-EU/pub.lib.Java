@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code></dd>
+<dd><code><a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a></code>, <code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>All Known Subinterfaces:</dt>
@@ -98,11 +98,13 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">AIiDocumentationContainerElement</span><span class="extends-implements">
-extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></span></div>
-<div class="block">Represents a documentation AST element that can contain child elements.
+extends <a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a></span></div>
+<div class="block">Represents a block-level documentation element that can contain child blocks.
  <p>
  Containers are used for document roots, sections, and any future structural
- elements that need to aggregate other documentation elements.</div>
+ block elements that need to aggregate other block elements. Inline elements
+ such as links, text, and references belong inside paragraph-like elements, not
+ directly inside containers.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -118,19 +120,19 @@ extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.li
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#addChildElement(eu.algites.lib.common.documentation.AIiDocumentationElement)" class="member-name-link">addChildElement</a><wbr>(<a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a>&nbsp;aChildElement)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#addChildElement(eu.algites.lib.common.documentation.AIiDocumentationBlockElement)" class="member-name-link">addChildElement</a><wbr>(<a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a>&nbsp;aChildElement)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Adds a child documentation element.</div>
+<div class="block">Adds a child block element.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#addChildElements(java.util.List)" class="member-name-link">addChildElements</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a>&gt;&nbsp;aChildElements)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#addChildElements(java.util.List)" class="member-name-link">addChildElements</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a>&gt;&nbsp;aChildElements)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Adds multiple child documentation elements in the provided order.</div>
+<div class="block">Adds multiple child block elements in the provided order.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getChildElements()" class="member-name-link">getChildElements</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Returns child documentation elements in their rendering order.</div>
+<div class="block">Returns child block elements in their rendering order.</div>
 </div>
 </div>
 </div>
@@ -152,33 +154,33 @@ extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.li
 <li>
 <section class="detail" id="getChildElements()">
 <h3>getChildElements</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a>&gt;</span>&nbsp;<span class="element-name">getChildElements</span>()</div>
-<div class="block">Returns child documentation elements in their rendering order.</div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a>&gt;</span>&nbsp;<span class="element-name">getChildElements</span>()</div>
+<div class="block">Returns child block elements in their rendering order.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>ordered child element list</dd>
+<dd>ordered child block element list</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="addChildElement(eu.algites.lib.common.documentation.AIiDocumentationElement)">
+<section class="detail" id="addChildElement(eu.algites.lib.common.documentation.AIiDocumentationBlockElement)">
 <h3>addChildElement</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">addChildElement</span><wbr><span class="parameters">(<a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a>&nbsp;aChildElement)</span></div>
-<div class="block">Adds a child documentation element.</div>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">addChildElement</span><wbr><span class="parameters">(<a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a>&nbsp;aChildElement)</span></div>
+<div class="block">Adds a child block element.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>aChildElement</code> - child element to add</dd>
+<dd><code>aChildElement</code> - child block element to add</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="addChildElements(java.util.List)">
 <h3>addChildElements</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">addChildElements</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a>&gt;&nbsp;aChildElements)</span></div>
-<div class="block">Adds multiple child documentation elements in the provided order.</div>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">addChildElements</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a>&gt;&nbsp;aChildElements)</span></div>
+<div class="block">Adds multiple child block elements in the provided order.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>aChildElements</code> - child elements to add</dd>
+<dd><code>aChildElements</code> - child block elements to add</dd>
 </dl>
 </section>
 </li>

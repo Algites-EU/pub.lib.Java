@@ -85,17 +85,19 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
 <div class="inheritance"><a href="AIcDocumentationElement.html" title="class in eu.algites.lib.common.documentation">eu.algites.lib.common.documentation.AIcDocumentationElement</a>
+<div class="inheritance"><a href="AIcDocumentationBlockElement.html" title="class in eu.algites.lib.common.documentation">eu.algites.lib.common.documentation.AIcDocumentationBlockElement</a>
 <div class="inheritance">eu.algites.lib.common.documentation.AIcDocumentationParagraph</div>
+</div>
 </div>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code>, <code><a href="AIiDocumentationParagraph.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationParagraph</a></code></dd>
+<dd><code><a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a></code>, <code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code>, <code><a href="AIiDocumentationParagraph.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationParagraph</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">AIcDocumentationParagraph</span>
-<span class="extends-implements">extends <a href="AIcDocumentationElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationElement</a>
+<span class="extends-implements">extends <a href="AIcDocumentationBlockElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationBlockElement</a>
 implements <a href="AIiDocumentationParagraph.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationParagraph</a></span></div>
 <div class="block">Default implementation of <a href="AIiDocumentationParagraph.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationParagraph</code></a>.
  <p>
@@ -111,9 +113,11 @@ implements <a href="AIiDocumentationParagraph.html" title="interface in eu.algit
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String)" class="member-name-link">AIcDocumentationParagraph</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aText)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String)" class="member-name-link">AIcDocumentationParagraph</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.util.List)" class="member-name-link">AIcDocumentationParagraph</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a>&gt;&nbsp;aInlineElements)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -128,10 +132,43 @@ implements <a href="AIiDocumentationParagraph.html" title="interface in eu.algit
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getText()" class="member-name-link">getText</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addInlineCode(java.lang.String,java.lang.String)" class="member-name-link">addInlineCode</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aCode)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addInlineElement(eu.algites.lib.common.documentation.AIiDocumentationInlineElement)" class="member-name-link">addInlineElement</a><wbr>(<a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a>&nbsp;aInlineElement)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Adds an inline element to the paragraph.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addInlineElements(java.util.List)" class="member-name-link">addInlineElements</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a>&gt;&nbsp;aInlineElements)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns paragraph text.</div>
+<div class="block">Adds multiple inline elements in the provided order.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addLineBreak(java.lang.String)" class="member-name-link">addLineBreak</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addLink(java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">addLink</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aLabel,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aTarget,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aTitle)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addReference(java.lang.String,java.lang.String,eu.algites.lib.common.documentation.AIiDocumentationReferenceTarget,java.lang.String)" class="member-name-link">addReference</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aLabel,
+ <a href="AIiDocumentationReferenceTarget.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationReferenceTarget</a>&nbsp;aReferenceTarget,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aTitle)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addText(java.lang.String,java.lang.String)" class="member-name-link">addText</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aText)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInlineElements()" class="member-name-link">getInlineElements</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns paragraph inline elements in their rendering order.</div>
 </div>
 </div>
 </div>
@@ -157,10 +194,16 @@ implements <a href="AIiDocumentationParagraph.html" title="interface in eu.algit
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String)">
+<section class="detail" id="&lt;init&gt;(java.lang.String)">
+<h3>AIcDocumentationParagraph</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AIcDocumentationParagraph</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.util.List)">
 <h3>AIcDocumentationParagraph</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AIcDocumentationParagraph</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aText)</span></div>
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a>&gt;&nbsp;aInlineElements)</span></div>
 </section>
 </li>
 </ul>
@@ -172,17 +215,83 @@ implements <a href="AIiDocumentationParagraph.html" title="interface in eu.algit
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="getText()">
-<h3>getText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getText</span>()</div>
-<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="AIiDocumentationParagraph.html#getText()">AIiDocumentationParagraph</a></code></span></div>
-<div class="block">Returns paragraph text.</div>
+<section class="detail" id="getInlineElements()">
+<h3>getInlineElements</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a>&gt;</span>&nbsp;<span class="element-name">getInlineElements</span>()</div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="AIiDocumentationParagraph.html#getInlineElements()">AIiDocumentationParagraph</a></code></span></div>
+<div class="block">Returns paragraph inline elements in their rendering order.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="AIiDocumentationParagraph.html#getText()">getText</a></code>&nbsp;in interface&nbsp;<code><a href="AIiDocumentationParagraph.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationParagraph</a></code></dd>
+<dd><code><a href="AIiDocumentationParagraph.html#getInlineElements()">getInlineElements</a></code>&nbsp;in interface&nbsp;<code><a href="AIiDocumentationParagraph.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationParagraph</a></code></dd>
 <dt>Returns:</dt>
-<dd>paragraph text</dd>
+<dd>ordered inline element list</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addInlineElement(eu.algites.lib.common.documentation.AIiDocumentationInlineElement)">
+<h3>addInlineElement</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addInlineElement</span><wbr><span class="parameters">(<a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a>&nbsp;aInlineElement)</span></div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="AIiDocumentationParagraph.html#addInlineElement(eu.algites.lib.common.documentation.AIiDocumentationInlineElement)">AIiDocumentationParagraph</a></code></span></div>
+<div class="block">Adds an inline element to the paragraph.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="AIiDocumentationParagraph.html#addInlineElement(eu.algites.lib.common.documentation.AIiDocumentationInlineElement)">addInlineElement</a></code>&nbsp;in interface&nbsp;<code><a href="AIiDocumentationParagraph.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationParagraph</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>aInlineElement</code> - inline element to add</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addInlineElements(java.util.List)">
+<h3>addInlineElements</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addInlineElements</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a>&gt;&nbsp;aInlineElements)</span></div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="AIiDocumentationParagraph.html#addInlineElements(java.util.List)">AIiDocumentationParagraph</a></code></span></div>
+<div class="block">Adds multiple inline elements in the provided order.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="AIiDocumentationParagraph.html#addInlineElements(java.util.List)">addInlineElements</a></code>&nbsp;in interface&nbsp;<code><a href="AIiDocumentationParagraph.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationParagraph</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>aInlineElements</code> - inline elements to add</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addText(java.lang.String,java.lang.String)">
+<h3>addText</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addText</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aText)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="addLineBreak(java.lang.String)">
+<h3>addLineBreak</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addLineBreak</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="addLink(java.lang.String,java.lang.String,java.lang.String,java.lang.String)">
+<h3>addLink</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addLink</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aLabel,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aTarget,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aTitle)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="addReference(java.lang.String,java.lang.String,eu.algites.lib.common.documentation.AIiDocumentationReferenceTarget,java.lang.String)">
+<h3>addReference</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addReference</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aLabel,
+ <a href="AIiDocumentationReferenceTarget.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationReferenceTarget</a>&nbsp;aReferenceTarget,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aTitle)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="addInlineCode(java.lang.String,java.lang.String)">
+<h3>addInlineCode</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addInlineCode</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aElementId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;aCode)</span></div>
 </section>
 </li>
 </ul>

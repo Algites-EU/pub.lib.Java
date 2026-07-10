@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code></dd>
+<dd><code><a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a></code>, <code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
@@ -94,12 +94,13 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">AIiDocumentationTable</span><span class="extends-implements">
-extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></span></div>
-<div class="block">Represents a tabular documentation element.
+extends <a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a></span></div>
+<div class="block">Represents a tabular block element.
  <p>
  A table consists of column definitions and rows. Cells are associated with
  columns through column identifiers, which allows renderers to keep cell
- values stable even if column order changes.</div>
+ values stable even if column order changes. Cell content may contain inline
+ elements such as links and semantic references.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -160,10 +161,12 @@ extends <a href="AIiDocumentationElement.html" title="interface in eu.algites.li
 <section class="detail" id="getTableTitle()">
 <h3>getTableTitle</h3>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getTableTitle</span>()</div>
-<div class="block">Returns the human-readable table title.</div>
+<div class="block">Returns the human-readable table title.
+ <p>
+ An empty string means that no title is available.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>table title</dd>
+<dd>table title, or an empty string if no title is available</dd>
 </dl>
 </section>
 </li>

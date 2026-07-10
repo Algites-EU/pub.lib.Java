@@ -85,17 +85,19 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
 <div class="inheritance"><a href="AIcDocumentationElement.html" title="class in eu.algites.lib.common.documentation">eu.algites.lib.common.documentation.AIcDocumentationElement</a>
+<div class="inheritance"><a href="AIcDocumentationInlineElement.html" title="class in eu.algites.lib.common.documentation">eu.algites.lib.common.documentation.AIcDocumentationInlineElement</a>
 <div class="inheritance">eu.algites.lib.common.documentation.AIcDocumentationLink</div>
+</div>
 </div>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code>, <code><a href="AIiDocumentationLink.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationLink</a></code></dd>
+<dd><code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code>, <code><a href="AIiDocumentationInlineElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationInlineElement</a></code>, <code><a href="AIiDocumentationLink.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationLink</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">AIcDocumentationLink</span>
-<span class="extends-implements">extends <a href="AIcDocumentationElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationElement</a>
+<span class="extends-implements">extends <a href="AIcDocumentationInlineElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationInlineElement</a>
 implements <a href="AIiDocumentationLink.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationLink</a></span></div>
 <div class="block">Default implementation of <a href="AIiDocumentationLink.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationLink</code></a>.
  <p>
@@ -143,7 +145,7 @@ implements <a href="AIiDocumentationLink.html" title="interface in eu.algites.li
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTitle()" class="member-name-link">getTitle</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns an optional human-readable link title.</div>
+<div class="block">Returns a human-readable link title.</div>
 </div>
 </div>
 </div>
@@ -204,7 +206,10 @@ implements <a href="AIiDocumentationLink.html" title="interface in eu.algites.li
 <h3>getTarget</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getTarget</span>()</div>
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="AIiDocumentationLink.html#getTarget()">AIiDocumentationLink</a></code></span></div>
-<div class="block">Returns the link target.</div>
+<div class="block">Returns the link target.
+ <p>
+ The target is renderer-neutral text, for example an absolute URL, a
+ relative path, or an anchor expression understood by the renderer.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="AIiDocumentationLink.html#getTarget()">getTarget</a></code>&nbsp;in interface&nbsp;<code><a href="AIiDocumentationLink.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationLink</a></code></dd>
@@ -218,12 +223,14 @@ implements <a href="AIiDocumentationLink.html" title="interface in eu.algites.li
 <h3>getTitle</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getTitle</span>()</div>
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="AIiDocumentationLink.html#getTitle()">AIiDocumentationLink</a></code></span></div>
-<div class="block">Returns an optional human-readable link title.</div>
+<div class="block">Returns a human-readable link title.
+ <p>
+ An empty string means that no title is available.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="AIiDocumentationLink.html#getTitle()">getTitle</a></code>&nbsp;in interface&nbsp;<code><a href="AIiDocumentationLink.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationLink</a></code></dd>
 <dt>Returns:</dt>
-<dd>link title</dd>
+<dd>link title, or an empty string if no title is available</dd>
 </dl>
 </section>
 </li>

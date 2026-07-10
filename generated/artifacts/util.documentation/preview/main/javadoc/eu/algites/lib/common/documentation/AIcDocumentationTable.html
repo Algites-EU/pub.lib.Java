@@ -85,17 +85,19 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
 <div class="inheritance"><a href="AIcDocumentationElement.html" title="class in eu.algites.lib.common.documentation">eu.algites.lib.common.documentation.AIcDocumentationElement</a>
+<div class="inheritance"><a href="AIcDocumentationBlockElement.html" title="class in eu.algites.lib.common.documentation">eu.algites.lib.common.documentation.AIcDocumentationBlockElement</a>
 <div class="inheritance">eu.algites.lib.common.documentation.AIcDocumentationTable</div>
+</div>
 </div>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code>, <code><a href="AIiDocumentationTable.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationTable</a></code></dd>
+<dd><code><a href="AIiDocumentationBlockElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationBlockElement</a></code>, <code><a href="AIiDocumentationElement.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationElement</a></code>, <code><a href="AIiDocumentationTable.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationTable</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">AIcDocumentationTable</span>
-<span class="extends-implements">extends <a href="AIcDocumentationElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationElement</a>
+<span class="extends-implements">extends <a href="AIcDocumentationBlockElement.html" title="class in eu.algites.lib.common.documentation">AIcDocumentationBlockElement</a>
 implements <a href="AIiDocumentationTable.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationTable</a></span></div>
 <div class="block">Default implementation of <a href="AIiDocumentationTable.html" title="interface in eu.algites.lib.common.documentation"><code>AIiDocumentationTable</code></a>.
  <p>
@@ -196,12 +198,14 @@ implements <a href="AIiDocumentationTable.html" title="interface in eu.algites.l
 <h3>getTableTitle</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getTableTitle</span>()</div>
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="AIiDocumentationTable.html#getTableTitle()">AIiDocumentationTable</a></code></span></div>
-<div class="block">Returns the human-readable table title.</div>
+<div class="block">Returns the human-readable table title.
+ <p>
+ An empty string means that no title is available.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="AIiDocumentationTable.html#getTableTitle()">getTableTitle</a></code>&nbsp;in interface&nbsp;<code><a href="AIiDocumentationTable.html" title="interface in eu.algites.lib.common.documentation">AIiDocumentationTable</a></code></dd>
 <dt>Returns:</dt>
-<dd>table title</dd>
+<dd>table title, or an empty string if no title is available</dd>
 </dl>
 </section>
 </li>
