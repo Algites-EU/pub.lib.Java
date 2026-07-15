@@ -3,13 +3,13 @@ package eu.algites.lib.common.documentation;
 import java.util.Objects;
 
 /**
- * Default implementation of {@link AIiDocumentationTableColumn}.
+ * Default implementation of {@link AIiDocumentationTableColumnWriteAccess}.
  * <p>
- * See {@link AIiDocumentationTableColumn} for the table column contract.
+ * See {@link AIiDocumentationTableColumn} for the read-only table column contract.
  */
 public class AIcDocumentationTableColumn
         extends AIcDocumentationElement
-        implements AIiDocumentationTableColumn {
+        implements AIiDocumentationTableColumnWriteAccess {
 
     private final String columnId;
 
@@ -17,6 +17,14 @@ public class AIcDocumentationTableColumn
 
     private final String columnDescription;
 
+    /**
+     * Creates a documentation table column.
+     *
+     * @param aElementId stable element identifier
+     * @param aColumnId stable table-local column identifier
+     * @param aColumnTitle human-readable column title
+     * @param aColumnDescription column description, or an empty string if unavailable
+     */
     public AIcDocumentationTableColumn(
             String aElementId,
             String aColumnId,

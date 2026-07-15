@@ -3,16 +3,22 @@ package eu.algites.lib.common.documentation;
 import java.util.Objects;
 
 /**
- * Default implementation of {@link AIiDocumentationText}.
+ * Default implementation of {@link AIiDocumentationTextWriteAccess}.
  * <p>
- * See {@link AIiDocumentationText} for the text contract.
+ * See {@link AIiDocumentationText} for the read-only text contract.
  */
 public class AIcDocumentationText
         extends AIcDocumentationInlineElement
-        implements AIiDocumentationText {
+        implements AIiDocumentationTextWriteAccess {
 
     private final String text;
 
+    /**
+     * Creates a plain inline text element.
+     *
+     * @param aElementId stable element identifier
+     * @param aText plain text content
+     */
     public AIcDocumentationText(
             String aElementId,
             String aText) {

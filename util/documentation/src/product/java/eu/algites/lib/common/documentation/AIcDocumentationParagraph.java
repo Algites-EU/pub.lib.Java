@@ -6,25 +6,42 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Default implementation of {@link AIiDocumentationParagraph}.
+ * Default implementation of {@link AIiDocumentationParagraphWriteAccess}.
  * <p>
- * See {@link AIiDocumentationParagraph} for the paragraph contract.
+ * See {@link AIiDocumentationParagraph} for the read-only paragraph contract.
  */
 public class AIcDocumentationParagraph
         extends AIcDocumentationBlockElement
-        implements AIiDocumentationParagraph {
+        implements AIiDocumentationParagraphWriteAccess {
 
     private final List<AIiDocumentationInlineElement> inlineElements = new ArrayList<>();
 
+    /**
+     * Creates an empty paragraph.
+     *
+     * @param aElementId stable element identifier
+     */
     public AIcDocumentationParagraph(String aElementId) {
         super(aElementId);
     }
 
+    /**
+     * Creates a paragraph initialized with inline elements.
+     *
+     * @param aElementId stable element identifier
+     * @param aInlineElements initial inline elements in rendering order
+     */
     public AIcDocumentationParagraph(
             String aElementId,
             List<? extends AIiDocumentationInlineElement> aInlineElements) {
         this(aElementId);
-        addInlineElements(aInlineElements);
+        Objects.requireNonNull(aInlineElements, "Parameter aInlineElements must not be null.");
+
+        for (AIiDocumentationInlineElement locInlineElement : aInlineElements) {
+            inlineElements.add(Objects.requireNonNull(
+                    locInlineElement,
+                    "Inline element must not be null."));
+        }
     }
 
     @Override
@@ -46,16 +63,19 @@ public class AIcDocumentationParagraph
         }
     }
 
+    @Override
     public void addText(
             String aElementId,
             String aText) {
         addInlineElement(new AIcDocumentationText(aElementId, aText));
     }
 
+    @Override
     public void addLineBreak(String aElementId) {
         addInlineElement(new AIcDocumentationLineBreak(aElementId));
     }
 
+    @Override
     public void addLink(
             String aElementId,
             String aLabel,
@@ -64,6 +84,7 @@ public class AIcDocumentationParagraph
         addInlineElement(new AIcDocumentationLink(aElementId, aLabel, aTarget, aTitle));
     }
 
+    @Override
     public void addReference(
             String aElementId,
             String aLabel,
@@ -72,6 +93,7 @@ public class AIcDocumentationParagraph
         addInlineElement(new AIcDocumentationReference(aElementId, aLabel, aReferenceTarget, aTitle));
     }
 
+    @Override
     public void addInlineCode(
             String aElementId,
             String aCode) {

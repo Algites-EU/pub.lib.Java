@@ -6,16 +6,21 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Default base implementation of {@link AIiDocumentationElement}.
+ * Default base implementation of {@link AIiDocumentationElementWriteAccess}.
  * <p>
- * See {@link AIiDocumentationElement} for the element contract.
+ * See {@link AIiDocumentationElement} for the read-only element contract.
  */
-public abstract class AIcDocumentationElement implements AIiDocumentationElement {
+public abstract class AIcDocumentationElement implements AIiDocumentationElementWriteAccess {
 
     private final String elementId;
 
     private final Map<String, String> metadata = new LinkedHashMap<>();
 
+    /**
+     * Creates a documentation element.
+     *
+     * @param aElementId stable element identifier
+     */
     protected AIcDocumentationElement(String aElementId) {
         elementId = Objects.requireNonNull(aElementId, "Parameter aElementId must not be null.");
     }

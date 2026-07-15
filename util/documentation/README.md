@@ -8,9 +8,31 @@ eu.algites.lib.common.documentation
 
 This source set defines a renderer-neutral documentation element model.
 
-The model intentionally contains no MPS-specific API and no HTML/Markdown rendering logic.
+The model intentionally contains no MPS-specific API and no HTML/Markdown
+rendering logic.
 
-The element hierarchy distinguishes:
+## Read-only and write-access contracts
+
+Every documentation type has two interface contracts:
+
+```text
+AIiDocumentation<Type>
+    read-only contract
+
+AIiDocumentation<Type>WriteAccess
+    read-only contract plus write capabilities inherited from the matching
+    write-access hierarchy
+
+AIcDocumentation<Type>
+    default implementation of the write-access contract
+```
+
+Validators, renderers, and public consumers should depend on read-only
+interfaces. Contributors, mergers, and model processors may depend on the
+corresponding `WriteAccess` interfaces. Collection getters return read-only
+views; mutations are exposed through explicit write-access operations.
+
+The read-only element hierarchy is:
 
 ```text
 AIiDocumentationElement
@@ -31,6 +53,14 @@ AIiDocumentationElement
 ├─ AIiDocumentationTableColumn
 ├─ AIiDocumentationTableRow
 └─ AIiDocumentationTableCell
+```
+
+The `WriteAccess` hierarchy mirrors this hierarchy exactly. For example:
+
+```text
+AIiDocumentationParagraphWriteAccess
+├─ extends AIiDocumentationParagraph
+└─ extends AIiDocumentationBlockElementWriteAccess
 ```
 
 Paragraphs and table cells contain ordered inline elements, so text such as

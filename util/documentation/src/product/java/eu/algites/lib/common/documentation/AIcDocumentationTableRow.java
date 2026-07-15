@@ -6,16 +6,21 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Default implementation of {@link AIiDocumentationTableRow}.
+ * Default implementation of {@link AIiDocumentationTableRowWriteAccess}.
  * <p>
- * See {@link AIiDocumentationTableRow} for the table row contract.
+ * See {@link AIiDocumentationTableRow} for the read-only table row contract.
  */
 public class AIcDocumentationTableRow
         extends AIcDocumentationElement
-        implements AIiDocumentationTableRow {
+        implements AIiDocumentationTableRowWriteAccess {
 
     private final List<AIiDocumentationTableCell> cells = new ArrayList<>();
 
+    /**
+     * Creates an empty documentation table row.
+     *
+     * @param aElementId stable element identifier
+     */
     public AIcDocumentationTableRow(String aElementId) {
         super(aElementId);
     }

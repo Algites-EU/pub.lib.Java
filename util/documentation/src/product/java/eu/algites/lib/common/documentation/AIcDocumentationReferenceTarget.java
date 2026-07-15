@@ -3,13 +3,13 @@ package eu.algites.lib.common.documentation;
 import java.util.Objects;
 
 /**
- * Default implementation of {@link AIiDocumentationReferenceTarget}.
+ * Default implementation of {@link AIiDocumentationReferenceTargetWriteAccess}.
  * <p>
- * See {@link AIiDocumentationReferenceTarget} for the reference target contract.
+ * See {@link AIiDocumentationReferenceTarget} for the read-only reference target contract.
  */
 public class AIcDocumentationReferenceTarget
         extends AIcDocumentationElement
-        implements AIiDocumentationReferenceTarget {
+        implements AIiDocumentationReferenceTargetWriteAccess {
 
     private final String sourceSystemId;
 
@@ -21,6 +21,16 @@ public class AIcDocumentationReferenceTarget
 
     private final String displayName;
 
+    /**
+     * Creates a renderer-neutral semantic reference target.
+     *
+     * @param aElementId stable element identifier
+     * @param aSourceSystemId source-system identifier, or an empty string if unspecified
+     * @param aTargetKind stable renderer-neutral target kind
+     * @param aTargetId stable source-specific target identifier
+     * @param aQualifiedName qualified target name, or an empty string if unavailable
+     * @param aDisplayName human-readable target name, or an empty string if unavailable
+     */
     public AIcDocumentationReferenceTarget(
             String aElementId,
             String aSourceSystemId,

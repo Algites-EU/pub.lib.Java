@@ -3,18 +3,25 @@ package eu.algites.lib.common.documentation;
 import java.util.Objects;
 
 /**
- * Default implementation of {@link AIiDocumentationDocument}.
+ * Default implementation of {@link AIiDocumentationDocumentWriteAccess}.
  * <p>
- * See {@link AIiDocumentationDocument} for the document contract.
+ * See {@link AIiDocumentationDocument} for the read-only document contract.
  */
 public class AIcDocumentationDocument
         extends AIcDocumentationContainerElement
-        implements AIiDocumentationDocument {
+        implements AIiDocumentationDocumentWriteAccess {
 
     private final String documentTitle;
 
     private final String documentDescription;
 
+    /**
+     * Creates a documentation document.
+     *
+     * @param aElementId stable element identifier
+     * @param aDocumentTitle human-readable document title
+     * @param aDocumentDescription document description, or an empty string if unavailable
+     */
     public AIcDocumentationDocument(
             String aElementId,
             String aDocumentTitle,

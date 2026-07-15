@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Default implementation of {@link AIiDocumentationTable}.
+ * Default implementation of {@link AIiDocumentationTableWriteAccess}.
  * <p>
- * See {@link AIiDocumentationTable} for the table contract.
+ * See {@link AIiDocumentationTable} for the read-only table contract.
  */
 public class AIcDocumentationTable
         extends AIcDocumentationBlockElement
-        implements AIiDocumentationTable {
+        implements AIiDocumentationTableWriteAccess {
 
     private final String tableTitle;
 
@@ -20,6 +20,12 @@ public class AIcDocumentationTable
 
     private final List<AIiDocumentationTableRow> rows = new ArrayList<>();
 
+    /**
+     * Creates an empty documentation table.
+     *
+     * @param aElementId stable element identifier
+     * @param aTableTitle table title, or an empty string if unavailable
+     */
     public AIcDocumentationTable(
             String aElementId,
             String aTableTitle) {

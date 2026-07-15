@@ -8,6 +8,10 @@ import java.util.Map;
  * Each element has a stable element identifier and optional string metadata.
  * The element identifier can be used by renderers for anchors, cross-links,
  * diagnostics, source mapping, or stable incremental generation.
+ * <p>
+ * This interface provides read-only access. Construction and transformation
+ * code that needs to modify an element should use
+ * {@link AIiDocumentationElementWriteAccess}.
  */
 public interface AIiDocumentationElement {
 
@@ -24,12 +28,11 @@ public interface AIiDocumentationElement {
     /**
      * Returns metadata associated with this documentation element.
      * <p>
-     * Metadata is intended for renderer-neutral annotations, diagnostics,
-     * source mapping, and extension points. Implementations should return a
-     * read-only view unless mutability is explicitly part of the implementation
-     * contract.
+     * The returned map must not allow callers to modify the element. Metadata is
+     * intended for renderer-neutral annotations, diagnostics, source mapping,
+     * and extension points.
      *
-     * @return element metadata keyed by metadata name
+     * @return read-only element metadata keyed by metadata name
      */
     Map<String, String> getMetadata();
 
@@ -40,19 +43,4 @@ public interface AIiDocumentationElement {
      * @return metadata value, or {@code null} if no value exists for the key
      */
     String getMetadataValue(String aKey);
-
-    /**
-     * Adds or replaces a metadata value.
-     *
-     * @param aKey metadata key
-     * @param aValue metadata value
-     */
-    void putMetadataValue(String aKey, String aValue);
-
-    /**
-     * Removes a metadata value.
-     *
-     * @param aKey metadata key
-     */
-    void removeMetadataValue(String aKey);
 }

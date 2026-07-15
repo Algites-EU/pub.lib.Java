@@ -3,18 +3,25 @@ package eu.algites.lib.common.documentation;
 import java.util.Objects;
 
 /**
- * Default implementation of {@link AIiDocumentationSection}.
+ * Default implementation of {@link AIiDocumentationSectionWriteAccess}.
  * <p>
- * See {@link AIiDocumentationSection} for the section contract.
+ * See {@link AIiDocumentationSection} for the read-only section contract.
  */
 public class AIcDocumentationSection
         extends AIcDocumentationContainerElement
-        implements AIiDocumentationSection {
+        implements AIiDocumentationSectionWriteAccess {
 
     private final String sectionTitle;
 
     private final String sectionDescription;
 
+    /**
+     * Creates a documentation section.
+     *
+     * @param aElementId stable element identifier
+     * @param aSectionTitle human-readable section title
+     * @param aSectionDescription section description, or an empty string if unavailable
+     */
     public AIcDocumentationSection(
             String aElementId,
             String aSectionTitle,

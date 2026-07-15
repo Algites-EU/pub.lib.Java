@@ -6,16 +6,21 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Default base implementation of {@link AIiDocumentationContainerElement}.
+ * Default base implementation of {@link AIiDocumentationContainerElementWriteAccess}.
  * <p>
- * See {@link AIiDocumentationContainerElement} for the container contract.
+ * See {@link AIiDocumentationContainerElement} for the read-only container contract.
  */
 public abstract class AIcDocumentationContainerElement
         extends AIcDocumentationBlockElement
-        implements AIiDocumentationContainerElement {
+        implements AIiDocumentationContainerElementWriteAccess {
 
     private final List<AIiDocumentationBlockElement> childElements = new ArrayList<>();
 
+    /**
+     * Creates a block-level documentation container.
+     *
+     * @param aElementId stable element identifier
+     */
     protected AIcDocumentationContainerElement(String aElementId) {
         super(aElementId);
     }

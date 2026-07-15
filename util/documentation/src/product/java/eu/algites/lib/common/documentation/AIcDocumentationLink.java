@@ -3,13 +3,13 @@ package eu.algites.lib.common.documentation;
 import java.util.Objects;
 
 /**
- * Default implementation of {@link AIiDocumentationLink}.
+ * Default implementation of {@link AIiDocumentationLinkWriteAccess}.
  * <p>
- * See {@link AIiDocumentationLink} for the link contract.
+ * See {@link AIiDocumentationLink} for the read-only link contract.
  */
 public class AIcDocumentationLink
         extends AIcDocumentationInlineElement
-        implements AIiDocumentationLink {
+        implements AIiDocumentationLinkWriteAccess {
 
     private final String label;
 
@@ -17,6 +17,14 @@ public class AIcDocumentationLink
 
     private final String title;
 
+    /**
+     * Creates a non-semantic inline link.
+     *
+     * @param aElementId stable element identifier
+     * @param aLabel human-readable link label
+     * @param aTarget renderer-neutral link target
+     * @param aTitle human-readable link title, or an empty string if unavailable
+     */
     public AIcDocumentationLink(
             String aElementId,
             String aLabel,

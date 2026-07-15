@@ -9,6 +9,10 @@ import java.util.List;
  * columns through column identifiers, which allows renderers to keep cell
  * values stable even if column order changes. Cell content may contain inline
  * elements such as links and semantic references.
+ * <p>
+ * This interface provides read-only access. Construction and transformation
+ * code that needs to modify the table should use
+ * {@link AIiDocumentationTableWriteAccess}.
  */
 public interface AIiDocumentationTable extends AIiDocumentationBlockElement {
 
@@ -24,28 +28,14 @@ public interface AIiDocumentationTable extends AIiDocumentationBlockElement {
     /**
      * Returns table columns in their rendering order.
      *
-     * @return ordered column list
+     * @return read-only ordered column list
      */
     List<AIiDocumentationTableColumn> getColumns();
 
     /**
      * Returns table rows in their rendering order.
      *
-     * @return ordered row list
+     * @return read-only ordered row list
      */
     List<AIiDocumentationTableRow> getRows();
-
-    /**
-     * Adds a table column.
-     *
-     * @param aColumn column to add
-     */
-    void addColumn(AIiDocumentationTableColumn aColumn);
-
-    /**
-     * Adds a table row.
-     *
-     * @param aRow row to add
-     */
-    void addRow(AIiDocumentationTableRow aRow);
 }

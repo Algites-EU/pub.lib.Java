@@ -3,18 +3,25 @@ package eu.algites.lib.common.documentation;
 import java.util.Objects;
 
 /**
- * Default implementation of {@link AIiDocumentationCodeBlock}.
+ * Default implementation of {@link AIiDocumentationCodeBlockWriteAccess}.
  * <p>
- * See {@link AIiDocumentationCodeBlock} for the code block contract.
+ * See {@link AIiDocumentationCodeBlock} for the read-only code block contract.
  */
 public class AIcDocumentationCodeBlock
         extends AIcDocumentationBlockElement
-        implements AIiDocumentationCodeBlock {
+        implements AIiDocumentationCodeBlockWriteAccess {
 
     private final String languageId;
 
     private final String code;
 
+    /**
+     * Creates a code block.
+     *
+     * @param aElementId stable element identifier
+     * @param aLanguageId language identifier, or an empty string if unspecified
+     * @param aCode code block content
+     */
     public AIcDocumentationCodeBlock(
             String aElementId,
             String aLanguageId,

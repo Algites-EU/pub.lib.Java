@@ -9,27 +9,17 @@ import java.util.List;
  * block elements that need to aggregate other block elements. Inline elements
  * such as links, text, and references belong inside paragraph-like elements, not
  * directly inside containers.
+ * <p>
+ * This interface provides read-only access. Construction and transformation
+ * code that needs to modify the child list should use
+ * {@link AIiDocumentationContainerElementWriteAccess}.
  */
 public interface AIiDocumentationContainerElement extends AIiDocumentationBlockElement {
 
     /**
      * Returns child block elements in their rendering order.
      *
-     * @return ordered child block element list
+     * @return read-only ordered child block element list
      */
     List<AIiDocumentationBlockElement> getChildElements();
-
-    /**
-     * Adds a child block element.
-     *
-     * @param aChildElement child block element to add
-     */
-    void addChildElement(AIiDocumentationBlockElement aChildElement);
-
-    /**
-     * Adds multiple child block elements in the provided order.
-     *
-     * @param aChildElements child block elements to add
-     */
-    void addChildElements(List<? extends AIiDocumentationBlockElement> aChildElements);
 }

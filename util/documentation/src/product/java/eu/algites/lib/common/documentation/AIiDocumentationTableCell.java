@@ -8,6 +8,10 @@ import java.util.List;
  * The cell references a column by its column identifier and stores ordered
  * inline content. This allows table cells to contain not only plain text, but
  * also links, semantic references, line breaks, and inline code.
+ * <p>
+ * This interface provides read-only access. Construction and transformation
+ * code that needs to modify inline content should use
+ * {@link AIiDocumentationTableCellWriteAccess}.
  */
 public interface AIiDocumentationTableCell extends AIiDocumentationElement {
 
@@ -21,21 +25,7 @@ public interface AIiDocumentationTableCell extends AIiDocumentationElement {
     /**
      * Returns cell inline elements in their rendering order.
      *
-     * @return ordered inline element list
+     * @return read-only ordered inline element list
      */
     List<AIiDocumentationInlineElement> getInlineElements();
-
-    /**
-     * Adds an inline element to the cell.
-     *
-     * @param aInlineElement inline element to add
-     */
-    void addInlineElement(AIiDocumentationInlineElement aInlineElement);
-
-    /**
-     * Adds multiple inline elements in the provided order.
-     *
-     * @param aInlineElements inline elements to add
-     */
-    void addInlineElements(List<? extends AIiDocumentationInlineElement> aInlineElements);
 }
