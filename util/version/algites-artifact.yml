@@ -1,4 +1,4 @@
 artifact:
-  type: java
+  kinds: [java]
   name: Utilities for version management
   description: Utilities for versioning and version management
