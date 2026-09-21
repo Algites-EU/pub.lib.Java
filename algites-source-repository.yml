@@ -1,7 +1,8 @@
 sourceRepository:
   id: pub.lib.Java
-  groupId: eu.algites.lib.common
   name: Algites public Java libraries repository
+
+groupId: eu.algites.lib.common
 
 versionContext:
   releaseLine: "1"
