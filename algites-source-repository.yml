@@ -1,11 +1,10 @@
-sourceRepository:
-  id: pub.lib.Java
-  name: Algites public Java libraries repository
+SourceRepository:
+  Id: pub.lib.General
+  Name: Algites public general-purpose libraries repository
 
-groupId: eu.algites.lib.common
+GroupId: eu.algites.lib.common
 
-versionContext:
-  releaseLine: "1"
-  revision: 0
-  qualifierKind: SNAPSHOT
-  qualifierLabel: SNAPSHOT
+Version:
+  ReleaseLine: "1"
+  Revision: 0
+  QualifierKind: snapshot

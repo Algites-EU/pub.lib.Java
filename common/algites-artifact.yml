@@ -1,4 +1,4 @@
-artifact:
-  technologyKinds: [java]
-  name: Common Java Utilities
-  description: Basic support for Java development 
+Artifact:
+  TechnologyKinds: [java]
+  Name: Common Java utilities
+  Description: General-purpose support utilities shared across Algites Java artifacts.
