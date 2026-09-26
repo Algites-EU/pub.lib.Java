@@ -1,19 +1,13 @@
-manifestVersion: 1
-artifact:
-  repositoryId: pub.lib.Java
-  localArtifactId: util.common
-  artifactCoordinateId: pub.lib.Java_util.common
-  groupId: eu.algites.lib.common
-  version: 1.0-SNAPSHOT
-  sourcePath: util/common
-  structureKind: artifact
-  name: "Common Java Utilities"
-  description: "Basic support for Java development"
-sourceMetadata:
-  descriptorHierarchy:
-    - structureKind: repository
-      path: algites-source-repository.yml
-      sha256: ccbe78a0de133cc2e57b82d58eca388f3252c9c47e87e228f5d41d0df9c4425e
-    - structureKind: artifact
-      path: util/common/algites-artifact.yml
-      sha256: d126ccea764b0c6dde3d57b1b3bcaf38574ec7f23c5437e42e014787dc890c64
+ManifestVersion: 1
+Artifact:
+  RepositoryId: pub.lib.General
+  LocalArtifactId: util.common
+  ArtifactCoordinateId: pub.lib.Java_util.common
+  GroupId: eu.algites.lib.common
+  Version: 1.0-SNAPSHOT
+  SourcePath: util/common
+  StructureKind: ""
+  Name: "Common Java Utilities"
+  Description: "Basic support for Java development"
+SourceMetadata:
+  DescriptorHierarchy:

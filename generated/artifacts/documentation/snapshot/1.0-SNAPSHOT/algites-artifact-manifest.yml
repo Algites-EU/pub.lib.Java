@@ -1,0 +1,13 @@
+ManifestVersion: 1
+Artifact:
+  RepositoryId: pub.lib.General
+  LocalArtifactId: documentation
+  ArtifactCoordinateId: pub.lib.General_documentation
+  GroupId: eu.algites.lib.common
+  Version: 1.0-SNAPSHOT
+  SourcePath: documentation
+  StructureKind: artifact
+  Name: "Documentation model utilities"
+  Description: "Renderer-neutral utilities and model types for building documentation structures and abstract syntax trees."
+SourceMetadata:
+  DescriptorHierarchy:
